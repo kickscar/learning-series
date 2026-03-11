@@ -27,10 +27,14 @@ requests와 비슷한 `httpx.get()`, `httpx.post()` API를 제공한다. `Client
 
 ## 실습
 
-### 전제 조건
+### 환경
 
-- Python 3.12+ 설치
-- `pip install httpx`
+- Python 3.12+
+- 설치 패키지
+
+    ```bash
+    $ pip install httpx
+    ```
 
 ### 목표
 
