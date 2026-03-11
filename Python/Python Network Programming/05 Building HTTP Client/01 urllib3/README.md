@@ -16,4 +16,4 @@
 
 ## Reference
 
-📘 Notion 문서: [0501notion.cursor.md](../../notion/0501notion.cursor.md)
+📘 [Notion 문서](https://www.notion.so/01-urllib3-31fdc703ccda8039b75defb8c86f3762?source=copy_link)

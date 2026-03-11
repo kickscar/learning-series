@@ -18,4 +18,4 @@
 
 ## Reference
 
-📘 Notion 문서: [0503notion.cursor.md](../../notion/0503notion.cursor.md)
+📘 [Notion 문서](https://www.notion.so/03-httpx-320dc703ccda80fda4bdd16d5b47b146?source=copy_link)
