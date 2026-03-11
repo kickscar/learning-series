@@ -1,8 +1,8 @@
-# 7.3 aiohttp Client/Server
+# 6.3 aiohttp Async HTTP Client
 
 ## 개요
 
-본 Section은 **aiohttp**를 사용한 비동기 HTTP **클라이언트** 구동을 다룬다. 7.1·7.2에서 Event loop와 asyncio를 이해했고, 6.2에서 aiohttp 서버를 다뤘다. 이제 aiohttp의 **ClientSession**으로 비동기 HTTP 요청을 수행한다. 학습 흐름은 다음과 같다. ① aiohttp Client와 5.3 httpx AsyncClient의 관계를 이해한다. ② ClientSession으로 GET, POST 요청과 `asyncio.gather()` 동시 요청을 실습한다.
+본 Section은 **aiohttp**를 사용한 비동기 HTTP **클라이언트** 구동을 다룬다. 4.1·4.2에서 Event loop와 asyncio를 이해했고, 7.2에서 aiohttp 서버를 다뤘다. 이제 aiohttp의 **ClientSession**으로 비동기 HTTP 요청을 수행한다. 학습 흐름은 다음과 같다. ① aiohttp Client와 6.4 httpx AsyncClient의 관계를 이해한다. ② ClientSession으로 GET, POST 요청과 `asyncio.gather()` 동시 요청을 실습한다.
 
 ## 이론
 
@@ -10,15 +10,15 @@
 
 > **aiohttp**는 asyncio 기반의 비동기 HTTP 클라이언트·서버 라이브러리다. **ClientSession**으로 비동기 HTTP 요청을 수행한다.
 
-5.3 httpx의 `AsyncClient`와 유사하다. `aiohttp.ClientSession()`을 `async with`로 사용하고, `session.get()`, `session.post()` 등으로 요청을 보낸다. 응답은 `async with session.get(url) as resp:` 형태로 컨텍스트 매니저로 받는다.
+6.4 httpx의 `AsyncClient`와 유사하다. `aiohttp.ClientSession()`을 `async with`로 사용하고, `session.get()`, `session.post()` 등으로 요청을 보낸다. 응답은 `async with session.get(url) as resp:` 형태로 컨텍스트 매니저로 받는다.
 
 ### ClientSession과 연결 풀
 
 `ClientSession`은 연결 풀을 관리한다. 동일 호스트에 대한 TCP 연결을 재사용하여 성능을 높인다. 애플리케이션당 하나의 Session을 만들고 여러 요청에 재사용하는 것이 권장된다.
 
-### 7.2 asyncio와의 연계
+### 4.2 asyncio와의 연계
 
-`ClientSession`의 `get()`, `post()`는 코루틴을 반환한다. `await session.get(url)`로 단일 요청을 보내거나, `asyncio.gather(session.get(url1), session.get(url2))`로 여러 요청을 동시에 보낼 수 있다. 7.2에서 익힌 `asyncio.gather()`가 그대로 적용된다.
+`ClientSession`의 `get()`, `post()`는 코루틴을 반환한다. `await session.get(url)`로 단일 요청을 보내거나, `asyncio.gather(session.get(url1), session.get(url2))`로 여러 요청을 동시에 보낼 수 있다. 4.2에서 익힌 `asyncio.gather()`가 그대로 적용된다.
 
 ## 실습
 
@@ -130,4 +130,4 @@ asyncio.run(main())
 - aiohttp ClientSession으로 비동기 HTTP 요청을 수행한다.
 - `async with`로 Session과 응답을 관리한다. `resp.json()`은 `await`가 필요하다.
 - `asyncio.gather()`와 결합하여 여러 요청을 동시에 보낼 수 있다.
-- 5.3 httpx AsyncClient와 유사한 역할이며, aiohttp는 서버(6.2)와 클라이언트를 모두 지원한다.
+- 6.4 httpx AsyncClient와 유사한 역할이며, aiohttp는 서버(7.2)와 클라이언트를 모두 지원한다.

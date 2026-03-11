@@ -1,4 +1,4 @@
-# 07 Async Network Programming / 03 aiohttp Client/Server
+# 06 Building HTTP Client / 03 aiohttp Async HTTP Client
 
 이 디렉토리는 Python에서 **aiohttp** 비동기 HTTP 클라이언트를 이해하기 위한 예제 코드들을 포함한다.
 
@@ -16,4 +16,4 @@
 
 ## Reference
 
-📘 [Notion 문서](../../notion/0703notion.cursor.md)
+📘 [Notion 문서](../../notion/0603notion.cursor.md)

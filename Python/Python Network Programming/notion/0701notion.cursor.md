@@ -1,75 +1,169 @@
-# 7.1 Event loop, Async IO
+# 7.1 http.server
 
 ## 개요
 
-본 Section은 **Event loop**와 **Async IO**의 개념을 다룬다. Ch02에서 selectors, Thread-per-request로 다중 요청을 처리했으나, 비동기 모델은 스레드·프로세스 없이 단일 스레드에서 많은 동시 연결을 처리할 수 있다. 학습 흐름은 다음과 같다. ① Event loop와 Async IO의 동작 방식을 이해한다. ② `asyncio.run()`, `asyncio.gather()`의 역할과 Python 비동기 원리(코루틴·Task·Cooperative multitasking)를 파악한다. ③ Ch02 대비 성능·리소스 이점을 파악한다. 실습은 7.2 asyncio에서 진행한다.
+본 Section은 Python 표준 라이브러리 **http.server**를 사용한 간단한 HTTP 서버 구동을 다룬다. http.server는 개발·테스트용으로 현재 디렉터리의 파일을 서빙한다. 학습 흐름은 다음과 같다. ① http.server의 구조, SimpleHTTPRequestHandler, ThreadingTCPServer, ThreadingHTTPServer, ForkingTCPServer를 이해한다. ② 명령줄과 스크립트로 Simple HTTP Server를 실행한다.
 
 ## 이론
 
-### Blocking IO와 Non-blocking IO
+### http.server의 역할
 
-> **Blocking IO**는 IO 작업이 완료될 때까지 호출 스레드가 대기한다. **Non-blocking IO**는 IO가 완료되지 않아도 즉시 제어를 반환한다.
+> **http.server**는 Python 표준 라이브러리로, 간단한 HTTP 서버를 구동한다. 프로덕션 환경에는 권장되지 않으며, 개발·테스트용이다.
 
-Ch02의 `socket.recv()`는 데이터가 도착할 때까지 블로킹된다. selectors는 여러 소켓을 감시하여 "준비된" 소켓만 처리하지만, 실제 IO는 여전히 블로킹 방식이다. 비동기 모델은 IO 대기 중에도 다른 작업을 수행한다.
+Ch02에서 raw socket으로 구현한 Simple HTTP Server와 달리, http.server는 HTTP 요청 파싱과 응답 생성을 내장한다. 운영용 서버(WSGI/ASGI, uvicorn)는 Series 03 Web Server에서 다룬다.
 
-### Event loop
+### SimpleHTTPRequestHandler
 
-> **Event loop**는 준비된 작업을 순차적으로 실행하고, IO 대기 시 다른 작업으로 전환하는 루프다.
+> **SimpleHTTPRequestHandler**는 현재 디렉터리와 하위 디렉터리의 정적 파일을 GET으로 서빙한다.
 
-이벤트 루프는 "어떤 소켓/작업이 준비되었는지"를 감시하고, 준비된 것만 실행한다. IO가 완료될 때까지 기다리는 동안 다른 코루틴을 실행하여 CPU를 활용한다. 단일 스레드로 많은 동시 연결을 처리할 수 있다.
+`GET /` 요청 시 `index.html`을, `GET /path/to/file` 요청 시 해당 파일을 응답한다. `Content-Type`은 파일 확장자에 따라 자동 설정된다.
 
-### Async IO와 코루틴
+### HTTPServer와 TCPServer
 
-> **Async IO**는 `async def`로 정의된 **코루틴(Coroutine)** 과 `await`를 사용하여 논블로킹 IO를 수행한다.
+`HTTPServer`는 `socketserver.TCPServer`를 상속한다. `(host, port)`와 `Handler` 클래스를 받아 서버를 생성하고, `serve_forever()`로 요청을 처리한다. 기본 `TCPServer`는 한 번에 하나의 요청만 처리한다.
 
-`await`를 만나면 해당 코루틴은 일시 중단되고, 이벤트 루프는 다른 코루틴을 실행한다. IO가 완료되면 중단된 코루틴이 재개된다. 스레드를 추가하지 않고도 동시성을 얻을 수 있다.
+### ThreadingTCPServer
 
-### asyncio.run()의 역할
+> **ThreadingTCPServer**는 `ThreadingMixIn`과 `TCPServer`를 조합한 클래스로, 요청마다 새 스레드를 생성하여 동시에 여러 요청을 처리한다.
 
-> **asyncio.run(coro)**는 비동기 프로그램의 최상위 진입점으로, 이벤트 루프를 생성·실행·정리한다.
+`socketserver.ThreadingTCPServer`를 사용하면, 각 연결이 별도 스레드에서 처리된다. 브라우저가 미리 소켓을 열어두는 경우처럼 동시 연결이 많을 때 유용하다.
 
-`asyncio.run(main())`을 호출하면 다음이 수행된다. ① 실행 중인 이벤트 루프가 있는지 확인한다. (한 스레드에는 하나의 루프만 허용) ② 새 이벤트 루프를 생성한다. ③ 전달받은 코루틴을 **Task**로 래핑하여 루프에 스케줄한다. ④ `loop.run_until_complete()`로 코루틴이 완료될 때까지 루프를 실행한다. ⑤ 완료 후 비동기 제너레이터 종료, executor 정리 등을 수행하고 루프를 닫는다. `asyncio.run()` 내부에서 다시 `asyncio.run()`을 호출하는 중첩은 불가능하다.
+### ThreadingHTTPServer
 
-### asyncio.gather()의 역할
+> **ThreadingHTTPServer**는 `ThreadingMixIn`과 `HTTPServer`를 조합한 클래스로, HTTP 요청을 스레드별로 처리한다. (Python 3.7+)
 
-> **asyncio.gather(*coros)**는 여러 코루틴을 동시에 실행하고, 모든 결과를 모아 반환한다.
+`http.server.ThreadingHTTPServer`를 사용하면 동시 HTTP 요청을 처리할 수 있다. `python -m http.server`는 Python 3.7부터 내부적으로 `ThreadingHTTPServer`를 사용한다.
 
-`gather()`에 전달된 코루틴은 내부적으로 **Task**로 변환되어 이벤트 루프에 스케줄된다. `await`만으로는 코루틴이 순차 실행되지만, `gather()`는 여러 코루틴을 **동시에** 루프에 올려 IO 대기 시간을 활용한다. 모든 Task가 완료되면 결과 리스트를 인자 순서대로 반환한다.
+### ForkingTCPServer (참고)
 
-### Python 비동기 원리: 코루틴과 Task
+> **ForkingTCPServer**는 `ForkingMixIn`과 `TCPServer`를 조합한 클래스로, 요청마다 새 **프로세스**를 생성한다.
 
-코루틴 함수(`async def`)를 **호출만** 하면 실행되지 않는다. 코루틴 객체가 생성될 뿐이며, `await`하거나 **Task**로 래핑해야 이벤트 루프에 스케줄된다.
-
-> **Task**는 코루틴을 래핑하여 이벤트 루프가 실행할 수 있게 하는 객체다. `asyncio.create_task()`, `asyncio.gather()` 등이 코루틴을 Task로 변환한다.
-
-**Cooperative multitasking(협력적 멀티태스킹)**: 스레드는 OS가 강제로 컨텍스트를 전환하는 반면, asyncio는 Task가 `await`에서 **자발적으로** 제어를 이벤트 루프에 반환한다. 루프는 한 번에 하나의 Task만 실행하며, `await`를 만나면 다른 준비된 Task로 전환한다.
-
-**이벤트 루프 동작 흐름**:
-1. Task가 `await`(예: `asyncio.sleep`, 네트워크 요청)에서 IO 대기를 요청하면, 제어권을 루프에 반환한다.
-2. 루프는 대기 중인 다른 Task를 선택하여 실행한다.
-3. IO가 완료되면 **Future** 객체의 콜백이 실행되고, 대기 중이던 Task가 재개된다.
-4. 1~3을 반복한다.
-
-단일 스레드에서 여러 Task가 번갈아 실행되므로, IO 대기 시간을 다른 Task 실행에 활용할 수 있다.
-
-### Ch02 대비 이점
-
-| 구분 | Ch02 selectors / Thread | Ch07 Async IO |
-|------|-------------------------|---------------|
-| **모델** | 멀티플렉싱 또는 스레드당 연결 | 단일 스레드, 코루틴 |
-| **리소스** | 스레드당 스택·컨텍스트 스위칭 | 코루틴은 경량 |
-| **적합** | 중간 규모 | 많은 동시 연결, IO-bound |
-
-IO-bound 작업이 많을 때 비동기는 스레드보다 메모리와 컨텍스트 스위칭 비용이 적다. asyncio 심화(task, 동시성 패턴)는 Series 08 Async Programming에서 다룬다.
+**ThreadingTCPServer와의 차이**: ThreadingTCPServer는 **스레드**를, ForkingTCPServer는 **프로세스**를 사용한다. ForkingTCPServer는 CPU-bound 작업에 유리하지만, 프로세스 생성 비용이 크고 **Windows에서 동작하지 않는다**. 본 Section의 실습에서는 사용하지 않는다.
 
 ## 실습
 
-본 Section은 개념 설명만 다룬다. 7.2 asyncio에서 `async/await` 실습을 진행한다.
+### 환경
+
+- Python 3.12+
+- 설치 패키지: 없음 (표준 라이브러리)
+
+    ```bash
+    # http.server는 stdlib에 포함되어 별도 설치 불필요
+    ```
+
+### 목표
+
+http.server로 Simple HTTP Server를 구동하고, 브라우저 또는 curl로 접근한다.
+
+### lab1: 명령줄로 서버 실행
+
+`python -m http.server`는 Python 3.7부터 내부적으로 **ThreadingHTTPServer**를 사용하여 동시 요청을 처리한다.
+
+#### 단계 1: 기본 서버 구동
+
+```bash
+# 터미널에서 실행. 현재 디렉터리를 루트로 서빙한다
+$ python -m http.server 8000
+```
+
+**예상 결과**: `Serving HTTP on 0.0.0.0 port 8000 ...`가 출력되고, 서버가 대기한다.
+
+#### 단계 2: CLI 옵션 사용
+
+```bash
+# -b: 바인드 주소 (기본: 0.0.0.0)
+# -d: 서빙할 디렉터리 (기본: 현재 디렉터리)
+$ python -m http.server -b 127.0.0.1 -d static 8080
+```
+
+**예상 결과**: `127.0.0.1:8080`에서 `static/` 디렉터리를 서빙한다. `static/` 디렉터리가 없으면 오류가 발생한다.
+
+#### 단계 3: 접근 확인
+
+다른 터미널 또는 브라우저에서:
+
+```bash
+$ curl http://127.0.0.1:8000/
+```
+
+또는 브라우저에서 `http://127.0.0.1:8000/` 접속.
+
+**예상 결과**: 현재 디렉터리의 파일 목록(HTML) 또는 index.html이 반환된다.
+
+### lab2: 스크립트로 서버 실행
+
+#### 단계 1: TCPServer (단일 요청 처리)
+
+```python
+# simple_server.py
+import http.server
+import socketserver
+
+PORT = 8000
+Handler = http.server.SimpleHTTPRequestHandler
+
+with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    print(f"Serving at port {PORT} (single-threaded)")
+    httpd.serve_forever()
+```
+
+**예상 결과**: `Serving at port 8000 (single-threaded)` 출력 후 서버가 대기한다. 한 번에 하나의 요청만 처리한다. `Ctrl+C`로 종료한다.
+
+#### 단계 2: ThreadingHTTPServer (동시 요청 처리)
+
+```python
+# threading_server.py
+import http.server
+
+PORT = 8000
+Handler = http.server.SimpleHTTPRequestHandler
+
+with http.server.ThreadingHTTPServer(("", PORT), Handler) as httpd:
+    print(f"Serving at port {PORT} (threaded)")
+    httpd.serve_forever()
+```
+
+**예상 결과**: `Serving at port 8000 (threaded)` 출력 후 서버가 대기한다. 요청마다 새 스레드를 생성하여 동시에 여러 요청을 처리한다.
+
+#### 단계 3: 특정 디렉터리 서빙
+
+```python
+# simple_server_directory.py
+import http.server
+import socketserver
+
+PORT = 8000
+DIRECTORY = "static"  # 서빙할 디렉터리
+
+class Handler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=DIRECTORY, **kwargs)
+
+with http.server.ThreadingHTTPServer(("", PORT), Handler) as httpd:
+    print(f"Serving {DIRECTORY} at port {PORT}")
+    httpd.serve_forever()
+```
+
+**예상 결과**: `static/` 디렉터리에 `index.html` 등을 두면 해당 경로에서 서빙된다.
+
+### 트러블슈팅
+
+| 현상 | 원인 | 대응 |
+|------|------|------|
+| `Address already in use` | 포트 8000 사용 중 | 다른 포트 사용 (예: 8080) |
+| `Permission denied` | 1024 미만 포트 사용 | 1024 이상 포트 사용 |
+| `FileNotFoundError` | `directory` 경로 없음 | `static` 등 디렉터리 생성 후 실행 |
+
+### 실습 포인트
+
+- `python -m http.server 8000`으로 빠르게 서버를 띄울 수 있다. Python 3.7+에서는 ThreadingHTTPServer를 사용한다.
+- `-b`, `-d` 옵션으로 바인드 주소와 서빙 디렉터리를 지정할 수 있다.
+- `TCPServer`는 단일 요청, `ThreadingHTTPServer`는 동시 요청을 처리한다.
 
 ## 핵심 정리
 
-- Event loop는 준비된 Task를 순차 실행하고, `await`에서 제어를 받아 다른 Task로 전환한다.
-- `asyncio.run()`은 이벤트 루프를 생성·실행·정리하는 최상위 진입점이다.
-- `asyncio.gather()`는 여러 코루틴을 Task로 변환하여 동시에 실행하고, 결과를 모아 반환한다.
-- 코루틴은 Task로 래핑되어야 이벤트 루프에 스케줄된다. Cooperative multitasking으로 `await` 시점에만 전환이 일어난다.
-- asyncio 심화는 Series 08에서 다룬다.
+- http.server는 Python 표준 라이브러리로, 개발·테스트용 Simple HTTP Server를 제공한다.
+- `SimpleHTTPRequestHandler`는 현재 디렉터리의 정적 파일을 GET으로 서빙한다.
+- `TCPServer`는 단일 요청, `ThreadingTCPServer`/`ThreadingHTTPServer`는 스레드로 동시 요청을 처리한다.
+- `ForkingTCPServer`는 프로세스를 사용하며 Windows 미지원. 실습에서는 사용하지 않는다.
+- `python -m http.server`는 Python 3.7+에서 ThreadingHTTPServer를 사용한다.

@@ -1,10 +1,10 @@
-# 06 Building HTTP Server / 02 aiohttp Async HTTP Server
+# 07 Building HTTP Server / 02 aiohttp Async HTTP Server
 
 이 디렉토리는 Python에서 **aiohttp** 비동기 HTTP 서버를 이해하기 위한 예제 코드들을 포함한다.
 
 ## What you will learn
 
-- 6.1 ThreadingHTTPServer와의 다중 요청 처리 차이 (스레드 vs 비동기)
+- 7.1 ThreadingHTTPServer와의 다중 요청 처리 차이 (스레드 vs 비동기)
 - web.Application, router, async def 핸들러
 - GET, POST(JSON) 요청 처리
 
@@ -16,4 +16,4 @@
 
 ## Reference
 
-📘 Notion 문서: [0602notion.cursor.md](../../notion/0602notion.cursor.md)
+📘 Notion 문서: [0702notion.cursor.md](../../notion/0702notion.cursor.md)

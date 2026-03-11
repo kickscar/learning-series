@@ -1,169 +1,111 @@
-# 6.1 http.server
+# 6.1 urllib3
 
 ## 개요
 
-본 Section은 Python 표준 라이브러리 **http.server**를 사용한 간단한 HTTP 서버 구동을 다룬다. http.server는 개발·테스트용으로 현재 디렉터리의 파일을 서빙한다. 학습 흐름은 다음과 같다. ① http.server의 구조, SimpleHTTPRequestHandler, ThreadingTCPServer, ThreadingHTTPServer, ForkingTCPServer를 이해한다. ② 명령줄과 스크립트로 Simple HTTP Server를 실행한다.
+본 Section은 **urllib3**의 역할과 기본 사용법을 다룬다. urllib3는 Python 표준 라이브러리의 `urllib`보다 안정적이고, **연결 풀(Connection Pool)** 을 기본 제공하는 HTTP 클라이언트 라이브러리다. requests 라이브러리의 하위 의존성으로도 널리 사용된다. 학습 흐름은 다음과 같다. ① urllib3의 특징과 PoolManager 구조를 이해한다. ② GET, POST 요청을 수행하는 기본 실습을 진행한다.
 
 ## 이론
 
-### http.server의 역할
+### urllib3의 역할
 
-> **http.server**는 Python 표준 라이브러리로, 간단한 HTTP 서버를 구동한다. 프로덕션 환경에는 권장되지 않으며, 개발·테스트용이다.
+> **urllib3**는 스레드 안전한 HTTP 클라이언트 라이브러리로, 연결 재사용(Connection Reuse)을 통해 성능을 최적화한다.
 
-Ch02에서 raw socket으로 구현한 Simple HTTP Server와 달리, http.server는 HTTP 요청 파싱과 응답 생성을 내장한다. 운영용 서버(WSGI/ASGI, uvicorn)는 Series 03 Web Server에서 다룬다.
+Python 표준 라이브러리의 `urllib`는 기능은 충분하지만, 연결 풀 관리와 재시도 로직이 없다. urllib3는 이를 보완하여 프로덕션 환경에서 안정적으로 HTTP 요청을 수행할 수 있게 한다. `requests` 라이브러리는 내부적으로 urllib3를 사용한다.
 
-### SimpleHTTPRequestHandler
+### PoolManager
 
-> **SimpleHTTPRequestHandler**는 현재 디렉터리와 하위 디렉터리의 정적 파일을 GET으로 서빙한다.
+> **PoolManager**는 호스트별 연결 풀을 관리하는 urllib3의 핵심 객체다.
 
-`GET /` 요청 시 `index.html`을, `GET /path/to/file` 요청 시 해당 파일을 응답한다. `Content-Type`은 파일 확장자에 따라 자동 설정된다.
+`PoolManager` 인스턴스를 생성하면, 동일 호스트에 대한 요청 시 기존 TCP 연결을 재사용한다. 이는 Ch05에서 다룬 HTTP Keep-Alive와 대응된다. `request()` 메서드로 HTTP 메서드와 URL을 지정하여 요청을 보낸다.
 
-### HTTPServer와 TCPServer
+### HTTPResponse
 
-`HTTPServer`는 `socketserver.TCPServer`를 상속한다. `(host, port)`와 `Handler` 클래스를 받아 서버를 생성하고, `serve_forever()`로 요청을 처리한다. 기본 `TCPServer`는 한 번에 하나의 요청만 처리한다.
-
-### ThreadingTCPServer
-
-> **ThreadingTCPServer**는 `ThreadingMixIn`과 `TCPServer`를 조합한 클래스로, 요청마다 새 스레드를 생성하여 동시에 여러 요청을 처리한다.
-
-`socketserver.ThreadingTCPServer`를 사용하면, 각 연결이 별도 스레드에서 처리된다. 브라우저가 미리 소켓을 열어두는 경우처럼 동시 연결이 많을 때 유용하다.
-
-### ThreadingHTTPServer
-
-> **ThreadingHTTPServer**는 `ThreadingMixIn`과 `HTTPServer`를 조합한 클래스로, HTTP 요청을 스레드별로 처리한다. (Python 3.7+)
-
-`http.server.ThreadingHTTPServer`를 사용하면 동시 HTTP 요청을 처리할 수 있다. `python -m http.server`는 Python 3.7부터 내부적으로 `ThreadingHTTPServer`를 사용한다.
-
-### ForkingTCPServer (참고)
-
-> **ForkingTCPServer**는 `ForkingMixIn`과 `TCPServer`를 조합한 클래스로, 요청마다 새 **프로세스**를 생성한다.
-
-**ThreadingTCPServer와의 차이**: ThreadingTCPServer는 **스레드**를, ForkingTCPServer는 **프로세스**를 사용한다. ForkingTCPServer는 CPU-bound 작업에 유리하지만, 프로세스 생성 비용이 크고 **Windows에서 동작하지 않는다**. 본 Section의 실습에서는 사용하지 않는다.
+`request()`의 반환값은 **HTTPResponse** 객체다. `status`(상태 코드), `data`(응답 본문 바이트), `headers`(응답 헤더), `json()`(JSON 파싱) 등의 속성과 메서드를 제공한다.
 
 ## 실습
 
-### 환경
+### 전제 조건
 
-- Python 3.12+
-- 설치 패키지: 없음 (표준 라이브러리)
-
-    ```bash
-    # http.server는 stdlib에 포함되어 별도 설치 불필요
-    ```
+- Python 3.12+ 설치
+- `pip install urllib3` (Python 3.12+에서는 보통 별도 설치 필요)
 
 ### 목표
 
-http.server로 Simple HTTP Server를 구동하고, 브라우저 또는 curl로 접근한다.
+PoolManager를 사용하여 GET, POST 요청을 수행하고 응답을 확인한다.
 
-### lab1: 명령줄로 서버 실행
-
-`python -m http.server`는 Python 3.7부터 내부적으로 **ThreadingHTTPServer**를 사용하여 동시 요청을 처리한다.
-
-#### 단계 1: 기본 서버 구동
-
-```bash
-# 터미널에서 실행. 현재 디렉터리를 루트로 서빙한다
-$ python -m http.server 8000
-```
-
-**예상 결과**: `Serving HTTP on 0.0.0.0 port 8000 ...`가 출력되고, 서버가 대기한다.
-
-#### 단계 2: CLI 옵션 사용
-
-```bash
-# -b: 바인드 주소 (기본: 0.0.0.0)
-# -d: 서빙할 디렉터리 (기본: 현재 디렉터리)
-$ python -m http.server -b 127.0.0.1 -d static 8080
-```
-
-**예상 결과**: `127.0.0.1:8080`에서 `static/` 디렉터리를 서빙한다. `static/` 디렉터리가 없으면 오류가 발생한다.
-
-#### 단계 3: 접근 확인
-
-다른 터미널 또는 브라우저에서:
-
-```bash
-$ curl http://127.0.0.1:8000/
-```
-
-또는 브라우저에서 `http://127.0.0.1:8000/` 접속.
-
-**예상 결과**: 현재 디렉터리의 파일 목록(HTML) 또는 index.html이 반환된다.
-
-### lab2: 스크립트로 서버 실행
-
-#### 단계 1: TCPServer (단일 요청 처리)
+### 단계 1: GET 요청
 
 ```python
-# simple_server.py
-import http.server
-import socketserver
+# basic_get.py
+import urllib3
 
-PORT = 8000
-Handler = http.server.SimpleHTTPRequestHandler
+http = urllib3.PoolManager()
+resp = http.request("GET", "https://httpbin.org/get")
 
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
-    print(f"Serving at port {PORT} (single-threaded)")
-    httpd.serve_forever()
+print(f"Status: {resp.status}")
+print(f"Headers: {resp.headers}")
+print(f"Body: {resp.data.decode('utf-8')}")
 ```
 
-**예상 결과**: `Serving at port 8000 (single-threaded)` 출력 후 서버가 대기한다. 한 번에 하나의 요청만 처리한다. `Ctrl+C`로 종료한다.
+**예상 결과**: Status 200, JSON 형식의 응답 본문이 출력된다.
 
-#### 단계 2: ThreadingHTTPServer (동시 요청 처리)
+### 단계 2: POST 요청 (form 데이터)
 
 ```python
-# threading_server.py
-import http.server
+# basic_post.py
+import urllib3
 
-PORT = 8000
-Handler = http.server.SimpleHTTPRequestHandler
+http = urllib3.PoolManager()
+resp = http.request(
+    "POST",
+    "https://httpbin.org/post",
+    fields={"name": "python", "version": "3.12"},
+)
 
-with http.server.ThreadingHTTPServer(("", PORT), Handler) as httpd:
-    print(f"Serving at port {PORT} (threaded)")
-    httpd.serve_forever()
+print(f"Status: {resp.status}")
+print(resp.data.decode("utf-8"))
 ```
 
-**예상 결과**: `Serving at port 8000 (threaded)` 출력 후 서버가 대기한다. 요청마다 새 스레드를 생성하여 동시에 여러 요청을 처리한다.
+**예상 결과**: 전송한 form 필드가 응답에 포함된 JSON이 출력된다.
 
-#### 단계 3: 특정 디렉터리 서빙
+### 단계 3: JSON 요청 및 응답
 
 ```python
-# simple_server_directory.py
-import http.server
-import socketserver
+# basic_json.py
+import json
+import urllib3
 
-PORT = 8000
-DIRECTORY = "static"  # 서빙할 디렉터리
+http = urllib3.PoolManager()
+resp = http.request(
+    "POST",
+    "https://httpbin.org/post",
+    body=json.dumps({"key": "value"}),
+    headers={"Content-Type": "application/json"},
+)
 
-class Handler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=DIRECTORY, **kwargs)
-
-with http.server.ThreadingHTTPServer(("", PORT), Handler) as httpd:
-    print(f"Serving {DIRECTORY} at port {PORT}")
-    httpd.serve_forever()
+data = resp.json()
+print(data.get("json"))
 ```
 
-**예상 결과**: `static/` 디렉터리에 `index.html` 등을 두면 해당 경로에서 서빙된다.
+**예상 결과**: `{'key': 'value'}`가 출력된다.
 
 ### 트러블슈팅
 
 | 현상 | 원인 | 대응 |
 |------|------|------|
-| `Address already in use` | 포트 8000 사용 중 | 다른 포트 사용 (예: 8080) |
-| `Permission denied` | 1024 미만 포트 사용 | 1024 이상 포트 사용 |
-| `FileNotFoundError` | `directory` 경로 없음 | `static` 등 디렉터리 생성 후 실행 |
+| `ModuleNotFoundError: urllib3` | 미설치 | `pip install urllib3` |
+| `SSLError` | 인증서 검증 실패 | 테스트 시 `cert_reqs='CERT_NONE'` 사용 가능 (프로덕션에서는 비권장) |
+| `NewConnectionError` | 네트워크/방화벽 | URL 접근 가능 여부, 프록시 설정 확인 |
 
 ### 실습 포인트
 
-- `python -m http.server 8000`으로 빠르게 서버를 띄울 수 있다. Python 3.7+에서는 ThreadingHTTPServer를 사용한다.
-- `-b`, `-d` 옵션으로 바인드 주소와 서빙 디렉터리를 지정할 수 있다.
-- `TCPServer`는 단일 요청, `ThreadingHTTPServer`는 동시 요청을 처리한다.
+- `PoolManager()`는 싱글톤처럼 재사용하는 것이 좋다.
+- `resp.data`는 `bytes`이므로 `decode('utf-8')`로 문자열 변환이 필요하다.
+- `resp.json()`은 JSON 응답을 딕셔너리로 파싱한다.
 
 ## 핵심 정리
 
-- http.server는 Python 표준 라이브러리로, 개발·테스트용 Simple HTTP Server를 제공한다.
-- `SimpleHTTPRequestHandler`는 현재 디렉터리의 정적 파일을 GET으로 서빙한다.
-- `TCPServer`는 단일 요청, `ThreadingTCPServer`/`ThreadingHTTPServer`는 스레드로 동시 요청을 처리한다.
-- `ForkingTCPServer`는 프로세스를 사용하며 Windows 미지원. 실습에서는 사용하지 않는다.
-- `python -m http.server`는 Python 3.7+에서 ThreadingHTTPServer를 사용한다.
+- urllib3는 연결 풀을 기본 제공하는 HTTP 클라이언트 라이브러리다.
+- `PoolManager`로 요청을 보내며, `request(메서드, URL, ...)` 형태로 사용한다.
+- `HTTPResponse`의 `status`, `data`, `headers`, `json()`으로 응답을 처리한다.
+- requests의 하위 의존성으로 널리 사용되며, 저수준 제어가 필요할 때 직접 사용한다.

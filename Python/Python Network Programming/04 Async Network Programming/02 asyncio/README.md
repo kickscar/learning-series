@@ -1,4 +1,4 @@
-# 07 Async Network Programming / 02 asyncio
+# 04 Async Network Programming / 02 asyncio
 
 이 디렉토리는 Python에서 **asyncio**와 **async/await**를 이해하기 위한 예제 코드들을 포함한다.
 
@@ -17,4 +17,4 @@
 
 ## Reference
 
-📘 [Notion 문서](../../notion/0702notion.cursor.md)
+📘 [Notion 문서](../../notion/0402notion.cursor.md)

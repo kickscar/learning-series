@@ -1,4 +1,4 @@
-# 4.1 HTTP request / response
+# 5.3 Persistent connection, Keep-Alive
 
 ## 개요
 
@@ -6,11 +6,11 @@
 
 ## 이론
 
-<!-- HTTP request, response -->
+<!-- Persistent connection, Keep-Alive -->
 
 ## 실습
 
-<!-- raw socket으로 HTTP GET -->
+<!-- - -->
 
 ## 핵심 정리
 

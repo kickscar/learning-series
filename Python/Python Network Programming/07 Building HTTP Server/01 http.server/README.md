@@ -1,4 +1,4 @@
-# 06 Building HTTP Server / 01 http.server
+# 07 Building HTTP Server / 01 http.server
 
 이 디렉토리는 Python에서 **http.server**를 이해하기 위한 예제 코드들을 포함한다.
 
@@ -17,4 +17,4 @@
 
 ## Reference
 
-📘 Notion 문서: [0601notion.cursor.md](https://www.notion.so/01-http-server-320dc703ccda803ca494d5de75f9034e?source=copy_link)
+📘 Notion 문서: [0701notion.cursor.md](https://www.notion.so/01-http-server-320dc703ccda803ca494d5de75f9034e?source=copy_link)

@@ -1,4 +1,4 @@
-# 4.3 Persistent connection, Keep-Alive
+# 5.2 Headers, Methods, Status codes
 
 ## 개요
 
@@ -6,7 +6,7 @@
 
 ## 이론
 
-<!-- Persistent connection, Keep-Alive -->
+<!-- Headers, Methods, Status codes -->
 
 ## 실습
 
