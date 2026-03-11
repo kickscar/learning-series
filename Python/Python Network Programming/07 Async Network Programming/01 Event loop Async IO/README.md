@@ -7,6 +7,8 @@
 - Blocking IO vs Non-blocking IO
 - Event loop 동작 방식
 - Async IO와 코루틴 (async def, await)
+- asyncio.run(), asyncio.gather()의 역할
+- Python 비동기 원리: 코루틴 vs Task, Cooperative multitasking
 - Ch02 selectors/Thread 대비 비동기 이점
 
 ## Examples
