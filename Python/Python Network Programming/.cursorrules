@@ -25,6 +25,20 @@
 - 챕터 번호, 챕터 이름, 섹션 번호, 섹션 이름은 문서와 동일하게 사용한다. 스페이스 유지, 하이픈으로 붙이지 않는다.
 - 예: ./01 Network Fundamentals/01 OSI Model/0101notion.cursor.md
 
+### 1.1 문서 완성 시 이동 및 커밋
+
+Section 문서(`*notion.cursor.md`)가 **완성**되면 다음을 순서대로 실행한다.
+
+1. **이동**: `notion/` 디렉토리로 **move**한다.
+   - 이동 후 파일명: `notion/{chapter no}{section no}notion.cursor.md` (예: `notion/0502notion.cursor.md`)
+   - 원본 경로의 파일은 삭제한다.
+2. **Git 커밋**:
+   ```bash
+   git add -A
+   git commit -m 'docs: {chapter no} {chapter name}/{section no} {section name} 문서 정리 완료'
+   ```
+   - 예: `git commit -m 'docs: 05 Building HTTP Client/02 requests 문서 정리 완료'`
+
 ---
 
 ## 2. 문서 구조
@@ -144,6 +158,7 @@
 
 Section 문서 작성 완료 후 아래를 확인한다:
 
+- [ ] 문서가 완성되면 `notion/` 디렉토리로 **move** 후 `git add -A`, `git commit` 했는가?
 - [ ] 개요에 **학습 흐름**을 명시했는가?
 - [ ] 핵심 개념 등장 시 **blockquote**로 강조했는가?
 - [ ] 나열형 항목에 **① ② ③ ④**와 볼드를 적용했는가?
