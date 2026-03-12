@@ -82,11 +82,11 @@ plan/
 06 Building HTTP Client/
   01 urllib3/0601notion.cursor.md
   02 requests/0602notion.cursor.md
-  03 aiohttp Async HTTP Client/0603notion.cursor.md
-  04 httpx/0604notion.cursor.md
+  03 httpx/0603notion.cursor.md
+  04 aiohttp/0604notion.cursor.md
 07 Building HTTP Server/
   01 http.server/0701notion.cursor.md
-  02 aiohttp Async HTTP Server/0702notion.cursor.md
+  02 aiohttp/0702notion.cursor.md
 08 Streaming/
   01 HTTP Client Streaming/0801notion.cursor.md
   02 HTTP Server Streaming/0802notion.cursor.md
