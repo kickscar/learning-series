@@ -62,8 +62,8 @@ Ch02 서버 다중 처리(selectors, Thread)를 비동기로 개선. Event loop,
 | ------- | ---- | ---- |
 | 6.1 | urllib3 | 기본 사용 |
 | 6.2 | requests | 기본 사용, Session |
-| 6.3 | aiohttp Async HTTP Client | aiohttp HTTP Client |
-| 6.4 | httpx | 동기/비동기 기본 사용 |
+| 6.3 | httpx | 동기/비동기 기본 사용 |
+| 6.4 | aiohttp | aiohttp HTTP Client |
 
 ## Chapter 07: Building HTTP Server
 
@@ -72,7 +72,7 @@ http.server, aiohttp. (uvicorn, WSGI/ASGI는 Series 03 Web Server에서 다룸)
 | Section | 내용 | 실습 |
 | ------- | ---- | ---- |
 | 7.1 | http.server (stdlib) | Simple HTTP Server |
-| 7.2 | aiohttp Async HTTP Server | aiohttp Server |
+| 7.2 | aiohttp | aiohttp Server |
 
 ## Chapter 08: Streaming
 
