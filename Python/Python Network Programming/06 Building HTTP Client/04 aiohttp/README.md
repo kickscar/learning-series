@@ -10,10 +10,10 @@
 
 ## Examples
 
-- `client_get.py` → GET 요청
-- `client_post.py` → POST 요청 (JSON)
-- `client_concurrent.py` → asyncio.gather() 동시 요청
+- `lab01.py` → GET 요청
+- `lab02.py` → POST 요청 (JSON)
+- `lab03.py` → asyncio.gather() 동시 요청
 
 ## Reference
 
-📘 [Notion 문서](../../notion/0604notion.cursor.md)
+📘 [Notion 문서](https://www.notion.so/04-aiohttp-320dc703ccda8027909dc530705ce9b0?source=copy_link)
