@@ -71,9 +71,10 @@ plan/
   01 TCP 연결 종료/0301notion.cursor.md
   02 TCP 데이터 송수신/0302notion.cursor.md
   03 TCP Keep-Alive/0303notion.cursor.md
-04 Async Network Programming/
-  01 Event loop Async IO/0401notion.cursor.md
+04 Python Async Programming/
+  01 Event Loop와 Async IO/0401notion.cursor.md
   02 asyncio/0402notion.cursor.md
+  03 Task와 동시성/0403notion.cursor.md
 05 HTTP Protocol/
   01 HTTP request response/0501notion.cursor.md
   02 Headers Methods Status codes/0502notion.cursor.md
@@ -115,7 +116,7 @@ plan/
 ## 6. 작성 순서 권장
 
 1. **Phase 1**: Ch01, Ch02, Ch03 (기초 + 소켓 + TCP Internals)
-2. **Phase 2**: Ch04 (Async Network Programming)
+2. **Phase 2**: Ch04 (Python Async Programming)
 3. **Phase 3**: Ch05 (HTTP Protocol)
 4. **Phase 4**: Ch06, Ch07 (HTTP Client, HTTP Server)
 5. **Phase 5**: Ch08, Ch09 (Streaming, WebSocket)
