@@ -10,11 +10,10 @@
 - http.server CLI 옵션 (-b, -d)
 
 ## Examples
-
-- `simple_server.py` → TCPServer로 단일 요청 처리
-- `threading_server.py` → ThreadingHTTPServer로 동시 요청 처리
-- `simple_server_directory.py` → 지정 디렉터리 서빙
+- `lab02` → HTTPServer로 단일 요청 처리
+- `lab03` → HTTPServer로 지정 디렉터리 서빙 
+- `lab04` → ThreadingHTTPServer로 동시 요청 처리
 
 ## Reference
 
-📘 Notion 문서: [0701notion.cursor.md](https://www.notion.so/01-http-server-320dc703ccda803ca494d5de75f9034e?source=copy_link)
+[📘 Notion 문서](https://www.notion.so/01-http-server-320dc703ccda803ca494d5de75f9034e?source=copy_link)
