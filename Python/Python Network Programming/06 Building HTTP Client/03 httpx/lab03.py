@@ -1,4 +1,5 @@
 # lan03.py
+
 import httpx
 
 with httpx.Client() as client:

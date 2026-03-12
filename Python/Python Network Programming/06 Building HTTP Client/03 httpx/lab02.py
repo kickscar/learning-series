@@ -1,4 +1,5 @@
 # lab02.py
+
 import httpx
 
 resp = httpx.post(

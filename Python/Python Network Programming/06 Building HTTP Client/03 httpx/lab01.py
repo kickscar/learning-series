@@ -1,4 +1,5 @@
 # lab01.py
+
 import httpx
 
 resp = httpx.get("https://httpbin.org/get")
