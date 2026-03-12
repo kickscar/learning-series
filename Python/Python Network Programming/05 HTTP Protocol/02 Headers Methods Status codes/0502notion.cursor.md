@@ -1,4 +1,4 @@
-# 5.1 HTTP request / response
+# 5.2 Headers, Methods, Status codes
 
 ## 개요
 
@@ -6,11 +6,11 @@
 
 ## 이론
 
-<!-- HTTP request, response -->
+<!-- Headers, Methods, Status codes -->
 
 ## 실습
 
-<!-- raw socket으로 HTTP GET -->
+<!-- - -->
 
 ## 핵심 정리
 

@@ -25,6 +25,40 @@
 - 챕터 번호, 챕터 이름, 섹션 번호, 섹션 이름은 문서와 동일하게 사용한다. 스페이스 유지, 하이픈으로 붙이지 않는다.
 - 예: ./01 Network Fundamentals/01 OSI Model/0101notion.cursor.md
 
+### 1.1 문서 완성 시 이동 및 커밋
+
+Section 문서(`*notion.cursor.md`)가 **완성**되면 다음을 순서대로 실행한다.
+
+1. **이동**: `notion/` 디렉토리로 **move**한다.
+   - 이동 후 파일명: `notion/{chapter no}{section no}notion.cursor.md` (예: `notion/0502notion.cursor.md`)
+   - 원본 경로의 파일은 삭제한다.
+2. **README.md 작성**: `{chapter no} {chapter name}/{section no} {section name}/README.md`를 생성한다.
+
+   구조:
+   ```markdown
+   # {chapter no} {chapter name} / {section no} {section name}
+   이 디렉토리는 Python에서 **{핵심 개념}**을 이해하기 위한 예제 코드들을 포함한다.
+
+   ## What you will learn
+   - {이론 포인트 1}
+   - {이론 포인트 2}
+   - {이론 포인트 3}
+
+   ## Examples
+   - `{example_1}.py` → {어떤 개념을 보여주는지}
+   - `{example_2}.py` → {어떤 개념을 비교/확장하는지}
+
+   ## Reference
+   📘 [Notion 문서]({노션링크})
+   ```
+3. **Git 커밋**:
+   ```bash
+   git add -A
+   git commit -m 'docs: {chapter no} {chapter name}/{section no} {section name} 문서 초안 생성 by cursor agent'
+   ```
+   - 예: `git commit -m 'docs: 05 Building HTTP Client/02 requests 문서 초안 생성'`
+   - Git 명령 실행 시 `all` 권한을 요청한다. (샌드박스 제한으로 `git_write`만으로는 실패할 수 있음)
+
 ---
 
 ## 2. 문서 구조
@@ -34,19 +68,19 @@
 - 문서의 **목적과 학습 흐름**을 명시한다. 구체적 대상 독자보다 흐름을 강조한다.
 - "~한다", "~이해하도록 한다" 등 동작·목적을 드러내는 서술형 문장을 사용한다.
 
-### 2.2 이론 (H2)
+### 2.2 이론 (H1)
 
 - 이론별로 **이론 1(H2), 이론 2(H2)** 형태로 구분
 - 계층 뎁스는 최소화한다
 - 이론 설명: 서술형 문장 위주. 표, 그림, 코드 블록, 리스트 적절히 사용
 
-### 2.3 실습 (H2)
+### 2.3 실습 (H1)
 
 - 실습이 1개: 실습 (H2) 하위에 단계별 안내
 - 실습이 2개 이상: lab1, lab2... (H3)로 구분
 - 앞의 이론에 해당하는 실습
 
-### 2.4 핵심 정리 (H2)
+### 2.4 핵심 정리 (H1)
 
 - Section 요약
 
@@ -107,8 +141,17 @@
 
 ## 6. 실습 구성
 
-- 실습의 목표, 설명을 간단히 서술형 문장으로 작성
-- **전제 조건**: Python 3.12+ 설치, pip 설치, 네트워크 환경 설정. 패킷 관찰 실습 시 **Wireshark** 설치·필터·캡처 절차를 **자세히 문서화**
+- **목표**: 타이틀은 생략, 실습의 목표와 설명 등의 개요를 실습(H1) 타이틀 하위에 서술형 문장으로 작성한다.
+- **실습 환경**: 아래 형식을 따른다.
+  - Python {실습을 위한 최소 버전}
+  - 설치 패키지
+
+      ```bash
+      $ pip install ...
+      $ pip install ...
+      ```
+
+  - 패킷 관찰 실습 시 **Wireshark** 설치·필터·캡처 절차를 **자세히 문서화**한다.
 - **단계별 안내**: 1, 2, 3... 번호 매기기
 - **예상 결과**: 각 단계별 예상 출력 또는 결과 명시
 - **트러블슈팅**: 자주 발생하는 오류와 해결 방법 (별도 섹션 또는 박스)
@@ -144,6 +187,7 @@
 
 Section 문서 작성 완료 후 아래를 확인한다:
 
+- [ ] 문서가 완성되면 `notion/` 디렉토리로 **move**, **README.md 작성**, `git add -A`, `git commit` 했는가?
 - [ ] 개요에 **학습 흐름**을 명시했는가?
 - [ ] 핵심 개념 등장 시 **blockquote**로 강조했는가?
 - [ ] 나열형 항목에 **① ② ③ ④**와 볼드를 적용했는가?
