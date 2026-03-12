@@ -2,7 +2,7 @@
 
 ## 개요
 
-본 Section은 Python 표준 라이브러리 **asyncio**를 사용한 `async/await` 실습을 다룬다. 4.1에서 Event loop와 Async IO 개념을 이해했으므로, 이제 asyncio로 코루틴을 작성하고 실행한다. 학습 흐름은 다음과 같다. ① `asyncio.run()`과 `async def`, `await`의 기본 사용법을 익힌다. ② `asyncio.gather()`로 여러 코루틴을 동시에 실행한다.
+본 Section은 Python 표준 라이브러리 **asyncio**를 사용한 `async/await` 실습을 다룬다. 4.1에서 Event loop와 Async IO 개념을 이해했으므로, 이제 asyncio로 코루틴을 작성하고 실행한다. 학습 흐름은 다음과 같다. ① `asyncio.run()`과 `async def`, `await`의 기본 사용법을 익힌다. ② `asyncio.gather()`로 여러 코루틴을 동시에 실행한다. ③ create_task, Semaphore는 4.3에서 다룬다.
 
 ## 이론
 
@@ -124,4 +124,3 @@ asyncio.run(main())
 - asyncio는 `asyncio.run()`으로 진입하고, `async def`, `await`로 코루틴을 작성한다.
 - `await asyncio.sleep()`으로 대기 시 다른 코루틴이 실행된다.
 - `asyncio.gather()`로 여러 코루틴을 동시에 실행한다.
-- asyncio 심화(task, 동시성 패턴)는 Series 08에서 다룬다.
