@@ -74,7 +74,7 @@ plan/
 04 Python Async Programming/
   01 Event Loop와 Async IO/0401notion.cursor.md
   02 asyncio/0402notion.cursor.md
-  03 Task와 동시성/0403notion.cursor.md
+  03 Task와 Concurrency/0403notion.cursor.md
 05 HTTP Protocol/
   01 HTTP request response/0501notion.cursor.md
   02 Headers Methods Status codes/0502notion.cursor.md

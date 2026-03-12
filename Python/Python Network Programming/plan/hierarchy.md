@@ -46,7 +46,7 @@ Ch02 서버 다중 처리(selectors, Thread)를 비동기로 개선. Event loop,
 | ------- | ---- | ---- |
 | 4.1 | Event Loop와 Async IO | - |
 | 4.2 | asyncio | async/await 예제 |
-| 4.3 | Task와 동시성 | create_task, Semaphore |
+| 4.3 | Task와 Concurrency | create_task, Semaphore |
 
 ## Chapter 05: HTTP Protocol
 
