@@ -1,4 +1,4 @@
-# 04 Async Network Programming / 01 Event loop Async IO
+# 04 Python Async Programming / 01 Event Loop와 Async IO
 
 이 디렉토리는 Python에서 **Event loop**와 **Async IO** 개념을 이해하기 위한 내용을 포함한다.
 
@@ -13,8 +13,6 @@
 
 ## Examples
 
-본 Section은 이론만 다룬다. 4.2 asyncio에서 실습을 진행한다.
-
 ## Reference
 
-📘 Notion 문서: [0401notion.cursor.md](../../notion/0401notion.cursor.md)
+[📘 Notion 문서](https://www.notion.so/01-Event-Loop-Async-IO-320dc703ccda80419719f10c92b0e4cd?source=copy_link)
