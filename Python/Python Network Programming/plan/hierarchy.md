@@ -78,8 +78,8 @@ http.server, aiohttp. (uvicorn, WSGI/ASGI는 Series 03 Web Server에서 다룸)
 
 | Section | 내용 | 실습 |
 | ------- | ---- | ---- |
-| 8.1 | HTTP Client Streaming | requests/httpx stream |
-| 8.2 | HTTP Server Streaming | Streaming response |
+| 8.1 | HTTP Server | Streaming response |
+| 8.2 | HTTP Client | requests/httpx stream |
 
 ## Chapter 09: WebSocket Programming
 

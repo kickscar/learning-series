@@ -1,4 +1,4 @@
-# 08 Streaming / 01 HTTP Client Streaming
+# 08 Streaming / 02 HTTP Client
 이 디렉토리는 Python에서 **HTTP 클라이언트 스트리밍 응답 수신**을 이해하기 위한 예제 코드들을 포함한다.
 
 ## What you will learn

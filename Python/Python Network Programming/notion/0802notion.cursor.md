@@ -1,4 +1,4 @@
-# HTTP Client Streaming : 스트리밍 응답 수신
+# HTTP Client : 스트리밍 응답 수신
 
 ## 개요
 

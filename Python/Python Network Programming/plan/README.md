@@ -88,8 +88,8 @@ plan/
   01 http.server/0701notion.cursor.md
   02 aiohttp/0702notion.cursor.md
 08 Streaming/
-  01 HTTP Client Streaming/0801notion.cursor.md
-  02 HTTP Server Streaming/0802notion.cursor.md
+  01 HTTP Server/0801notion.cursor.md
+  02 HTTP Client/0802notion.cursor.md
 09 WebSocket Programming/
   01 WebSocket 프로토콜/0901notion.cursor.md
   02 websockets 라이브러리/0902notion.cursor.md

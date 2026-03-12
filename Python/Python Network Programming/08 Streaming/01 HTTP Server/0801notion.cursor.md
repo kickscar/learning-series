@@ -1,4 +1,4 @@
-# 8.2 HTTP Server Streaming
+# 8.1 HTTP Server Streaming
 
 ## 개요
 
