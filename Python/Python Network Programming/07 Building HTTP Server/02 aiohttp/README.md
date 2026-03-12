@@ -1,4 +1,4 @@
-# 07 Building HTTP Server / 02 aiohttp Async HTTP Server
+# 07 Building HTTP Server / 02 aiohttp
 
 이 디렉토리는 Python에서 **aiohttp** 비동기 HTTP 서버를 이해하기 위한 예제 코드들을 포함한다.
 
