@@ -1,4 +1,4 @@
-# 7.2 aiohttp Async HTTP Server
+# 7.2 aiohttp
 
 ## 개요
 
