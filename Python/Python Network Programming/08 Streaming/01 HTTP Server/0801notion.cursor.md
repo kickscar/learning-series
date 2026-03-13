@@ -1,4 +1,4 @@
-# 8.1 HTTP Client Streaming
+# 8.1 HTTP Server Streaming
 
 ## 개요
 
@@ -6,11 +6,11 @@
 
 ## 이론
 
-<!-- HTTP Client Streaming -->
+<!-- HTTP Server Streaming -->
 
 ## 실습
 
-<!-- requests/httpx stream -->
+<!-- Streaming response -->
 
 ## 핵심 정리
 
