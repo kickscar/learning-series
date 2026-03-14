@@ -354,7 +354,6 @@ Codex agent는 다음 skills를 활용한다.
 
 - series-plan
 - section-write
-- lab-write
 - series-consistency
 
 각 skill은 특정 작업을 수행하도록 설계되어 있다.
@@ -362,9 +361,10 @@ Codex agent는 다음 skills를 활용한다.
 예:
 
 - series-plan → 시리즈 전체 hierarchy 및 section 계획 생성
-- section-write → section 문서 초안 생성
-- lab-write → 실습 설계 및 작성
+- section-write → section 문서 초안 생성 및 Lab 설계 작성
 - series-consistency → 문서 구조 일관성 점검
+
+`lab-write` skill은 더 이상 분리해서 사용하지 않는다. 기존의 실습 설계 및 Lab 설명 작성 책임은 `section-write`에 통합되었다.
 
 
 ---
