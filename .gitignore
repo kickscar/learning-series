@@ -791,3 +791,7 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,java,python,node,visualstudiocode,intellij+all,eclipse,maven,gradle,nextjs,django,flask
+
+
+# AI Agent Persistent Context: codex
+**/.agents/memory

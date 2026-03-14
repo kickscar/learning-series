@@ -223,7 +223,8 @@ Skill 실행 시 다음을 생성한다.
 이 작업들은 다음의 다른 Skill이 담당한다.
 
 - section-write
-- lab-write
+
+Lab 설계와 실습 설명은 별도 `lab-write` skill이 아니라 `section-write`에서 함께 처리한다.
 
 ---
 
