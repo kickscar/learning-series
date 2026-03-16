@@ -1,0 +1,102 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Dynamic Template using Parameters, Mappings and Conditions
+
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Existing Key Pair Name for SSH
+
+  AmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+    Description: AMI ID (Use SSM Parameter Path to Find Latest Amazon Linux)
+
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VPC ID where Resources will be Deployed
+
+  EnvType:
+    Type: String
+    Default: development
+    AllowedValues: [development, production]
+    Description: Deployment Environment
+
+  AZ:
+    Type: String
+    Description: the Logical AZ Number for the Main Subnet.
+    Default: AZ1
+    AllowedValues: [AZ1, AZ2, AZ3, AZ4]
+
+Mappings:
+  RegionMap:
+    ap-northeast-1:
+      AZ1: ap-northeast-1a
+      AZ2: ap-northeast-1b
+      AZ3: ap-northeast-1c
+      AZ4: ap-northeast-1d
+    ap-northeast-2:
+      AZ1: ap-northeast-2a
+      AZ2: ap-northeast-2b
+      AZ3: ap-northeast-2c
+      AZ4: ap-northeast-2d
+
+  InstanceMap:
+    development:
+      Type: t3.micro
+    production:
+      Type: t3.small
+
+Conditions:
+  IsProdutionEnv: !Equals [!Ref EnvType, production]
+
+Resources:
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for EC2(Instance) SSH Access
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !If [IsProdutionEnv, 125.129.167.183/32, 0.0.0.0/0]
+      Tags:
+        - Key: Project
+          Value: !Ref "AWS::StackName"
+        - Key: Environment
+          Value: !Ref EnvType
+        - Key: Capability
+          Value: "SecurityGroup"
+
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref KeyName
+      SecurityGroupIds: [!Ref SecurityGroup]
+      ImageId: !Ref AmiId
+      InstanceType: !FindInMap [InstanceMap, !Ref EnvType, Type]
+      AvailabilityZone: !FindInMap [RegionMap, !Ref AWS::Region, !Ref AZ]
+      Tags:
+        - Key: Project
+          Value: !Ref "AWS::StackName"
+        - Key: Environment
+          Value: !Ref EnvType
+        - Key: Capability
+          Value: "Instance"
+
+Outputs:
+  InstanceId:
+    Description: EC2 Instance ID
+    Value: !Ref Instance
+
+  InstanceType:
+    Description: Instance Type Selected
+    Value: !FindInMap [InstanceMap, !Ref EnvType, Type]
+
+  AvailabilityZone:
+    Description: Availability Zone on Region
+    Value: !FindInMap [RegionMap, !Ref AWS::Region, !Ref AZ]
+
+  SshCommand:
+    Description: SSH Command
+    Value: !Sub "ssh -i ${KeyName}.pem ec2-user@${Instance.PublicDnsName}"

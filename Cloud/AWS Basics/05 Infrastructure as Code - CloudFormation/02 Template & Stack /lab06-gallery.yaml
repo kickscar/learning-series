@@ -1,0 +1,186 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: gallery-ec2 Deployment
+
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Existing Key Pair Name for SSH
+
+  AmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+    Description: AMI ID (Use SSM Parameter Path to Find Latest Amazon Linux)
+
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VPC ID where Resources will be Deployed
+
+  SshSourceCidr:
+    Type: String
+    Description: CIDR Allowed to SSH Port 22
+
+  EnvType:
+    Type: String
+    Default: lab
+    AllowedValues: [development, production, lab]
+    Description: Deployment Environment
+
+  AZ:
+    Type: String
+    Description: the Logical AZ Number for the Main Subnet.
+    Default: AZ1
+    AllowedValues: [AZ1, AZ2, AZ3, AZ4]
+
+
+Mappings:
+  RegionMap:
+    ap-northeast-1:
+      AZ1: ap-northeast-1a
+      AZ2: ap-northeast-1b
+      AZ3: ap-northeast-1c
+      AZ4: ap-northeast-1d
+    ap-northeast-2:
+      AZ1: ap-northeast-2a
+      AZ2: ap-northeast-2b
+      AZ3: ap-northeast-2c
+      AZ4: ap-northeast-2d
+
+  InstanceMap:
+    lab:
+      Type: t3.micro
+    development:
+      Type: t3.micro
+    production:
+      Type: t3.small
+
+  ConfigMap:
+    Constants:
+      SourceUrl: https://github.com/kickscar/series-aws-apps/archive/refs/heads/main.tar.gz
+      SourceCodeDir: /opt/app/series-aws-apps-main/gallery-ec2
+      ApplicationName: gallery-ec2
+
+
+Conditions:
+  IsDevelopmentEnv: !Equals [!Ref EnvType, development]
+
+
+Resources:
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for EC2 Instance SSH Access
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref SshSourceCidr
+        - IpProtocol: tcp
+          FromPort: !If [IsDevelopmentEnv, "8080", "80"]
+          ToPort: !If [IsDevelopmentEnv, "8080", "80"]
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Project
+          Value: !Ref "AWS::StackName"
+        - Key: Environment
+          Value: !Ref EnvType
+        - Key: Capability
+          Value: "SecurityGroup"
+
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref KeyName
+      SecurityGroupIds: [!Ref SecurityGroup]
+      ImageId: !Ref AmiId
+      InstanceType: !FindInMap [InstanceMap, !Ref EnvType, Type]
+      AvailabilityZone: !FindInMap [RegionMap, !Ref AWS::Region, !Ref AZ]
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -ex
+          dnf update -y
+          /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource Instance --configsets deploy --region ${AWS::Region}
+      Tags:
+        - Key: Project
+          Value: !Ref "AWS::StackName"
+        - Key: Environment
+          Value: !Ref EnvType
+        - Key: Capability
+          Value: "Instance"
+    Metadata:
+      AWS::CloudFormation::Init:
+        configSets:
+          deploy: [setup, build, service]
+        setup:
+          packages:
+            yum:
+              java-21-amazon-corretto: []
+        build:
+          sources:
+            /opt/app: !FindInMap [ConfigMap, Constants, SourceUrl]
+          commands:
+            01_permisson:
+              command: !Sub
+                - "chmod +x ${BuildPath}/mvnw || true"
+                - BuildPath: !FindInMap [ConfigMap, Constants, SourceCodeDir]
+            02_build:
+              command: !Sub
+                - "export HOME=/root && cd ${BuildPath} && ./mvnw clean package -Dbuild.finalName=${FinalName}"
+                - BuildPath: !FindInMap [ConfigMap, Constants, SourceCodeDir]
+                  FinalName: !FindInMap [ConfigMap, Constants, ApplicationName]
+        service:
+          files:
+            /etc/systemd/system/gallery.service:
+              content: !Sub
+                - |
+                  [Unit]
+                  Description=Gallery Service
+                  After=network.target
+  
+                  [Service]
+                  Type=simple
+                  WorkingDirectory=${InstallPath}
+                  ExecStart=/usr/bin/java -jar ${InstallPath}/${ApplicationName}.jar --spring.profiles.active=${EnvType}
+                  Restart=always
+                  User=root
+                  Group=root
+                  StandardOutput=journal
+                  StandardError=journal
+  
+                  [Install]
+                  WantedBy=multi-user.target
+                - InstallPath: !Sub [ "${BuildPath}/target", { BuildPath: !FindInMap [ ConfigMap, Constants, SourceCodeDir ] } ]
+                  ApplicationName: !FindInMap [ ConfigMap, Constants, ApplicationName ]
+              mode: "000644"
+              owner: root
+              group: root
+          services:
+            systemd:
+              gallery:
+                enabled: true
+                ensureRunning: true
+
+
+Outputs:
+  InstanceId:
+    Description: EC2 Instance ID
+    Value: !Ref Instance
+
+  InstanceType:
+    Description: Instance Type Selected
+    Value: !FindInMap [InstanceMap, !Ref EnvType, Type]
+
+  AvailabilityZone:
+    Description: Availability Zone on Region
+    Value: !FindInMap [RegionMap, !Ref AWS::Region, !Ref AZ]
+
+  SSHCommand:
+    Description: SSH Command
+    Value: !Sub "ssh -i ${KeyName}.pem ec2-user@${Instance.PublicDnsName}"
+
+  ApplicationURL:
+    Description: Gallery Application URL (Public DNS + Dynamic Port)
+    Value: !Sub
+      - "http://${DnsName}:${Port}"
+      - DnsName: !GetAtt Instance.PublicDnsName
+        Port: !If [ IsDevelopmentEnv, "8080", "80" ]
