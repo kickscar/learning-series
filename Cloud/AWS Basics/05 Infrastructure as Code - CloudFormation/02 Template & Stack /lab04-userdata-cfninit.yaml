@@ -1,0 +1,117 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: EC2 Bootstrapping using "UserData and cfn-init"
+
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Existing EC2 Key Pair Name for SSH Login
+
+  InstanceType:
+    Type: String
+    Default: t3.micro
+    Description: EC2 Instance Type
+
+  AmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+    Description: AMI ID (Use SSM Parameter Path to Find Latest Amazon Linux)
+
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VPC ID where Resources will be Deployed
+
+  SshSourceCidr:
+    Type: String
+    Default: 0.0.0.0/0
+    Description: CIDR Allowed to SSH Port 22
+
+  HttpSourceCidr:
+    Type: String
+    Default: 0.0.0.0/0
+    Description: CIDR Allowed to Http Port 80
+
+
+Resources:
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for EC2(Instance) SSH Access
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref SshSourceCidr
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !Ref HttpSourceCidr
+      Tags:
+        - Key: Project
+          Value: !Ref "AWS::StackName"
+        - Key: Capability
+          Value: "SecurityGroup"
+
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyName
+      ImageId: !Ref AmiId
+      SecurityGroupIds: [!Ref SecurityGroup]
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -ex
+          dnf update -y
+          /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource Instance --configsets install_and_run --region ${AWS::Region}
+      Tags:
+        - Key: Project
+          Value: !Ref "AWS::StackName"
+        - Key: Capability
+          Value: "Instance"
+
+    Metadata:
+      AWS::CloudFormation::Init:
+        configSets:
+          install_and_run: [setup, web]
+        setup:
+          packages:
+            yum:
+              httpd: []
+        web:
+          files:
+            /var/www/html/index.html:
+              content: |
+                <!DOCTYPE html>
+                <head>
+                  <meta charset=\"UTF-8\">
+                  <title>AWS - CloudFormation</title>
+                </head>
+                <body>
+                  <h1>CloudFormation cfn-init Bootstrapping Success!</h1>
+                </body>
+                </html>
+              mode: "644"
+          services:
+            systemd:
+              httpd:
+                enabled: true
+                ensureRunning: true
+
+
+Outputs:
+  InstanceId:
+    Description: EC2 Instance ID
+    Value: !Ref Instance
+
+  InstancePublicDns:
+     Description: EC2 Public DNS
+     Value: !GetAtt Instance.PublicDnsName
+
+  SshCommand:
+     Description: SSH command
+     Value: !Sub "ssh -i ${KeyName}.pem ec2-user@${Instance.PublicDnsName}"
+
+  CurlTest:
+    Description: curl command for Web Server Test
+    Value: !Sub "curl http://${Instance.PublicDnsName}"

@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Minimal EC2 Template
+
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Existing EC2 Key Pair Name for SSH Login
+
+  InstanceType:
+    Type: String
+    Default: t3.micro
+    AllowedValues: [t2.micro, t3.micro, t3.small]
+    Description: EC2 Instance Type
+
+  AmiId:
+    Type: AWS::EC2::Image::Id
+    Description: AMI ID (Use CLI to Find Latest Amazon Linux 2023)
+
+Resources:
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyName
+      ImageId: !Ref AmiId
+      Tags:
+        - Key: Project
+          Value: !Ref "AWS::StackName"
+        - Key: Capability
+          Value: "Instance"
+
+Outputs:
+  InstanceId:
+    Description: EC2 Instance ID
+    Value: !Ref Instance
+
+  InstancePublicIP:
+    Description: EC2 Public IP
+    Value: !GetAtt Instance.PublicIp

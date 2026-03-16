@@ -1,0 +1,101 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Security Group (Allow SSH)
+
+Parameters:
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Existing EC2 Key Pair Name for SSH Login
+
+  InstanceType:
+    Type: String
+    Default: t3.micro
+    Description: EC2 Instance Type
+
+  AmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+    Description: AMI ID (Use SSM Parameter Path to Find Latest Amazon Linux)
+
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VPC ID where Resources will be Deployed
+
+  SshSourceCidr:
+    Type: String
+    Default: 0.0.0.0/0
+    Description: CIDR Allowed to SSH Port 22
+
+Resources:
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for EC2(AppInstance) SSH Access
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref SshSourceCidr
+      Tags:
+        - Key: Project
+          Value: !Ref "AWS::StackName"
+        - Key: Capability
+          Value: "SecurityGroup"
+
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyName
+      ImageId: !Ref AmiId
+      SecurityGroupIds:
+        - !Ref SecurityGroup
+      Tags:
+        - Key: Project
+          Value: !Ref "AWS::StackName"
+        - Key: Capability
+          Value: "Instance"
+
+Outputs:
+  InstanceId:
+    Description: EC2 Instance ID
+    Value: !Ref Instance
+
+  InstancePublicIP:
+    Description: EC2 Public IP
+    Value: !GetAtt Instance.PublicIp
+
+  InstancePublicDns:
+    Description: EC2 Public DNS
+    Value: !GetAtt Instance.PublicDnsName
+
+  SecurityGroupId:
+    Description: Created Security Group ID
+    Value: !Ref SecurityGroup
+
+  SshCommand:
+    Description: SSH command
+    Value: !Sub "ssh -i ${KeyName}.pem ec2-user@${Instance.PublicDnsName}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
