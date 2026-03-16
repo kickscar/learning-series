@@ -24,6 +24,7 @@ Terraform Basics 시리즈의 전체 학습 구조를 설계한다.
 - Chapter별 학습 목표 정의
 - Section 구성 설계
 - Section별 Lab 방향 정의
+- 사용자가 제공한 hierarchy correction 반영
 
 Series plan이 완료되어야 Section 문서 작성이 가능하다.
 
@@ -54,6 +55,10 @@ Skill 실행 전에 다음 문서를 반드시 읽는다.
 - .agents/standards/writing-rules.md
 - .agents/standards/glossary.md
 
+사용자가 correction 문서를 제공한 경우 다음 문서도 함께 확인한다.
+
+- .agents/correction/*.md
+
 목적
 
 1. 문서 작성 스타일을 일관되게 유지
@@ -80,20 +85,29 @@ Skill 실행 전에 다음 문서를 반드시 읽는다.
 - Terraform Basics 전체 Chapter 목록
 - Chapter 간 학습 흐름
 - 각 Chapter의 핵심 학습 주제
+- 사용자가 제공한 correction이 있을 경우 correction 기준 Chapter / Section 구조
 
 예:
 
 - Chapter 01 Terraform 소개
 - Chapter 02 HCL 기초
-- Chapter 03 Terraform Core Concepts
-- Chapter 04 Terraform Workflow
-- Chapter 05 Terraform State
-- Chapter 06 Terraform Modules
-- Chapter 07 Terraform Production Practices
+- Chapter 03 Terraform 핵심 개념
+- Chapter 04 변수와 출력 심화
+- Chapter 05 State 관리
+- Chapter 06 조건문과 반복
+- Chapter 07 모듈 기초
+- Chapter 08 모듈 고급
+- Chapter 09 Workspace와 환경 분리
+- Chapter 10 코드 품질과 검증
+- Chapter 11 Terraform 테스트
+- Chapter 12 CI/CD 연동
+- Chapter 13 Networking
+- Chapter 14 Computing과 스토리지
+- Chapter 15 Database와 고가용성
 
 이 문서는 `.agents/templates/plan-series-hierarchy.md` 템플릿을 사용한다.
 
-이미 존재하는 경우 수정하지 않는다. 사용자가 명시적으로 요청한 경우에만 재작성한다.
+이미 존재하는 경우 기본적으로 수정하지 않는다. 다만 사용자가 series hierarchy correction, chapter structure correction, plan 재수립을 명시적으로 요청한 경우에는 재작성할 수 있다.
 
 ---
 
@@ -108,6 +122,8 @@ Skill 실행 전에 다음 문서를 반드시 읽는다.
 - .agents/plans/01 Terraform 소개.md
 - .agents/plans/02 HCL 기초.md
 - .agents/plans/03 Terraform 핵심 개념.md
+- .agents/plans/10 코드 품질과 검증.md
+- .agents/plans/15 Database와 고가용성.md
 
 각 문서는 다음 내용을 포함한다.
 
@@ -131,12 +147,12 @@ Section 번호는 Chapter 내에서 두 자리 숫자를 사용한다.
 예:
 
 - 01 IaC와 Terraform
-- 02 Terraform vs CloudFormation
-- 03 Terraform 설치
+- 02 CloudFormation vs Terraform 비교
+- 03 Terraform 설치 및 환경 구성
 
 이 문서는 `.agents/templates/plan-chapter.md` 템플릿을 사용한다.
 
-이미 존재하는 plan 문서는 덮어쓰지 않는다. 사용자가 명시적으로 요청한 경우에만 재작성한다.
+이미 존재하는 plan 문서는 기본적으로 덮어쓰지 않는다. 다만 사용자가 correction 문서를 제공했거나 plan 재수립을 명시적으로 요청한 경우에는 관련 Chapter plan을 재작성할 수 있다.
 
 
 ---
@@ -170,17 +186,23 @@ Terraform 학습은 다음 흐름을 따른다.
 ```
 Terraform 소개
 ↓
-HCL syntax
+HCL 기초
 ↓
-resource / provider
+Terraform 핵심 개념
 ↓
-Terraform workflow
+변수와 출력 심화
 ↓
-Terraform state
+State 관리
 ↓
-Terraform module
+조건문과 반복
 ↓
-production infrastructure
+모듈 기초 / 모듈 고급
+↓
+Workspace와 환경 분리
+↓
+코드 품질 / 테스트 / CI/CD
+↓
+AWS 인프라 실전 구성
 ```
 
 ## 3. CloudFormation 경험자 고려
@@ -203,12 +225,17 @@ production infrastructure
 Skill 실행 시 다음을 생성한다.
 
 - .agents/plans/series-hierarchy.md
-- .agents/plans/01 {chapter}.md
-- .agents/plans/02 {chapter}.md
+- .agents/plans/{chapter number} {chapter name}.md
 
-미 존재하는 plan 문서는 덮어쓰지 않는다.
+예:
 
-사용자가 명시적으로 요청한 경우에만 재작성한다.
+- .agents/plans/01 Terraform 소개.md
+- .agents/plans/07 모듈 기초.md
+- .agents/plans/15 Database와 고가용성.md
+
+미 존재하는 plan 문서는 새로 생성한다.
+
+이미 존재하는 plan 문서는 사용자가 명시적으로 재작성 또는 correction 반영을 요청한 경우에만 재작성한다.
 
 ---
 
