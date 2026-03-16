@@ -6,132 +6,113 @@
 
 ## 왜 필요한가
 
-Terraform은 단순히 코드를 읽어 순서대로 실행하는 도구가 아니다. 이 Chapter는 Terraform architecture, dependency graph, lifecycle 같은 내부 동작 원리를 설명한다.
-
-이 내용을 이해해야 `terraform plan` 결과를 해석할 수 있고, 예기치 않은 변경이나 리소스 재생성 문제를 구조적으로 판단할 수 있다.
+이 Chapter는 Terraform state, CLI workflow, dependency graph, destroy를 포함한 Terraform의 실행 모델을 설명한다. 이후 state 관리와 module 학습의 기초가 된다.
 
 ---
 
 ## 세부 Sections
 
-1. 03.01 Terraform Architecture와 실행 모델
-2. 03.02 Dependency Graph와 리소스 의존성
-3. 03.03 Lifecycle과 변경 제어
+1. 03.01 State의 이해와 로컬 State
+2. 03.02 init, plan, apply 워크플로우
+3. 03.03 리소스 의존성과 실행 순서
+4. 03.04 destroy와 리소스 정리
 
 ---
 
 ## 간단 소개
 
-이 Chapter에서는 Terraform의 실행 모델을 개념적으로 설명한다.
-
-- Terraform architecture
-- dependency graph
-- lifecycle meta-argument
+- local state의 역할 이해
+- `terraform init`, `terraform plan`, `terraform apply` 흐름 이해
+- dependency graph와 실행 순서 해석
+- `terraform destroy`의 안전한 사용법 학습
 
 ---
 
 # Section Definition
 
-## 03.01 Terraform Architecture와 실행 모델
-
+## 03.01 State의 이해와 로컬 State
 ### 개요
-
-Terraform이 configuration을 읽고 provider와 상호작용하여 실행 계획을 만드는 과정을 설명한다.
-
+local state의 역할과 state file 구조를 설명한다.
 ### 목표
-
-- Terraform architecture 설명
-- plan 생성 흐름 이해
-- provider interaction 과정 이해
-
+- state 필요성 설명
+- state file 확인
+- state와 plan 관계 이해
 ### 내용 요약
-
-- configuration loading
-- provider initialization
-- state 참조
-- execution planning
-
+- Terraform state
+- state file
+- local backend
 ### Lab 요약
+- apply 후 state file 확인
 
-- 간단한 resource 구성을 대상으로 plan 생성 흐름 추적
-
----
-
-## 03.02 Dependency Graph와 리소스 의존성
-
+## 03.02 init, plan, apply 워크플로우
 ### 개요
-
-Terraform이 resource 간 참조 관계를 바탕으로 dependency graph를 만드는 방식을 설명한다.
-
+기본 Terraform CLI workflow를 설명한다.
 ### 목표
-
-- 암시적 의존성과 명시적 의존성 차이 이해
-- resource 생성 순서 설명
-- `depends_on`의 사용 시점 판단
-
+- init 역할 이해
+- plan 출력 해석
+- apply 결과 확인
 ### 내용 요약
-
-- reference 기반 dependency
-- `depends_on`
-- graph 기반 실행 순서
-
+- `terraform init`
+- `terraform plan`
+- `terraform apply`
 ### Lab 요약
+- 단일 resource 생성 흐름 실습
 
-- VPC, Subnet, Security Group 간 참조 실습
-- dependency graph가 plan에 미치는 영향 확인
-
----
-
-## 03.03 Lifecycle과 변경 제어
-
+## 03.03 리소스 의존성과 실행 순서
 ### 개요
-
-lifecycle 설정을 통해 Terraform 변경 동작을 제어하는 방법을 설명한다.
-
+resource 간 의존성과 dependency graph를 설명한다.
 ### 목표
-
-- `create_before_destroy` 이해
-- `prevent_destroy`의 보호 목적 설명
-- `ignore_changes` 사용 시 주의점 이해
-
+- 참조 기반 의존성 이해
+- 실행 순서 해석
+- `depends_on` 사용 시점 이해
 ### 내용 요약
-
-- lifecycle meta-argument
-- 리소스 재생성 제어
-- 운영 리스크와 trade-off
-
+- dependency graph
+- implicit dependency
+- explicit dependency
 ### Lab 요약
+- VPC와 subnet 참조 관계 확인
 
-- 리소스 속성 변경 시 lifecycle 차이 비교
+## 03.04 destroy와 리소스 정리
+### 개요
+Terraform이 생성한 리소스를 정리하는 흐름을 설명한다.
+### 목표
+- destroy 역할 이해
+- 삭제 전 검토 포인트 파악
+- 실습 자원 정리 습관 형성
+### 내용 요약
+- `terraform destroy`
+- 삭제 계획
+- 정리 workflow
+### Lab 요약
+- 생성 자원 destroy 실행
 
 ---
 
 # Lab Overview
 
-- Lab1 - Terraform plan 생성 흐름 분석
-- Lab2 - dependency graph 기반 실행 순서 확인
-- Lab3 - lifecycle 설정에 따른 변경 차이 확인
+- Lab1 - state file 구조 확인
+- Lab2 - init, plan, apply workflow 실습
+- Lab3 - dependency graph 기반 실행 순서 확인
+- Lab4 - destroy로 자원 정리
 
 ---
 
 # Expected Learning Outcomes
 
-- Terraform 내부 실행 모델을 설명할 수 있다
-- dependency graph를 기준으로 리소스 의존성을 해석할 수 있다
-- lifecycle을 이용해 변경 동작을 제어할 수 있다
+- Terraform state의 기본 역할을 설명할 수 있다
+- Terraform CLI workflow를 수행할 수 있다
+- dependency graph를 해석할 수 있다
+- destroy를 안전하게 사용할 수 있다
 
 ---
 
 # Modern Key Concepts
 
-- **Terraform Architecture**
-  configuration, provider, state, plan의 연결 구조
-
+- **Terraform state**
+  관리 상태 추적 메커니즘
+- **Terraform Workflow**
+  init → plan → apply → destroy
 - **Dependency Graph**
-  resource 실행 순서를 결정하는 그래프
-
-- **Lifecycle**
-  변경 및 교체 동작 제어 메커니즘
-
+  실행 순서를 결정하는 구조
 - **Idempotency**
-  동일 configuration 반복 실행 시 기대 상태 유지
+  반복 실행 시 일관된 상태 유지

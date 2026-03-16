@@ -66,7 +66,9 @@ Terraform Basics 문서는 다음 원칙을 따른다.
 
 이 시리즈는 **실습 중심 교육 콘텐츠**이다.
 
-문서는 다음 흐름을 따른다.
+다만 모든 Section이 반드시 실습을 포함해야 하는 것은 아니다.
+
+문서는 다음 두 흐름 중 Section 성격에 맞는 구조를 선택할 수 있다.
 
 ```
 개념 이해
@@ -78,7 +80,19 @@ Terraform CLI 실행
 결과 확인
 ```
 
-가능한 실제 Terraform 사용 사례 기반 설명을 포함한다.
+또는,
+
+```
+배경 개념
+↓
+핵심 이론
+↓
+비교 / 분류 / 구조 설명
+↓
+필요 시 예제 / 실습 / 참고 자료
+```
+
+가능한 실제 Terraform 사용 사례 기반 설명을 포함한다. 그러나 개념 중심 문서는 코드와 실습 없이도 완결된 형태를 가질 수 있다.
 
 
 ## 2. 기술 중심 서술
@@ -114,6 +128,69 @@ Terraform에서의 역할
 - 핵심 개념 설명용 코드 블록 사용 가능
 
 
+## 4. 문서 유형 구분
+
+Section draft는 다음 유형 중 하나 또는 여러 유형의 조합으로 작성할 수 있다.
+
+### 개념 중심 Section
+
+- 배경 개념에서 시작
+- 정의와 필요성 중심
+- 비교적 코드 비중이 낮음
+- 표, 분류, 참고 자료 활용 가능
+
+예:
+
+- IaC와 Terraform
+- DevOps와 자동화 배경
+
+### 비교 중심 Section
+
+- 두 개 이상의 도구, 방식, 구조를 비교
+- 표를 우선 활용
+- 차이점, 장단점, 적용 기준 설명
+
+예:
+
+- CloudFormation vs Terraform
+- Declarative vs Imperative
+
+### workflow 중심 Section
+
+- 단계별 실행 흐름 설명
+- CLI, state, plan, apply, destroy 같은 실행 순서 강조
+- 필요한 경우 Mermaid 사용
+
+### 실습 중심 Section
+
+- 예제 코드, 실행 명령, 결과 검증 포함
+- 실습 목표와 포인트를 명확히 제시
+
+### 운영/설계 중심 Section
+
+- production 운영 기준
+- 구조적 trade-off
+- 보안, 협업, 품질, 환경 분리 같은 주제
+
+
+## 5. 대상 독자 보정
+
+이 시리즈의 독자는 AWS 기본 개념과 CloudFormation 입문 경험이 있는 엔지니어다.
+
+따라서 다음 원칙을 따른다.
+
+- VPC, Subnet, EC2, S3, IGW 같은 AWS 기본 개념을 장황하게 재설명하지 않는다.
+- AWS 서비스의 동작 자체보다 Terraform이 그 리소스를 어떻게 모델링하고 관리하는지에 초점을 둔다.
+- AWS 리소스 설명은 Terraform 개념 이해에 필요한 최소 수준으로 제한한다.
+- CloudFormation은 비교 기준으로 활용할 수 있지만, CloudFormation 자체를 깊게 설명하지 않는다.
+- 문서의 중심축은 항상 Terraform 개념, Terraform workflow, Terraform state, module, backend, lifecycle에 둔다.
+
+예:
+
+- `aws_vpc` 예제를 보여줄 수는 있지만 VPC 네트워크 설계 자체를 길게 설명하지 않는다.
+- CloudFormation stack과 비교는 가능하지만 CloudFormation template 작성법 자체를 길게 다루지 않는다.
+
+
 ---
 
 # Title and Section Rules
@@ -130,6 +207,14 @@ Terraform에서의 역할
 
 - Terraform Workflow : init → plan → apply
 - Terraform State : Local State vs Remote Backend
+
+Notion 초안 문서에서는 다음과 같은 제목 스타일도 허용한다.
+
+- `# **개요**`
+- `# **Terraform**`
+- `## IaC 도구의 유형`
+- `# 실습 목표`
+- `# 핵심 포인트`
 
 
 ## 계층 깊이 제한
@@ -161,6 +246,14 @@ H4 이상 사용은 권장하지 않는다.
     Terraform resource는 인프라 객체를 정의하는 가장 기본적인 구성 요소이다. Terraform configuration에서 resource 블록을 통해 실제 클라우드 인프라가 생성된다.
 ```
 
+실습형 문서에서는 다음 소제목 패턴도 적극 사용할 수 있다.
+
+- `핵심 포인트`
+- `실습 목표`
+- `구성 요소`
+- `검증 포인트`
+- `Stack 배포 및 검증` 대신 Terraform 문맥에서는 `실행 및 검증`
+
 ---
 
 # Concept Emphasis
@@ -184,6 +277,8 @@ H4 이상 사용은 권장하지 않는다.
 ```
     앞서 살펴본 Terraform workflow 예시와 같이
 ```
+
+필요한 경우 blockquote는 한 문서에서 여러 번 사용할 수 있다. 다만 선언문, 핵심 정의, 중요한 전환 문장에만 사용한다.
 
 ---
 
@@ -253,7 +348,7 @@ AWS
 
 ## 실행 가능한 코드
 
-실습 코드는 복사하여 바로 실행할 수 있는 완전한 코드를 제공한다. 부분 코드 대신 가능한 전체 예제를 제공한다. 개념이나 이론 설명에서 제시한 전체 코드가 너무 길면 내(사용자)가 노션 문서 작성 시 판단해서 줄이거나 발췌한다.
+실습 코드가 필요한 경우 복사하여 바로 실행할 수 있는 완전한 코드를 제공한다. 부분 코드 대신 가능한 전체 예제를 제공한다. 개념 중심 Section에서는 코드 없이 설명만으로 구성할 수 있다.
 
 Terraform 코드 예제는 HCL 언어 태그를 사용한다.
 
@@ -292,6 +387,10 @@ Terraform Basics 시리즈의 예제 코드와 Lab은 **AWS provider**를 기준
 - aws_vpc
 - aws_subnet
 - aws_security_group
+
+코드 예제는 필요한 경우에만 포함한다. Section 목표가 개념 이해 또는 비교 설명이라면 코드 블록을 생략할 수 있다.
+
+코드 예제의 목적은 AWS 인프라 자체 설명이 아니라 Terraform 개념 설명이다.
   
 
 ---
@@ -300,7 +399,7 @@ Terraform Basics 시리즈의 예제 코드와 Lab은 **AWS provider**를 기준
 
 ## Mermaid 사용
 
-아키텍처 구조나 workflow 설명에는 Mermaid 다이어그램을 사용한다.
+아키텍처 구조나 workflow 설명에는 Mermaid 다이어그램을 사용할 수 있다.
 
 예:
 
@@ -349,6 +448,46 @@ Mermaid로 표현하기 어려운 경우 다음 placeholder를 사용한다.
 ```
 
 Notion 문서 작성 시 실제 내(사용자)가 이미지로 교체한다.
+
+
+---
+
+# Table Usage Rules
+
+표는 다음 상황에서 적극 사용한다.
+
+- 도구 비교
+- 개념 분류
+- 핵심 구성 요소 정리
+- 장단점 비교
+- 절차 요약
+- 검증 포인트 정리
+
+예:
+
+- IaC 도구 유형
+- Declarative vs Imperative
+- Terraform 핵심 구성 요소
+
+표는 설명을 대체하는 것이 아니라 설명을 압축하고 명확하게 만드는 용도로 사용한다.
+
+특히 경험자 독자를 대상으로 할 때 표는 기초 개념 재설명보다 비교 기준과 구조 요약을 빠르게 전달하는 용도로 사용한다.
+
+
+---
+
+# Reference Rules
+
+최종 문서 수준에 가까운 draft를 작성할 때는 필요한 경우 `참고 자료` 섹션을 포함할 수 있다.
+
+다음 경우 참고 자료를 권장한다.
+
+- 입문 개념 Section
+- 비교 개념 Section
+- Terraform 공식 개념을 정리하는 Section
+- 실무 운영 기준을 소개하는 Section
+
+참고 자료는 가능한 1차 자료 또는 공식 문서를 우선한다.
 
 
 ---

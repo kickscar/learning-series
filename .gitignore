@@ -793,5 +793,29 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/macos,java,python,node,visualstudiocode,intellij+all,eclipse,maven,gradle,nextjs,django,flask
 
 
-# AI Agent Persistent Context: codex
-**/.agents/memory
+### Terraform ###
+
+# 1. 로컬 작업용 디렉터리 (바이너리 및 캐시)
+.terraform/
+
+# 2. 상태 파일 (공개 시 인프라 보안 위험 및 충돌 원인)
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+
+# 3. 변수 설정 파일 (민감한 인증 정보 포함 가능성)
+# 실제 운영 환경의 값은 Git에 올리지 않고 별도 관리합니다.
+*.tfvars
+*.tfvars.json
+
+# 4. 크래시 로그 및 사용자 설정
+crash.log
+.terraform.rc
+terraform.rc
+
+
+### AI Agent ###
+
+# 1. Codex: Persistent Context
+.agents/memory
+.agents/correction

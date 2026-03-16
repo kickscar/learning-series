@@ -44,7 +44,7 @@ Chapter
 
 - **Chapter**
   - 큰 학습 주제 단위
-  - 예: Introduction, Core Workflow, State Management
+  - 예: Terraform 소개, HCL 기초, State 관리, 모듈 기초, CI/CD 연동
 
 - **Section**
   - Chapter 내의 구체적인 학습 단위
@@ -193,7 +193,9 @@ series plan → chapter plan → section draft → review → refine → notion 
 예:
 
 - .agents/plans/series-hierarchy.md (전체 문서의 구조, Chapter 들과 Section 들의 계층 구조)
-- .agents/plans/01.Terraform 소개.md (각 Chapter와 그 안의 Section들에 대한 내용 및 실습 등에 관한 계획)
+- .agents/plans/01 Terraform 소개.md (각 Chapter와 그 안의 Section들에 대한 내용 및 실습 등에 관한 계획)
+- .agents/plans/10 코드 품질과 검증.md
+- .agents/plans/15 Database와 고가용성.md
 
 특히, Chapter Plan 문서에는 다음이 포함된다.
 
@@ -232,6 +234,7 @@ Draft 생성과 함께 동시에 각 Section 디렉토리에는 README.md도 생
 예:
 
 01 Terraform 소개/01 IaC와 Terraform/README.md
+10 코드 품질과 검증/02 tflint와 정적 분석/README.md
 
 README에는 다음 내용이 포함된다.
 
@@ -285,12 +288,15 @@ Terraform Basics/
 │  │  │  └─ SKILL.md
 │  │  └─ series-consistency/
 │  │     └─ SKILL.md
+│  ├─ correction/
+│  │  └─ series-hierarchy.md
 │  ├─ plans/
 │  │  ├─ series-hierarchy.md
 │  │  ├─ 01 Terraform 소개.md
 │  │  ├─ 02 HCL 기초.md
 │  │  ├─ 03 Terraform 핵심 개념.md
-│  │  └─ 04 변수와 출력 심화.md
+│  │  ├─ ...
+│  │  └─ 15 Database와 고가용성.md
 │  └─ draft/
 │     ├─ 01.01.notion.codex.md
 │     └─ 01.02.notion.codex.md
@@ -329,6 +335,8 @@ Terraform Basics/
 - plan 작업 → `.agents/plans`   예) "계획 수립"
 - draft 작성 → `.agents/draft`  예) "{chapter no}-{section no} 문서 작성" 
 
+사용자가 correction 문서를 제공한 경우에는 `.agents/correction/` 아래 문서를 먼저 읽고 기존 plan과 충돌하는 내용을 우선 반영한다.
+
 3. Section draft 문서를 작성할 때
 
 - 해당 Chapter plan 문서를 먼저 읽는다.
@@ -337,6 +345,8 @@ Terraform Basics/
 - draft 문서 생성
 
 4. Plan이 확정되지 않은 상태에서는 **Section 문서를 작성하지 않는다.**
+
+사용자가 series hierarchy correction 또는 chapter plan correction을 제공한 경우, 관련 plan을 먼저 재작성하거나 수정한 뒤에만 Section 문서를 작성한다.
 
 5. 동일 Section draft 재작성 요청이 있을 경우 기존 draft 내용을 기반으로 수정하지 말고 사용자의 명시적 요청이 없는 한 기존 draft를 삭제 후 새로 작성한다. (삭제 후, 3 다시 수행)
 
@@ -377,6 +387,7 @@ Codex agent는 다음 skills를 활용한다.
 - {chapter no} {chapter name}/{section no} {section name}/README.md는 Git repository 사용자를 위한 안내 문서이다.
 - 실제 교육 문서는 Notion에서 최종 정리된다.
 - 너는 실습 예제 내용과 코드만 문서에 작성한다. 실제 소스 예제 파일은 내가 작성해서 테스트하고 Git repository에 반영한다. 
+- 사용자가 제공한 correction 문서는 기존 agent 판단보다 우선한다. 특히 series hierarchy와 chapter/section 구성 correction은 plan 재수립의 기준으로 사용한다.
 
 
 
