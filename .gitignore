@@ -816,6 +816,13 @@ terraform.rc
 
 ### AI Agent ###
 
-# 1. Codex: Persistent Context
+# Codex: Context
 **/.agents/memory
 **/.agents/correction
+**/.agents/requests
+
+# Cursor: Context
+**/.cursor/memory
+**/.cursor/correction
+**/.cursor/requests
+
