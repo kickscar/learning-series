@@ -43,7 +43,7 @@ app:
   storage:
     type: local
     local:
-      path: gallery-uploads
+      path: uploads
       url-prefix: /assets/images/uploads
     s3:
       bucket: gallery

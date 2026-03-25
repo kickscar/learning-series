@@ -27,7 +27,7 @@
 - **시리즈별 디렉터리** (예: `AWS Fundamentals`, `GCP Fundamentals`)에는 **그 시리즈 범위의 문서와 소규모 예제**를 둔다.
 - **Workloads**에는 **한 애플리케이션이 여러 학습 단계·인프라 시나리오를 관통**할 때 사용하는 **본체 코드**를 둔다.
 
-현재 예시로 **`gallery-spring-boot`** 가 있으며, **AWS Fundamentals** 시리즈에서 정의한 **Gallery 프로젝트**(단계별 이름: Gallery-Static, Gallery-S3, Gallery-Full, Gallery-Docker 및 VPC·ALB 등 **인프라 전환 Lab**)를 **하나의 애플리케이션**과 **설정으로 구분**하는 방향과 정렬된다. 문서상의 단계 이름은 **학습·Lab 라벨**로 남고, 저장소는 **단일 프로젝트**로 유지하는 것을 원칙으로 한다.
+현재 예시로 **`gallery-spring-boot`** 가 있으며, **AWS Fundamentals** 시리즈에서 정의한 **Gallery 프로젝트**(예: EC2 기본 배포, Custom VPC 이전, ALB 전환, S3·RDS·ECS 연동 등 **프로젝트 Lab**)를 **하나의 애플리케이션**과 **설정으로 구분**하는 방향과 정렬된다. 문서상의 Lab 제목은 **학습·시나리오 라벨**로 남고, 저장소는 **단일 프로젝트**로 유지하는 것을 원칙으로 한다.
 
 앞으로 Workload는 **언어·런타임·아키텍처·Cloud Provider** 가 다양해질 수 있다. 너는 **구체 스택이 주어지지 않은 작업**에서는 섣불리 전체 구조를 바꾸지 말고, 아래 **Scope Clarification**을 따른다.
 
@@ -93,7 +93,7 @@ Cloud Series
 
 ### 3. Align with series intent
 
-동작 요구가 바뀌면, 연결된 시리즈(예: AWS Fundamentals의 Gallery 단계 표)에서 정의한 **서비스 조합·흐름**과 **모순되지 않게** 조정한다. 문서 문구 편집이 필요하면 **사용자에게 위임**하거나 **짧은 제안**만 한다.
+동작 요구가 바뀌면, 연결된 시리즈(예: AWS Fundamentals의 Gallery 프로젝트 Lab·`README.md`)에서 정의한 **서비스 조합·흐름**과 **모순되지 않게** 조정한다. 문서 문구 편집이 필요하면 **사용자에게 위임**하거나 **짧은 제안**만 한다.
 
 ### 4. Minimal change
 
@@ -197,40 +197,54 @@ Learning Series/
     └── Workloads/                 ← 본 프로젝트
         ├── AGENTS.md
         ├── .cursor/
+        │   ├── rules/                 ← Cursor Rules (예: workloads-plan-first, refactoring-tracking)
         │   ├── memory/
-        │   │   └── context_bridge.md   ← 세션 간 맥락·결정 사항 (append)
+        │   │   └── context_bridge.md   ← Workloads 운영·규칙·스킬 맥락 (append, Memory Rule 참고)
         │   ├── plan/                  ← Series ↔ Workload 매트릭스, 시리즈별 연결, 기능 목록
         │   │   ├── README.md
         │   │   ├── matrix.md
         │   │   ├── series/
         │   │   └── workloads/
+        │   ├── refactoring/           ← Workload별 리팩토링·코드 리뷰 revision / 체크리스트 (내부)
+        │   │   ├── README.md
+        │   │   └── workloads/
+        │   │       └── gallery-spring-boot.md
         │   └── skills/
-        │       └── session-restore/
-        │           └── SKILL.md      ← 세션 복원 workflow (선택 트리거)
+        │       ├── session-restore/
+        │       │   └── SKILL.md      ← 세션 복원 workflow (선택 트리거)
+        │       └── code-review-refactoring/
+        │           └── SKILL.md    ← Workload 리팩토링 현황·코드 리뷰 (선택 트리거)
         ├── gallery-spring-boot/
         └── (future workloads...)
 ```
 
 **Series–Workload tracking:** `.cursor/plan/README.md` 를 진입점으로 하며, 요약표는 `.cursor/plan/matrix.md`, Workload별 기능은 `.cursor/plan/workloads/` 를 본다.
 
+**리팩토링·코드 리뷰 트래킹:** Workload 코드에 대한 **이슈·개선안·검증 체크리스트**는 `.cursor/refactoring/workloads/{workload-name}.md` 에 **revision** 단위로 누적한다. 사용자가 「제안만」「검증해」「Rev N 반영」처럼 범위를 정했을 때는 **해당 문서와 지시를 우선**하고, **명시적 구현 지시 없이 코드를 바꾸지 않는다** (리팩토링 제안만 받은 경우 등).
+
+**Workload 대상 작업 공통 (스킬·코드):** 특정 Workload 디렉터리(예: `gallery-spring-boot`)를 **대상으로** 리팩토링 리뷰·기능 개선·아이디어 반영·코드 수정 등을 하기 **전에**, 반드시 **`.cursor/plan/workloads/{workload-name}.md`** 를 먼저 읽는다. 여기에 **개요·기능 표·설정 키·시리즈 정렬**이 있다. 문서가 없으면 `.cursor/plan/matrix.md`·해당 Workload `README.md` 로 보조하고, **plan 초안을 만들지** 사용자에게 묻거나 짧게 알린 뒤 진행한다. (상세: `.cursor/rules/workloads-plan-first.mdc`)
+
+**새 Workload를 세울 때**는 코드보다 **먼저** `plan/workloads/{name}.md` 를 두고 기획을 쌓는 흐름을 권장한다. 다만 **이미 코드만 있고 나중에 Workloads에 붙인 경우**(예: `gallery-spring-boot` 처럼)에는 **코드를 먼저** 살펴보고, 그다음 plan 문서를 맞추는 시작도 있다. 절차 요약은 **`.cursor/plan/README.md`** 의 「새 Workload를 계획할 때」「이미 코드가 있고 나중에 붙인 경우」를 본다. (plan 전용 Cursor 스킬은 아직 없음 — 패턴이 정리되면 `.cursor/skills/README.md` 에서 후보로 둔다.)
+
 ---
 
 # Agent Session Flow
 
-세션이 끝나고 **새 세션**이 열려도 Workloads 맥락이 끊기지 않도록, 에이전트는 아래를 **기본 플로우**로 따른다. (사용자가 "지금 당장 코드만" 요청한 경우에도, **작업 전** `context_bridge.md` 를 읽는 것을 생략하지 않는 것이 안전하다.)
+세션이 끝나고 **새 세션**이 열려도 Workloads 맥락이 끊기지 않도록, 에이전트는 아래를 **기본 플로우**로 따른다. `context_bridge.md` 는 **운영·규칙·스킬** 위주이므로 비어 있을 수 있다(코드 이력은 git·plan·refactoring 문서로 추적).
 
 ### 1. Cold Start (새 세션 · 작업 착수 시)
 
 **필수 로드 순서:**
 
 1. **`AGENTS.md`** (본 파일 전체) — 역할, Scope, Memory Rule, 본 Session Flow.
-2. **`.cursor/memory/context_bridge.md`** — 이전 세션의 결정·범위·사용자 피드백.
+2. **`.cursor/memory/context_bridge.md`** — Workloads **운영·`AGENTS`/룰/스킬** 관련 남겨 둔 맥락(있으면). *순수 Workload 코드 작업만 한 세션에서는 짧을 수 있다.*
 3. **`.cursor/plan/matrix.md`** — Series ↔ Workload 연결 상태 요약.
 
-**조건부:**
+**조건부 (Workload가 정해진 경우 순서 권장):**
 
-- 다루는 앱이 정해져 있으면 **`.cursor/plan/workloads/{workload-name}.md`** (기능 표·설정 키·시리즈 정렬).
-- `.cursor/plan/` 구조를 처음 다루거나 변경 직후면 **`.cursor/plan/README.md`**.
+1. **`.cursor/plan/workloads/{workload-name}.md`** — **가장 먼저** (개요·기능·시리즈 정렬).
+2. **`.cursor/refactoring/workloads/{workload-name}.md`** — 리팩토링·코드 리뷰 라운드가 있을 때 (revision·체크리스트).
+3. `.cursor/plan/` 구조를 처음 다루거나 변경 직후면 **`.cursor/plan/README.md`**.
 
 문서 시리즈(AWS Fundamentals 등)의 Chapter draft·Lab 문서 작업은 **해당 시리즈 Workspace**에서 수행한다. 본 Workspace는 **실행 코드·설정·`.cursor/plan` 기반 Series–Workload 추적**이 중심이다.
 
@@ -243,16 +257,17 @@ Learning Series/
 
 ### 3. End of Session / Handoff (작업 단위가 끝날 때)
 
-다음 중 해당하면 **반드시** 남긴다.
+**`.cursor/memory/context_bridge.md` 에 append 할 것** (아래에 해당할 때만. **Workload 애플리케이션 코드·테스트·일상적인 plan/refactoring/README 갱신만**이면 **append 하지 않는다** — git·커밋·`.cursor/plan/`·`.cursor/refactoring/`·코드 리뷰로 추적한다.)
 
 | 상황 | 조치 |
 |------|------|
-| 디렉터리·빌드·주요 동작 방식 변경 | `context_bridge.md` 에 append |
-| `.cursor/plan/matrix.md` 또는 `.cursor/plan/workloads/*.md` 수정 | 동일 내용을 `context_bridge.md` 에 **한 줄 요약** append |
-| `Workloads/README.md` 또는 Workload `README.md` 갱신 | 변경 요지를 `context_bridge.md` 에 **한 줄** append |
-| 설계 결정(스토리지 추상화, Provider 방향 등) | `context_bridge.md` 에 append |
+| **`.cursor/skills/`** 에 스킬 **신규 추가** 또는 기존 `SKILL.md` **중요 변경** | 요지를 `context_bridge.md` 에 **한 줄** append |
+| **`AGENTS.md`** 또는 **`.cursor/rules/*.mdc`** 의 Workloads **운영·지시** 변경 | 요지를 append |
+| 사용자가 세션 간 유지하라고 한 **Workloads 전반 운영 방침**(에이전트 동작 규칙 수준) | append |
 
-새 세션은 **§1 Cold Start**에서 위 기록을 읽어 **지금 상태**를 복원한다.
+**append 하지 않아도 되는 예:** 특정 Workload의 Java/설정만 수정, `plan/workloads/*.md`·`refactoring/workloads/*.md` 만 갱신, 공개 README 동의 하에 수정 등 — **저장소와 추적 문서에 남으면 된다.**
+
+새 세션은 **§1 Cold Start**에서 `AGENTS`·필요 시 `context_bridge` 로 **운영 맥락**을 복원한다.
 
 ### 4. Explicit Restore (사용자가 맥락 복원을 요청할 때)
 
@@ -261,6 +276,20 @@ Learning Series/
 
 - **출력은 대화로만** 한다. 별도 파일을 만들지 않는다(사용자 요청이 없는 한).
 - **파일 수정은 하지 않는다**(복원 전용이므로).
+
+**트리거 충돌:** Workload 디렉터리명과 함께 **「리팩토링 현황」「코드 리뷰」「리팩토링 검증」** 등이 나오면 **§5** 를 우선한다 (전체 Workspace 요약이 아니라 **해당 Workload 리뷰·문서**가 목적일 때).
+
+### 5. Code review & refactoring (Workload 지정)
+
+다음에 가깝게 해당하면 **`.cursor/skills/code-review-refactoring/SKILL.md`** 의 workflow를 따른다.
+
+- `"{workload} 리팩토링 현황"`, `"리팩토링 어디까지"`, `"체크리스트"`, `"Rev 몇"`
+- `"{workload} 코드 리뷰"`, `"다시 봐줘"`, `"변경분 기준으로 리뷰"`
+
+- **기본:** 제안·요약은 **대화**로 한다. **`.cursor/refactoring/workloads/{workload}.md`** 를 고치려면 사용자가 **「Rev에 반영」「문서에 올려」** 등을 **명시**한다.
+- **구현(코드 수정)** 은 사용자가 **적용·반영·구현**을 명시한 경우에만 한다.
+
+**룰:** `.cursor/rules/refactoring-tracking.mdc`, `.cursor/rules/workloads-plan-first.mdc`
 
 ---
 
@@ -271,7 +300,7 @@ Learning Series/
 1. User direct instruction
 2. `Workloads/AGENTS.md` rules
 3. 상위 저장소의 공통 규칙 (존재할 경우)
-4. Memory context — **`.cursor/memory/context_bridge.md`** 를 우선한다.
+4. Memory context — **`.cursor/memory/context_bridge.md`** (있을 때) **운영·규칙·스킬** 관련만. 코드 이력과 무관하다.
 
 충돌 시 높은 우선순위를 따른다.
 
@@ -279,10 +308,21 @@ Learning Series/
 
 # Memory Rule
 
-- 주요 작업이 끝난 뒤, **구조 변경·시리즈 정렬 변경·공개 README 갱신·중요한 설계 결정·사용자 피드백**이 있으면 `.cursor/memory/context_bridge.md` 에 요약 기록한다.
-- 다음 작업에서는 이 파일을 **초기에 읽고** 반영한다.
+`.cursor/memory/context_bridge.md` 는 **Workload 전반 운영·에이전트 규칙**을 세션 간에 이어 주기 위한 것이다. **특정 Workload의 코드 변경**은 **기록 대상이 아니다**; git, 코드 리뷰, `.cursor/plan/`, `.cursor/refactoring/` 이 충분하다.
+
+**append 하는 경우 (해당할 때만):**
+
+- `.cursor/skills/` 스킬 **추가·중요 변경**
+- `AGENTS.md` 또는 `.cursor/rules/*.mdc` 의 **`Workloads` 운영·지시** 변경
+- 사용자가 **「다음 세션 기억해」**라고 한 **운영 방침** 수준의 지시
+
+**append 하지 않는 경우 (예시):**
+
+- `gallery-spring-boot` 등 **애플리케이션 소스·테스트·빌드 설정**만 변경
+- `plan/workloads/*.md`·`refactoring/workloads/*.md`·공개 README 만 갱신 (커밋·문서로 추적)
+
+- 다음 작업에서는 **Cold Start**에서 이 파일을 **있으면** 읽는다.
 - **append** 만 한다. 기존 기록을 삭제하지 않는다.
-- `.cursor/plan/matrix.md` 나 기능 표를 바꾼 경우에도, **왜 바꿨는지** 한 줄이라도 `context_bridge.md` 에 남기면 시리즈 간 맥락이 끊기지 않는다.
 
 ---
 
