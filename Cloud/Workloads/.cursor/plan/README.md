@@ -10,7 +10,7 @@
 ## 파일 구조
 
 ```text
-plan/
+.cursor/plan/
 ├── README.md                 ← 본 파일 (인덱스·갱신 규칙)
 ├── matrix.md                 ← Series × Workload 연결 요약표
 ├── series/                   ← 클라우드 시리즈별 연결·노트
@@ -26,13 +26,13 @@ plan/
 
 ## 갱신 규칙
 
-1. **새 Workload 디렉터리**가 추가되면 `plan/workloads/{name}.md` 를 만들고 `matrix.md` 와 해당 `plan/series/*.md` 를 갱신한다.
-2. **시리즈가 저장소에 추가**되면 `plan/series/` 에 파일을 추가하고 `matrix.md` 에 행을 추가한다.
-3. **기능 추가·제거**는 먼저 `plan/workloads/{name}.md` 의 기능 표·구현 상태를 고친 뒤, 필요 시 시리즈 문서와 교차 확인한다.
-4. **시리즈–Workload 관계나 범위 결정**이 바뀌면, 세션 간 맥락 유지를 위해 `../.cursor/memory/context_bridge.md` 에도 한 줄 요약을 append 한다.
+1. **새 Workload 디렉터리**가 추가되면 `.cursor/plan/workloads/{name}.md` 를 만들고 `matrix.md` 와 해당 `series/*.md` 를 갱신한다.
+2. **시리즈가 저장소에 추가**되면 `series/` 에 파일을 추가하고 `matrix.md` 에 행을 추가한다.
+3. **기능 추가·제거**는 먼저 `.cursor/plan/workloads/{name}.md` 의 기능 표·구현 상태를 고친 뒤, 필요 시 시리즈 문서와 교차 확인한다.
+4. **시리즈–Workload 관계나 범위 결정**이 바뀌면, 세션 간 맥락 유지를 위해 `../memory/context_bridge.md` 에도 한 줄 요약을 append 한다.
 
 ## 관련 문서
 
-- Workloads 전역 규칙·**새 세션 플로우(Cold Start)**: `../AGENTS.md` (`# Agent Session Flow`)
-- 세션 간 맥락: `../.cursor/memory/context_bridge.md`
-- AWS Fundamentals 시리즈 기획( Gallery 단계 등): `../../AWS Fundamentals/.cursor/plans/series-hierarchy.md`
+- Workloads 전역 규칙·**새 세션 플로우(Cold Start)**: `../../AGENTS.md` (`# Agent Session Flow`)
+- 세션 간 맥락: `../memory/context_bridge.md`
+- AWS Fundamentals 시리즈 기획( Gallery 단계 등): `../../../AWS Fundamentals/.cursor/plans/series-hierarchy.md`

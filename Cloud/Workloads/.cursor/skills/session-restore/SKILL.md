@@ -22,17 +22,17 @@ Workspace 루트를 `Cloud/Workloads` 로 둔다.
 
 - `AGENTS.md`
 - `.cursor/memory/context_bridge.md`
-- `plan/matrix.md`
-- (선택) 활성 Workload가 있으면 `plan/workloads/{해당}.md`
+- `.cursor/plan/matrix.md`
+- (선택) 활성 Workload가 있으면 `.cursor/plan/workloads/{해당}.md`
 
 ### Step 2. 상태 리포트 출력 (대화로만)
 
 다음을 간결하게 요약한다:
 
-- **역할**: 이 Workspace는 시리즈 문서가 아니라 **실행 코드·설정·plan 추적**이 중심임 (`AGENTS.md` 요약).
+- **역할**: 이 Workspace는 시리즈 문서가 아니라 **실행 코드·설정·`.cursor/plan` 기반 추적**이 중심임 (`AGENTS.md` 요약).
 - **최근 memory** (`context_bridge.md`): 최근 5개 항목 또는 마지막 날짜 블록 위주.
 - **Series ↔ Workload**: `matrix.md` 표의 현재 상태(primary / planned / —).
-- **Workload 기능 요약**: `plan/workloads/*.md`에 적힌 구현/계획 한 줄이 있으면 인용.
+- **Workload 기능 요약**: `.cursor/plan/workloads/*.md`에 적힌 구현/계획 한 줄이 있으면 인용.
 - **다음에 할 수 있는 작업** 1~2개 (memory·plan·사용자 목표와 무충돌하게).
 
 ### Step 3. 변경 금지

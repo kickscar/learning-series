@@ -105,7 +105,7 @@ Workload는 **Java(Spring Boot), Python, Node.js, Go** 등 **여러 언어**, **
 
 ### 6. Public README alignment
 
-다음 파일은 **공개용**으로 두며, 내부 전용(`plan/`, 에이전트 절차) 내용은 넣지 않는다.
+다음 파일은 **공개용**으로 두며, 내부 전용(`.cursor/plan/`, 에이전트 절차) 내용은 넣지 않는다.
 
 - `Workloads/README.md`
 - 각 Workload 디렉터리의 `README.md` (예: `gallery-spring-boot/README.md`)
@@ -199,19 +199,19 @@ Learning Series/
         ├── .cursor/
         │   ├── memory/
         │   │   └── context_bridge.md   ← 세션 간 맥락·결정 사항 (append)
+        │   ├── plan/                  ← Series ↔ Workload 매트릭스, 시리즈별 연결, 기능 목록
+        │   │   ├── README.md
+        │   │   ├── matrix.md
+        │   │   ├── series/
+        │   │   └── workloads/
         │   └── skills/
         │       └── session-restore/
         │           └── SKILL.md      ← 세션 복원 workflow (선택 트리거)
-        ├── plan/                  ← Series ↔ Workload 매트릭스, 시리즈별 연결, 기능 목록
-        │   ├── README.md
-        │   ├── matrix.md
-        │   ├── series/
-        │   └── workloads/
         ├── gallery-spring-boot/
         └── (future workloads...)
 ```
 
-**Series–Workload tracking:** `plan/README.md` 를 진입점으로 하며, 요약표는 `plan/matrix.md`, Workload별 기능은 `plan/workloads/` 를 본다.
+**Series–Workload tracking:** `.cursor/plan/README.md` 를 진입점으로 하며, 요약표는 `.cursor/plan/matrix.md`, Workload별 기능은 `.cursor/plan/workloads/` 를 본다.
 
 ---
 
@@ -225,19 +225,19 @@ Learning Series/
 
 1. **`AGENTS.md`** (본 파일 전체) — 역할, Scope, Memory Rule, 본 Session Flow.
 2. **`.cursor/memory/context_bridge.md`** — 이전 세션의 결정·범위·사용자 피드백.
-3. **`plan/matrix.md`** — Series ↔ Workload 연결 상태 요약.
+3. **`.cursor/plan/matrix.md`** — Series ↔ Workload 연결 상태 요약.
 
 **조건부:**
 
-- 다루는 앱이 정해져 있으면 **`plan/workloads/{workload-name}.md`** (기능 표·설정 키·시리즈 정렬).
-- `plan/` 구조를 처음 다루거나 변경 직후면 **`plan/README.md`**.
+- 다루는 앱이 정해져 있으면 **`.cursor/plan/workloads/{workload-name}.md`** (기능 표·설정 키·시리즈 정렬).
+- `.cursor/plan/` 구조를 처음 다루거나 변경 직후면 **`.cursor/plan/README.md`**.
 
-문서 시리즈(AWS Fundamentals 등)의 Chapter draft·Lab 문서 작업은 **해당 시리즈 Workspace**에서 수행한다. 본 Workspace는 **실행 코드·설정·plan 추적**이 중심이다.
+문서 시리즈(AWS Fundamentals 등)의 Chapter draft·Lab 문서 작업은 **해당 시리즈 Workspace**에서 수행한다. 본 Workspace는 **실행 코드·설정·`.cursor/plan` 기반 Series–Workload 추적**이 중심이다.
 
 ### 2. During Work
 
 - **Instruction Priority** 를 따른다. 사용자 지시가 `AGENTS.md` 와 충돌하면 사용자에게 확인한다.
-- 코드·설정을 바꿀 때 **`plan/workloads/` 의 기능 표**와 모순이 없는지 확인한다.
+- 코드·설정을 바꿀 때 **`.cursor/plan/workloads/` 의 기능 표**와 모순이 없는지 확인한다.
 - **Core Principles §6** 에 따라, 공개 `README.md` 와의 불일치가 생기면 사용자에게 알리고 반영 여부를 묻는다.
 - 불명확하면 **Scope Clarification** 에 따라 질문한 뒤 진행한다.
 
@@ -248,7 +248,7 @@ Learning Series/
 | 상황 | 조치 |
 |------|------|
 | 디렉터리·빌드·주요 동작 방식 변경 | `context_bridge.md` 에 append |
-| `plan/matrix.md` 또는 `plan/workloads/*.md` 수정 | 동일 내용을 `context_bridge.md` 에 **한 줄 요약** append |
+| `.cursor/plan/matrix.md` 또는 `.cursor/plan/workloads/*.md` 수정 | 동일 내용을 `context_bridge.md` 에 **한 줄 요약** append |
 | `Workloads/README.md` 또는 Workload `README.md` 갱신 | 변경 요지를 `context_bridge.md` 에 **한 줄** append |
 | 설계 결정(스토리지 추상화, Provider 방향 등) | `context_bridge.md` 에 append |
 
@@ -282,7 +282,7 @@ Learning Series/
 - 주요 작업이 끝난 뒤, **구조 변경·시리즈 정렬 변경·공개 README 갱신·중요한 설계 결정·사용자 피드백**이 있으면 `.cursor/memory/context_bridge.md` 에 요약 기록한다.
 - 다음 작업에서는 이 파일을 **초기에 읽고** 반영한다.
 - **append** 만 한다. 기존 기록을 삭제하지 않는다.
-- `plan/matrix.md` 나 기능 표를 바꾼 경우에도, **왜 바꿨는지** 한 줄이라도 `context_bridge.md` 에 남기면 시리즈 간 맥락이 끊기지 않는다.
+- `.cursor/plan/matrix.md` 나 기능 표를 바꾼 경우에도, **왜 바꿨는지** 한 줄이라도 `context_bridge.md` 에 남기면 시리즈 간 맥락이 끊기지 않는다.
 
 ---
 

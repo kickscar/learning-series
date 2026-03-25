@@ -67,4 +67,4 @@
 
 - `AWS Fundamentals/README.md` — Series Project: Gallery, Target Architecture
 - `AWS Fundamentals/.cursor/plans/series-hierarchy.md` — Gallery 버전 표, Phase
-- 시리즈별 상세: [plan/series/aws-fundamentals.md](../series/aws-fundamentals.md)
+- 시리즈별 상세: [aws-fundamentals.md](../series/aws-fundamentals.md)
