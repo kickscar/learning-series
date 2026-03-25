@@ -286,6 +286,28 @@ Learning Series/
 
 ---
 
+# Git: Commit and Remote
+
+사용자가 **커밋**을 지시하면 다음을 따른다.
+
+### Commit message (Conventional Commits)
+
+- 상위 저장소 관례에 맞춘다: **`type(scope): subject`** 한 줄 제목.
+- 예: `feat`, `fix`, `docs`, `chore`, `style`, `refactor` — Workload 관련이면 **`workloads`** 를 scope 로 쓸 수 있다.
+- 본문이 필요하면 **불릿**으로 무엇을 바꿨는지 적는다.
+- **타입·scope·한 줄 요약을 정하기 어렵다면 사용자에게 먼저 묻는다.** 임의로 억지 태그를 붙이지 않는다.
+- 커밋 메시지 **본문 마지막**에 한 줄을 넣는다: **`메시지 작성: Cursor Agent`**
+
+### 사용자가 리모트 반영 / 푸시 / 올려라고 지시한 경우
+
+1. **`git push`** 로 해당 브랜치를 `origin` 에 반영한다. (첫 푸시면 `-u origin <branch>`)
+2. 대화로 **PR 생성 URL** 을 보고한다.  
+   - 원격이 `git@github.com:kickscar/learning-series.git` 이면:  
+     `https://github.com/kickscar/learning-series/pull/new/<브랜치명>`  
+   - 원격 URL이 바뀌면 동일 규칙으로 호스트·저장소만 맞춘다.
+
+---
+
 # Open Questions for Series Owner
 
 아래는 **시리즈가 커질수록** 정하면 Workload 작업이 수월해진다. 답이 없으면 **기존 코드와 사용자 발화**로만 추론한다.
