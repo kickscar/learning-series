@@ -65,11 +65,12 @@ public class ImageStorageConfig implements WebMvcConfigurer {
 
     @ConfigurationProperties(prefix = "app.storage")
     public record ImageStorageProperties(String type, Local local, S3 s3) {
-        public record Local(String path, String urlPrefix) {}
+        public record Local(String path, Url url) {}
+        public record Url(String prefix) {}
         public record S3(String bucket) {}
 
         public String baseUrl() {
-            return local.urlPrefix().replaceAll("/+$", "");
+            return local.url().prefix().replaceAll("/+$", "");
         }
 
         public String resolvedLocalPath() {
