@@ -1,7 +1,7 @@
-# gallery-spring-boot — 리팩토링·코드 리뷰 트래킹
+# gallery-spring-boot — 코드 리뷰 어젠다 (트래킹)
 
 **대상 경로:** `Cloud/Workloads/gallery-spring-boot`  
-**문서 역할:** 코드 리뷰에서 나온 이슈·개선안을 **revision** 단위로 쌓고, **체크리스트**로 구현·검증 여부를 추적한다. 새로운 이슈가 나오면 **새 revision** 블록을 아래에 추가한다 (기존 revision 본문은 삭제하지 않는다).
+**문서 역할:** **검증·코드 리뷰·리팩터링**을 한 **코드 리뷰 어젠다**로 본다. 이슈·개선안·검증 결과·코드 동작에 대한 Q&A 결론을 **revision** 단위로 쌓고, **체크리스트**로 구현·검증 여부를 추적한다. 새로운 이슈가 나오면 **새 revision** 블록을 아래에 추가한다 (기존 revision 본문은 삭제하지 않는다).
 
 ---
 
@@ -11,6 +11,7 @@
 2. **구현 후:** 검증이 끝난 항목만 `- [x]` 로 바꾼다. 부분 완료는 `- [ ]` 옆에 짧은 메모.
 3. **재검토:** 같은 코드를 다시 보며 새 이슈가 나오면 **Revision 이력**에 행을 추가하고, **`## Rev N — …`** 섹션을 새로 만들어 체크리스트를 적는다.
 4. **에이전트 지시 예:** 「`.cursor/refactoring/workloads/gallery-spring-boot.md` Rev 2 기준으로 검증해」 또는 「Rev 3 추가해서 새 이슈만 정리해」
+5. **에이전트 (코드 관련 대화):** 사용자가 **코드에 대해 묻거나**(동작·경로·설정), **검증을 요청하거나**, **리팩터링·Docker·빌드를 논하면** 그 세션의 결론·할 일을 **가능하면 이 문서의 최신 Rev에 반영**한다. 사용자가 **문서에 쓰지 말라고 한 경우**만 생략한다.
 
 ---
 
@@ -20,6 +21,8 @@
 |-----|------------|------------|------|
 | 1 | 2026-03-26 | 초기 코드 리뷰 — 구조·안전·일관성 이슈 정리 | 열림 |
 | 2 | 2026-03-26 | 리팩토링 구현안(제안만, 코드 미적용) — 적용 시 검증 항목 | 열림 |
+| 3 | 2026-03-26 | Docker·README·이미지 경로·Dockerfile 최적화 제안(대화형 코드 리뷰) | 열림 |
+| 4 | 2026-03-26 | Dockerfile 최적화 적용·컨테이너 로컬 저장소 고정 정책 | 열림 |
 
 ---
 
@@ -83,11 +86,45 @@
 
 ---
 
-## Rev 3 — (예약) 사용자 검증 라운드
+## Rev 3 — Docker·README·운영 경로·Dockerfile 최적화 (코드 리뷰 기록)
 
-> Rev 1·2 반영 후 **직접 돌려보거나** 리뷰하며 새 이슈가 나오면 여기에 제목을 붙이고 체크리스트를 채운다.
+> 출처: 대화형 리뷰. **구현·문서 반영 여부는 체크박스로 추적.** 패치 초안은 **제안**이며, 적용 시 BuildKit·`dependency:go-offline` 동작을 로컬에서 한 번 확인할 것.
 
-- [ ] (비어 있음 — 필요 시 제목 추가)
+### 문서·검증
+
+- [x] **`README.md`:** Docker 빌드(`--build-arg application=gallery` 필수)·`docker run` 조합 예시 1)~4) 추가, 이미지 태그 **`gallery:local`**, 위치는 **JAR 섹션 다음·라이선스 앞**.
+- [x] **Docker 빌드 검증:** `--build-arg application=gallery` 있으면 성공, 없으면 실패(필수 인자 정책 확인).
+- [x] **런타임 경로 정리:** `application=gallery` 일 때 **`WORKDIR /gallery`**, 로컬 스토리지 **`/gallery/uploads`**, prod 파일 로그 **`/gallery/gallery-logs/`** (`logback-prod`, 상대 경로 기준).
+
+### Dockerfile 최적화 (Rev 4 에서 적용·체크)
+
+- [x] **`# syntax=docker/dockerfile:1`** 및 BuildKit 전제.
+- [x] **레이어 캐시:** `pom`/`mvnw`/`.mvn` → `dependency:go-offline` → `COPY src` → `package`.
+- [x] **BuildKit:** `RUN --mount=type=cache,target=/root/.m2` (Maven 캐시).
+- [x] **런타임:** `mkdir -p uploads` + `chown spring:spring` (`WORKDIR` = `/gallery` 일 때 **`/gallery/uploads`**).
+- [x] **`.dockerignore`:** `.git`, IDE, `README.md` 등 제외(프로젝트 루트 파일 존재).
+
+---
+
+## Rev 4 — Dockerfile 최적화 적용·컨테이너 로컬 저장소 고정
+
+> 구현 반영. **의도:** 컨테이너는 샌드박스로 보고, 호스트에서 **절대경로로 로컬 저장 위치를 바꾸는 설정**은 권한·마운트 혼란을 부르기 쉬워 **이미지 안에서는 상대 경로 `uploads` 로 고정**한다.
+
+### Dockerfile·런타임
+
+- [x] **빌드 최적화:** `dependency:go-offline`, `COPY src` 분리, `--mount=type=cache` for `~/.m2`.
+- [x] **`APP_STORAGE_LOCAL_PATH` ENV 제거** (이전에는 `uploads` 를 ENV로 두던 방식에서 변경).
+- [x] **로컬 경로 고정:** `ENTRYPOINT` 에서 `JarLauncher` **뒤에** `--app.storage.local.path=uploads` 전달. Spring 외부 설정 우선순위상 **명령줄 인자가 env·기본 yaml보다 우선**하므로, `-e APP_STORAGE_LOCAL_PATH=/절대/경로` 로 덮어쓰기 어렵게 한다(컨테이너 내부는 항상 `WORKDIR/uploads` → 예: `/gallery/uploads`).
+- [x] **엔트리포인트 순서:** `java` 의 메인 클래스 **앞**에 `--app.storage...` 를 두면 JVM이 인식하지 못하므로, **`JarLauncher` 다음**에 애플리케이션 인자를 둔다.
+
+### 후속(선택)
+
+- [x] **README Docker 절:** 로컬 스토리지 고정·볼륨 마운트 예시 추가됨.
+- [ ] **코드 레벨 잠금:** env를 완전히 무시하려면 `@Configuration` 에서 프로파일 `docker` 또는 `Environment` 검사 등 별도 설계(현재는 Spring 우선순위에 의존).
+
+### (예약) Rev 5 — 사용자 검증 라운드
+
+- [ ] (비어 있음)
 
 ---
 

@@ -44,7 +44,8 @@ app:
     type: local
     local:
       path: uploads
-      url-prefix: /assets/images/uploads
+      url:
+        prefix: /assets/images/uploads
     s3:
       bucket: gallery
 

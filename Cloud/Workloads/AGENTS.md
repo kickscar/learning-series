@@ -121,6 +121,10 @@ Workload는 **Java(Spring Boot), Python, Node.js, Go** 등 **여러 언어**, **
 
 사용자가 **코드만** 요청한 경우에도, 위 불일치를 **발견하면 침묵하지 않고** 짧게 짚고, 수정은 **승인 후** 진행한다. README만 단독으로 대규모 다듬지는 않는다(별도 요청 시 예외).
 
+### 7. Workspace file changes require consent
+
+**코드만이 아니라** 워크스페이스 안의 **모든 파일**(소스, 테스트, 빌드·컨테이너 설정, YAML/properties, README, 스크립트, `.cursor/` 하위, `AGENTS.md` 등)을 **새로 쓰거나 수정·삭제하기 전에** 반드시 **변경할 경로와 요지를 먼저 사용자에게 밝히고 허락을 받는다.** 승인 없이 저장·패치·삭제를 하지 않는다. 사용자가 같은 맥락에서 **적용·승인**을 명시한 경우에만 예외로 실행한다. 상세는 **`.cursor/rules/workspace-mutation-consent.mdc`** 와 같다.
+
 ---
 
 # Language Style
@@ -197,7 +201,7 @@ Learning Series/
     └── Workloads/                 ← 본 프로젝트
         ├── AGENTS.md
         ├── .cursor/
-        │   ├── rules/                 ← Cursor Rules (예: workloads-plan-first, refactoring-tracking)
+        │   ├── rules/                 ← Cursor Rules (예: workloads-plan-first, refactoring-tracking, workspace-mutation-consent)
         │   ├── memory/
         │   │   └── context_bridge.md   ← Workloads 운영·규칙·스킬 맥락 (append, Memory Rule 참고)
         │   ├── plan/                  ← Series ↔ Workload 매트릭스, 시리즈별 연결, 기능 목록
@@ -220,7 +224,7 @@ Learning Series/
 
 **Series–Workload tracking:** `.cursor/plan/README.md` 를 진입점으로 하며, 요약표는 `.cursor/plan/matrix.md`, Workload별 기능은 `.cursor/plan/workloads/` 를 본다.
 
-**리팩토링·코드 리뷰 트래킹:** Workload 코드에 대한 **이슈·개선안·검증 체크리스트**는 `.cursor/refactoring/workloads/{workload-name}.md` 에 **revision** 단위로 누적한다. 사용자가 「제안만」「검증해」「Rev N 반영」처럼 범위를 정했을 때는 **해당 문서와 지시를 우선**하고, **명시적 구현 지시 없이 코드를 바꾸지 않는다** (리팩토링 제안만 받은 경우 등).
+**코드 리뷰 어젠다·트래킹:** **검증**(빌드·Docker·실행)·**코드 리뷰**·**리팩터링**을 한 어젠다로 보고, Workload 코드에 대한 **이슈·개선안·검증 결과·Q&A 결론**은 `.cursor/refactoring/workloads/{workload-name}.md` 에 **revision** 단위로 누적한다. 사용자가 코드에 대해 묻거나 검증·개선을 논할 때 나온 내용도 **같은 문서**에 반영하는 것을 원칙으로 한다(사용자가 문서 기록을 거절한 경우 제외). 사용자가 「제안만」「검증해」「Rev N 반영」처럼 범위를 정했을 때는 **해당 문서와 지시를 우선**하고, **명시적 구현 지시 없이 코드를 바꾸지 않는다** (리팩토링 제안만 받은 경우 등).
 
 **Workload 대상 작업 공통 (스킬·코드):** 특정 Workload 디렉터리(예: `gallery-spring-boot`)를 **대상으로** 리팩토링 리뷰·기능 개선·아이디어 반영·코드 수정 등을 하기 **전에**, 반드시 **`.cursor/plan/workloads/{workload-name}.md`** 를 먼저 읽는다. 여기에 **개요·기능 표·설정 키·시리즈 정렬**이 있다. 문서가 없으면 `.cursor/plan/matrix.md`·해당 Workload `README.md` 로 보조하고, **plan 초안을 만들지** 사용자에게 묻거나 짧게 알린 뒤 진행한다. (상세: `.cursor/rules/workloads-plan-first.mdc`)
 

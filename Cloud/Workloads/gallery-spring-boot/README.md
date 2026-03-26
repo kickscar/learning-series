@@ -92,7 +92,7 @@ mvnw.cmd spring-boot:run
 | `spring.profiles.active` | 활성 프로파일. **기본(default)은 `dev`** 이며, 별도로 넘기지 않아도 된다. `prod` 를 쓸 때만 명시한다. |
 | `spring.datasource.*` | DB 연결. 기본은 인메모리 H2(MySQL 모드). MariaDB 등으로 교체 가능하다. |
 | `app.storage.type` | `local` 또는 `s3` |
-| `app.storage.local.path` | 로컬 저장 디렉터리 (상대 경로는 프로세스 작업 디렉터리 기준) |
+| `app.storage.local.path` | 로컬 저장 디렉터리 (상대 경로는 프로세스 작업 디렉터리 기준). **기본값은 `uploads`** (`application.yaml` 의 default 프로파일과 동일) |
 | `app.storage.local.url-prefix` | 브라우저에서 접근하는 업로드 파일 URL prefix |
 | `app.storage.s3.bucket` | S3 버킷 이름 (`app.storage.type=s3` 일 때) |
 
@@ -173,6 +173,86 @@ java -jar target/gallery.jar \
 --app.storage.type=s3 \
 --app.storage.s3.bucket=gallery \
 --server.port=8080
+```
+
+---
+
+## Docker: 이미지 빌드와 컨테이너 실행 (gallery.jar)
+
+컨테이너 이미지는 **`Dockerfile`** 의 `ENV` 로 **기본적으로 dev·H2·로컬 스토리지** 를 쓴다(포트는 이미지에서 **8080**). 실행 시 **`-e`** 로 JAR 의 `--속성=값` 과 같은 설정을 덮어쓴다. 비밀번호 등은 명령줄·환경 변수 노출을 피하기 위해 운영에서는 Secret·외부 설정을 권장한다.
+
+**로컬 스토리지 경로(컨테이너):** 이미지는 **`WORKDIR`(`/gallery`) 기준 상대 경로 `uploads`** 로 고정한다(`ENTRYPOINT` 에서 `--app.storage.local.path=uploads`). 호스트에서 절대경로로 바꾸는 설정은 컨테이너 샌드박스와 맞지 않아 **의도적으로 우선 적용하기 어렵게** 두었다. 업로드를 호스트에 남기려면 **볼륨으로 `/gallery/uploads` 에 마운트**하면 된다 (예: `-v "$(pwd)/gallery-uploads:/gallery/uploads"`).
+
+이미지 빌드 시 **`--build-arg application=gallery` 는 필수** 이다(`ARG application` 기본값 없음).
+
+### 빌드
+
+프로젝트 루트(`gallery-spring-boot/`)에서 실행한다.
+
+```bash
+docker build --build-arg application=gallery -t gallery:local .
+```
+
+Windows:
+
+```bash
+docker build --build-arg application=gallery -t gallery:local .
+```
+
+### 자주 쓰는 환경 변수 (컨테이너)
+
+| 목적 | 예시 |
+|------|------|
+| 프로파일 | `prod` 를 쓸 때만 `SPRING_PROFILES_ACTIVE=prod` (이미지 기본은 `dev`) |
+| 포트 | `SERVER_PORT=8080` (`prod` 프로파일은 앱 기본이 80이므로, JAR 예시와 같이 8080으로 맞출 때 사용) |
+| 스토리지 | `APP_STORAGE_TYPE=s3` |
+| S3 버킷 | `APP_STORAGE_S3_BUCKET=버킷이름` |
+| 외부 DB(MariaDB 등) | `SPRING_DATASOURCE_URL=...`, `SPRING_DATASOURCE_USERNAME=...`, `SPRING_DATASOURCE_PASSWORD=...` |
+
+S3 사용 시 AWS 자격 증명은 **사전 요구 사항** 과 같이 SDK 기본 체인(예: `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` / `AWS_REGION` 등)을 따른다.
+
+### 조합 예시
+
+**1) 기본 프로파일 + H2 + 로컬 스토리지**
+
+```bash
+docker run --rm -p 8080:8080 gallery:local
+```
+
+**2) 운영 프로파일 + H2 + 로컬 스토리지 + (포트:8080)**
+
+```bash
+docker run --rm -p 8080:8080 \
+  -e SPRING_PROFILES_ACTIVE=prod \
+  -e SERVER_PORT=8080 \
+  gallery:local
+```
+
+**3) 운영 프로파일 + H2 + S3 스토리지 + (포트:8080)**
+
+```bash
+docker run --rm -p 8080:8080 \
+  -e SPRING_PROFILES_ACTIVE=prod \
+  -e SERVER_PORT=8080 \
+  -e APP_STORAGE_TYPE=s3 \
+  -e APP_STORAGE_S3_BUCKET=my-gallery-bucket \
+  gallery:local
+```
+
+(AWS 자격 증명은 환경 변수·프로파일 등으로 제공한다.)
+
+**4) 운영 프로파일 + MariaDB + S3 스토리지 + (포트:8080)**
+
+```bash
+docker run --rm -p 8080:8080 \
+  -e SPRING_PROFILES_ACTIVE=prod \
+  -e SERVER_PORT=8080 \
+  -e SPRING_DATASOURCE_URL=jdbc:mariadb://db.example.com:3306/gallery \
+  -e SPRING_DATASOURCE_USERNAME=gallery \
+  -e SPRING_DATASOURCE_PASSWORD='비밀번호' \
+  -e APP_STORAGE_TYPE=s3 \
+  -e APP_STORAGE_S3_BUCKET=gallery \
+  gallery:local
 ```
 
 ---
