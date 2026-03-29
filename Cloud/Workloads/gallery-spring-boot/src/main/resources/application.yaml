@@ -36,6 +36,18 @@ spring:
     suffix : .html
     encoding: UTF-8
 
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: false
+      show-details: never
+
 mybatis:
   config-location: classpath:mybatis/configuration.xml
 
@@ -62,6 +74,7 @@ server:
     whitelabel:
       enabled: false
     path: /error
+  port: 8080
 
 
 ---
@@ -80,9 +93,6 @@ spring:
   thymeleaf:
     cache: false
 
-server:
-  port: 8080
-
 
 ---
 # prod
@@ -98,6 +108,3 @@ logging:
   config: classpath:logback-prod.xml
   ops:
     level: WARN
-
-server:
-  port: 80

@@ -46,6 +46,12 @@
             </form>
         </div>
     </main>
+
+    <footer th:if="${ec2InstanceId != null}" class="site-footer">
+        <div class="site-footer__inner">
+            <small class="site-footer__text">Instance: <span th:text="${ec2InstanceId}">local</span></small>
+        </div>
+    </footer>
 </body>
 </html>
 <script type="text/javascript">

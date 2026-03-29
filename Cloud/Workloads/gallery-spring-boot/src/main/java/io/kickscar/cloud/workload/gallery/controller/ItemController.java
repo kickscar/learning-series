@@ -1,6 +1,5 @@
 package io.kickscar.cloud.workload.gallery.controller;
 
-
 import io.kickscar.cloud.workload.gallery.domain.Item;
 import io.kickscar.cloud.workload.gallery.service.ItemService;
 import lombok.RequiredArgsConstructor;
