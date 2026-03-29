@@ -34,6 +34,8 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.5;
@@ -138,6 +140,8 @@ ul {
 
 /* —— 메인 · 그리드 —— */
 .main {
+  flex: 1 0 auto;
+  width: 100%;
   max-width: 80rem;
   margin-left: auto;
   margin-right: auto;
@@ -323,6 +327,48 @@ ul {
   width: 1px;
   height: 1px;
   overflow: hidden;
+}
+
+/* —— 푸터 (뷰포트 하단 고정: 짧은 페이지에서도 바닥에 붙음) —— */
+.site-footer {
+  flex-shrink: 0;
+  margin-top: auto;
+  border-top: 1px solid var(--tw-gray-200);
+  background-color: var(--tw-white);
+  box-shadow: 0 -1px 0 rgb(0 0 0 / 0.03);
+}
+
+.site-footer__inner {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.75rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .site-footer__inner {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-footer__inner {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.site-footer__text {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--tw-gray-500);
+  letter-spacing: 0.02em;
+}
+
+.site-footer__text span {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  color: var(--tw-gray-700);
 }
 
 /* jQuery UI 다이얼로그 래퍼 (클래스 부여됨) */

@@ -18,7 +18,6 @@ import software.amazon.awssdk.services.s3.S3Client;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
 @Configuration
 @EnableConfigurationProperties(ImageStorageConfig.ImageStorageProperties.class)
 public class ImageStorageConfig implements WebMvcConfigurer {
