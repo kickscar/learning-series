@@ -1,0 +1,38 @@
+#cloud-config
+# Gallery Spring Boot App - Azure VM 최초 배포
+# Ubuntu 24.04 LTS 기준
+
+package_update: true
+packages:
+  - git
+  - openjdk-21-jdk
+
+write_files:
+  - path: /etc/systemd/system/gallery.service
+    content: |
+      [Unit]
+      Description=Gallery Spring Boot Application
+      After=network.target
+
+      [Service]
+      Type=simple
+      User=azureuser
+      WorkingDirectory=/opt/gallery
+      ExecStart=/usr/bin/java -jar /opt/gallery/gallery.jar --spring.profiles.active=dev --gallery.storage.local.path=/opt/gallery/uploads
+      Restart=on-failure
+      RestartSec=5
+
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  - mkdir -p /opt/gallery/uploads
+  - git clone --filter=blob:none --sparse https://github.com/kickscar/learning-series.git /opt/gallery/workspace
+  - git -C /opt/gallery/workspace sparse-checkout init --no-cone
+  - git -C /opt/gallery/workspace sparse-checkout set "Cloud/Workloads/gallery-spring-boot"
+  - cd /opt/gallery/workspace/Cloud/Workloads/gallery-spring-boot && ./mvnw clean package -DskipTests -Dbuild.finalName=gallery
+  - cp /opt/gallery/workspace/Cloud/Workloads/gallery-spring-boot/target/gallery.jar /opt/gallery/gallery.jar
+  - chown -R azureuser:azureuser /opt/gallery
+  - systemctl daemon-reload
+  - systemctl enable gallery
+  - systemctl start gallery
