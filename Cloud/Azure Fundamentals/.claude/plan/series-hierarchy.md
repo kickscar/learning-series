@@ -113,7 +113,7 @@ Chapter
 
 ---
 
-### Chapter 06 — Object Storage
+### Chapter 06 — Azure Storage
 
 | No | 제목 | Lab | 비고 |
 |----|------|-----|------|
@@ -200,6 +200,6 @@ Chapter
 | 03 Compute: Azure Virtual Machine | 계획확정 |
 | 04 VNet & Networking | 계획확정 |
 | 05 Traffic Management & High Availability | 계획확정 |
-| 06 Object Storage | 계획확정 |
+| 06 Azure Storage | 계획확정 |
 | 07 Database | 계획확정 |
 | 08 Container: ACR & Azure Container Apps | 계획확정 |
