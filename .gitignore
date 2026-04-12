@@ -816,6 +816,10 @@ terraform.rc
 
 ### AI Agent ###
 
+# Claude Code: Workspace config & drafts
+**/.claude/
+**/CLAUDE.md
+
 # Codex: Context
 **/.agents/memory
 **/.agents/correction
