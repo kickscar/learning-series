@@ -11,4 +11,4 @@
 
 ## Reference
 
-- Notion: [Notion 문서]()
+- Notion: [Notion 문서](https://www.notion.so/01-IaC-Terraform-33cdc703ccda80a3b6b9e16690f02157?source=copy_link)
