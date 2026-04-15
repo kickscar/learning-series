@@ -12,4 +12,4 @@
 
 ## Reference
 
-- Notion: _작성 후 링크 추가_
+- Notion: [Notion 문서](https://www.notion.so/01-Terraform-Workflow-343dc703ccda8032a512f8c700ad3b82?source=copy_link)
