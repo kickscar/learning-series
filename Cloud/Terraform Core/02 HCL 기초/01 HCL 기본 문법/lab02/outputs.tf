@@ -1,19 +1,19 @@
-output "alb_port" {
-    value = var.alb_port
+output "listener_port" {
+  value = var.listener_port
 }
 
-output "ha_mode" {
-    value = var.ha_mode
+output "ha_enabled" {
+  value = var.ha_enabled
 }
 
-output "subnets_cidrs" {
-    value = var.subnets_cidrs
+output "subnet_cidr" {
+  value = var.subnet_cidr
 }
 
-output "instance_config" {
-    value = var.instance_config
+output "instance" {
+  value = var.instance
 }
 
 output "namespace" {
-    value = local.namespace
+  value = local.namespace
 }

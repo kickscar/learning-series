@@ -6,11 +6,3 @@ output "instance_web" {
     http_endpoint = "http://${aws_instance.web.public_ip}:${var.web_port}"
   }
 }
-
-output "sg_instance_web" {
-  description = "Gallery Security Group 정보"
-  value = {
-    id   = aws_security_group.instance_web.id
-    name = aws_security_group.instance_web.name
-  }
-}

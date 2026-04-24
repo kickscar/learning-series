@@ -37,6 +37,8 @@ After=network.target
 [Service]
 Type=simple
 User=ec2-user
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_BIND_SERVICE
 WorkingDirectory=/opt/gallery
 ExecStart=/usr/bin/java -jar /opt/gallery/gallery.jar --spring.profiles.active=${profile} --server.port=${server_port}
 Restart=always

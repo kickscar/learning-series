@@ -1,3 +1,3 @@
 locals {
-    project = "tf-core-lab03"
+  project = "tf-core-lab03"
 }
