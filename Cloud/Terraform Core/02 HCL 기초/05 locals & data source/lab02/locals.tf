@@ -1,6 +1,23 @@
 locals {
-    project   = "tf-core-lab02"
-    namespace = "${local.project}-${var.env}"
+  project     = "tf-corelab02"
+  environment = var.env
 
-    selected_az = data.aws_availability_zones.available.names[var.az_num - 1]
+  namespace = "${local.project}-${local.environment}"
+
+  instance = {
+    spec = {
+      type = var.instance_type
+      ami  = data.aws_ami.amazon_linux.id
+    }
+
+    network = {
+      vpc_id    = data.aws_vpc.default.id
+      subnet_id = data.aws_subnets.default.ids[0]
+    }
+
+    allow_access = {
+      port = var.web_port
+      cidr = var.allow_cidr
+    }
+  }
 }

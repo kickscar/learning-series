@@ -1,44 +1,24 @@
-output "namespace" {
-  value = local.namespace
-}
+output "resource" {
+  value = {
+    namespace = local.namespace
 
-output "instance_web" {
-    value = {
-        id            = aws_instance.web.id
-        public_ip     = aws_instance.web.public_ip
-        http_endpoint = "http://${aws_instance.web.public_ip}:${var.web_port}"
+    instance = {
+      id            = aws_instance.web.id
+      ami           = aws_instance.web.ami
+      instance_type = aws_instance.web.instance_type
+      subnet_id     = aws_instance.web.subnet_id
     }
-}
 
-output "sg_instance_web" {
-    value = {
-        id   = aws_security_group.instance_web.id
-        name = aws_security_group.instance_web.name
+    sg = {
+      id     = aws_security_group.instance_web.id
+      vpc_id = aws_security_group.instance_web.vpc_id
 
+      ingress = [for v in aws_security_group.instance_web.ingress : {
+        from_port   = v.from_port
+        to_port     = v.to_port
+        protocol    = v.protocol
+        cidr_blocks = v.cidr_blocks
+      }]
     }
-}
-
-output "ami" {
-  value = {
-    id   = data.aws_ami.amazon_linux.id
-    name = data.aws_ami.amazon_linux.name
-  }
-}
-
-output "availability_zones" {
-  value = data.aws_availability_zones.available.names
-}
-
-output "vpc_default" {
-  value = {
-    id         = data.aws_vpc.default.id
-    cidr_block = data.aws_vpc.default.cidr_block
-  }
-}
-
-output "subnet" {
-  value = {
-    id                = data.aws_subnets.default.ids[0]
-    availability_zone = local.selected_az
   }
 }

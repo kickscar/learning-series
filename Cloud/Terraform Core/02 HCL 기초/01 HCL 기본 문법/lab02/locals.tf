@@ -1,8 +1,8 @@
 locals {
-    tags = {
-        Project   = "tf-core"
-        ManagedBy = "Terraform"
-    }
+  tags = {
+    project   = "tf-core-lab02"
+    ManagedBy = "Terraform"
+  }
 
-    namespace = "${local.tags.Project}-${var.env}"
+  namespace = "${local.tags.project}-${var.env}"
 }
