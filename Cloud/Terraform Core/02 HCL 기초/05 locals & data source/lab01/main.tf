@@ -56,7 +56,7 @@ resource "aws_security_group" "instance_web" {
 
 resource "aws_instance" "web" {
   ami                         = "ami-0c003e98ceffee43e"
-  instance_type               = local.instance.spec.type
+  instance_type               = local.instance.instance_type
   associate_public_ip_address = true
   vpc_security_group_ids      = [aws_security_group.instance_web.id]
 

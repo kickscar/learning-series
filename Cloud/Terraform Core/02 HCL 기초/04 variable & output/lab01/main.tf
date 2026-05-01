@@ -36,10 +36,10 @@ resource "aws_security_group" "instance_web" {
   name = "${local.project}-sg-instance-web"
 
   ingress {
-    from_port   = var.web_port
-    to_port     = var.web_port
+    from_port   = var.service_port
+    to_port     = var.service_port
     protocol    = "tcp"
-    cidr_blocks = var.allowed_cidrs
+    cidr_blocks = var.cidr_blocks
   }
   egress {
     from_port   = 0
@@ -60,7 +60,8 @@ resource "aws_instance" "web" {
   vpc_security_group_ids      = [aws_security_group.instance_web.id]
 
   iam_instance_profile = aws_iam_instance_profile.instance_web.name
-  depends_on           = [aws_iam_role_policy_attachment.instance_web_ssm]
+
+  depends_on = [aws_iam_role_policy_attachment.instance_web_ssm]
 
   tags = {
     Name = "${local.project}-instance-web"

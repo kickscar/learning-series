@@ -7,5 +7,5 @@ variable "env" {
 variable "ports" {
   type        = list(number)
   default     = []
-  description = " Allowed Ports of Instance"
+  description = "Allowed Ports of Instance"
 }

@@ -1,7 +1,7 @@
 variable "env" {
   type        = string
   default     = "dev"
-  description = "배포 환경"
+  description = "Deploy Environment"
 
   validation {
     condition     = contains(["dev", "stg", "prod"], var.env)
@@ -12,7 +12,7 @@ variable "env" {
 variable "instance_type" {
   type        = string
   default     = "t3.small"
-  description = "EC2 인스턴스 타입 (t3.micro, t3.small, t3.medium)"
+  description = "EC2 Instance Type (t3.micro, t3.small, t3.medium)"
 
   validation {
     condition     = contains(["t3.micro", "t3.small", "t3.medium"], var.instance_type)
@@ -20,32 +20,32 @@ variable "instance_type" {
   }
 }
 
-variable "web_port" {
+variable "service_port" {
   type        = number
   default     = 8080
-  description = "웹 포트 (1~65535)"
+  description = "Service Port (1~65535)"
 
   validation {
-    condition     = 1 <= var.web_port && var.web_port <= 65535
-    error_message = "web_port는 1~65535 범위여야 한다."
+    condition     = 1 <= var.service_port && var.service_port <= 65535
+    error_message = "service_port는 1~65535 범위여야 한다."
   }
 }
 
-variable "allow_cidr" {
+variable "cidr_blocks" {
   type        = list(string)
   default     = ["0.0.0.0/0"]
-  description = "Security Group 허용 CIDR 목록"
+  description = "Security Group Allowed CIDR Blocks"
 
   validation {
-    condition     = length(var.allow_cidr) > 0
-    error_message = "allowed_cidrs는 최소 1개 이상의 CIDR을 포함해야 한다."
+    condition     = length(var.cidr_blocks) > 0
+    error_message = "cidr_blocks는 최소 1개 이상의 CIDR을 포함해야 한다."
   }
 }
 
 variable "az_num" {
+  description = "AZ Number"
   type        = number
   default     = 1
-  description = "사용할 가용 영역 번호 (1부터 시작)"
 
   validation {
     condition     = var.az_num >= 1 && var.az_num <= length(data.aws_availability_zones.available.names)

@@ -1,0 +1,26 @@
+locals {
+  namespace = var.namespace
+
+  vpc_id = var.vpc_id
+
+  instance = {
+    name = "web"
+
+    instance_type               = "t3.small"
+    ami                         = data.aws_ami.amazon_linux.id
+    associate_public_ip_address = true
+    vpc_id                      = local.vpc_id
+    subnet_id                   = var.instance_subnet_id
+    iam_instance_profile        = var.instance_iam_instance_profile
+
+    allow_access = {
+      port        = 80
+      cidr_blocks = var.instance_allow_access_cidr_blocks
+    }
+
+  }
+
+  lb = {
+    target_group_arn = var.lb_target_group_arn
+  }
+}

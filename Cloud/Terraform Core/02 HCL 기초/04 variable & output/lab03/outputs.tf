@@ -2,7 +2,7 @@ output "instance_web" {
   value = {
     id            = aws_instance.web.id
     public_ip     = aws_instance.web.public_ip
-    http_endpoint = "http://${aws_instance.web.public_ip}:${var.web_port}"
+    http_endpoint = "http://${aws_instance.web.public_ip}:${var.service_port}"
   }
 }
 

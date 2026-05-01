@@ -3,13 +3,13 @@ data "aws_ami" "amazon_linux" {
 
   filter {
     name   = "name"
-    values = ["al2023-ami-*-x86_64"]
+    values = ["al2023-ami-2023.*-x86_64"]
   }
 
   owners = ["amazon"]
 }
 
-data "aws_iam_policy_document" "ec2_assume_role" {
+data "aws_iam_policy_document" "ec2_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
     effect  = "Allow"
@@ -19,4 +19,8 @@ data "aws_iam_policy_document" "ec2_assume_role" {
       identifiers = ["ec2.amazonaws.com"]
     }
   }
+}
+
+data "aws_iam_policy" "aws_ssm_core_policy" {
+  name = "AmazonSSMManagedInstanceCore"
 }

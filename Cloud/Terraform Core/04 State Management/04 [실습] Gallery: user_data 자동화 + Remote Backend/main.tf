@@ -1,16 +1,16 @@
 resource "aws_iam_role" "instance_web" {
-  name = "${local.namespace}-iamrole-instance-web"
+  name = "${local.project}-iamrole-instance-web"
 
-  assume_role_policy = data.aws_iam_policy_document.ec2_trust_policy.json
+  assume_role_policy = data.aws_iam_policy_document.ec2_assume_role_policy.json
 
   tags = {
-    Name = "${local.namespace}-iamrole-instance-web"
+    Name = "${local.project}-iamrole-instance-web"
   }
 }
 
 resource "aws_iam_role_policy_attachment" "instance_web_ssm" {
   role       = aws_iam_role.instance_web.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  policy_arn = data.aws_iam_policy.aws_ssm_core_policy.arn
 }
 
 resource "aws_iam_instance_profile" "instance_web" {
@@ -31,7 +31,7 @@ resource "aws_security_group" "instance_web" {
     from_port   = local.instance.allow_access.port
     to_port     = local.instance.allow_access.port
     protocol    = "tcp"
-    cidr_blocks = local.instance.allow_access.cidr
+    cidr_blocks = local.instance.allow_access.cidr_blocks
   }
 
   egress {
@@ -54,6 +54,7 @@ resource "aws_instance" "web" {
   vpc_security_group_ids      = [aws_security_group.instance_web.id]
   iam_instance_profile        = aws_iam_instance_profile.instance_web.name
 
+  user_data_replace_on_change = true
   user_data = templatefile("${path.module}/templates/user_data.sh.tpl", {
     profile     = local.environment
     server_port = local.instance.allow_access.port
