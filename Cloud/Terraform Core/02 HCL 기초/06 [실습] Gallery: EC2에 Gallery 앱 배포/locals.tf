@@ -5,19 +5,14 @@ locals {
   namespace = "${local.project}-${local.environment}"
 
   instance = {
-    spec = {
-      type = var.instance_type
-      ami  = data.aws_ami.amazon_linux.id
-    }
-
-    network = {
-      vpc_id    = data.aws_vpc.default.id
-      subnet_id = data.aws_subnets.default.ids[0]
-    }
+    instance_type = var.instance_type
+    ami           = data.aws_ami.amazon_linux.id
+    vpc_id        = data.aws_vpc.default.id
+    subnet_id     = data.aws_subnets.default.ids[0]
 
     allow_access = {
-      port = var.web_port
-      cidr = var.allow_cidr
+      port        = var.service_port
+      cidr_blocks = var.cidr_blocks
     }
   }
 }

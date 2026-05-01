@@ -36,10 +36,10 @@ resource "aws_security_group" "instance_web" {
   name = "${local.project}-sg-instance-web"
 
   ingress {
-    from_port   = var.web_port
-    to_port     = var.web_port
+    from_port   = var.service_port
+    to_port     = var.service_port
     protocol    = "tcp"
-    cidr_blocks = var.allowed_cidrs
+    cidr_blocks = var.cidr_blocks
   }
   egress {
     from_port   = 0

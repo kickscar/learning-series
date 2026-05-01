@@ -1,7 +1,7 @@
 resource "aws_iam_role" "instance_web" {
   name = "${local.project}-iamrole-instance-web"
 
-  assume_role_policy = data.aws_iam_policy_document.ec2_assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.ec2_assume_role_policy.json
 
   tags = {
     Name = "${local.project}-iamrole-instance-web"
@@ -10,7 +10,7 @@ resource "aws_iam_role" "instance_web" {
 
 resource "aws_iam_role_policy_attachment" "instance_web_ssm" {
   role       = aws_iam_role.instance_web.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  policy_arn = data.aws_iam_policy.aws_ssm_core_policy.arn
 }
 
 resource "aws_iam_instance_profile" "instance_web" {
