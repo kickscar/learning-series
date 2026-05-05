@@ -1,5 +1,7 @@
-output "instance_web" {
+output "instance" {
   value = {
-    id = aws_instance.web.id
+    (local.instance.name) = {
+      id = aws_instance.this.id
+    }
   }
 }

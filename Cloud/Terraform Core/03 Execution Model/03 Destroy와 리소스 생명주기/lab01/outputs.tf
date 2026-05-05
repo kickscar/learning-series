@@ -1,6 +1,6 @@
-output "sg_instance" {
+output "sg" {
   value = {
-    id   = aws_security_group.instance.id
-    name = aws_security_group.instance.name
+    id   = aws_security_group.this.id
+    name = aws_security_group.this.name
   }
 }

@@ -15,7 +15,7 @@ module "workload" {
 
   namespace = local.namespace
 
-  instance_vpc_id               = module.network.vpc.id
-  instance_subnet_id            = module.network.subnet.id
-  instance_iam_instance_profile = module.iam.instance_profile.name
+  instance_vpc_id               = module.network.vpc["main"].id
+  instance_subnet_id            = module.network.subnet["public-a"].id
+  instance_iam_instance_profile = module.iam.iamprofile["instance-web"].name
 }

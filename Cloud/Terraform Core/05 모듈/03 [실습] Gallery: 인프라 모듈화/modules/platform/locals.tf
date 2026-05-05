@@ -35,10 +35,8 @@ locals {
     }
   }
 
-  iam = {
-    role = {
+  iamrole = {
       name       = "lt-web"
       policy_arn = data.aws_iam_policy.aws_ssm_core_policy.arn
-    }
   }
 }

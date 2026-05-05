@@ -1,8 +1,12 @@
-output "instance_web" {
-  description = "Gallery EC2 인스턴스 정보"
+output "instance" {
   value = {
-    id            = aws_instance.web.id
-    public_ip     = aws_instance.web.public_ip
-    http_endpoint = "http://${aws_instance.web.public_ip}:${local.instance.allow_access.port}"
+    (local.instance.name) = {
+      id        = aws_instance.this.id
+      public_ip = aws_instance.this.public_ip
+    }
   }
+}
+
+output "web_endpoint" {
+  value = "http://${aws_instance.this.public_ip}:${local.instance.allow_access.port}"
 }

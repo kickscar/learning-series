@@ -1,6 +1,8 @@
-output "s3_bucket_tfstate" {
+output "s3bucket" {
   value = {
-    bucket = aws_s3_bucket.tfstate.bucket
-    arn    = aws_s3_bucket.tfstate.arn
+    (local.s3bucket.name) = {
+      bucket = aws_s3_bucket.this.bucket
+      arn    = aws_s3_bucket.this.arn
+    }
   }
 }

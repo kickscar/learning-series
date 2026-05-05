@@ -5,13 +5,11 @@ resource "aws_lb_target_group_attachment" "this" {
 }
 
 resource "aws_instance" "this" {
-  ami           = local.instance.ami
-  instance_type = local.instance.instance_type
-
+  instance_type               = local.instance.instance_type
+  ami                         = local.instance.ami
   subnet_id                   = local.instance.subnet_id
   associate_public_ip_address = local.instance.associate_public_ip_address
-
-  iam_instance_profile = local.instance.iam_instance_profile
+  iam_instance_profile        = local.instance.iam_instance_profile
 
   vpc_security_group_ids = [aws_security_group.this.id]
 

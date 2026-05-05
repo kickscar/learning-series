@@ -12,4 +12,4 @@ Ch04 Gallery의 단일 EC2 구조를 05.02 lab04의 3-Layer 모듈(network/platf
 
 ## Reference
 
-- Notion: [Notion 문서]()
+- Notion: [Notion 문서](https://www.notion.so/03-Gallery-3-layer-345dc703ccda809db063fc47d494652f?source=copy_link)
