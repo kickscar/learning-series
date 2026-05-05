@@ -1,4 +1,4 @@
-resource "aws_security_group" "instance" {
+resource "aws_security_group" "this" {
   name = "${local.project}-sg-instance"
 
   egress {
@@ -13,8 +13,8 @@ resource "aws_security_group" "instance" {
   }
 
   lifecycle {
-    #        prevent_destroy = true
-    #        ignore_changes = [tags]
-    #        create_before_destroy = true
+    # prevent_destroy       = true
+    # ignore_changes        = [tags]
+    # create_before_destroy = true
   }
 }

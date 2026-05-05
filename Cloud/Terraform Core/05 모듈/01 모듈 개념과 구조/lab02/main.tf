@@ -17,6 +17,6 @@ module "iam" {
 
   namespace = local.namespace
 
-  role_name  = "instance-web"
+  iamrole_name  = "instance-web"
   policy_arn = data.aws_iam_policy.aws_ssm_core_policy.arn
 }

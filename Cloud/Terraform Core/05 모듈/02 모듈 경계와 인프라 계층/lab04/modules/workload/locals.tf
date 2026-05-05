@@ -8,9 +8,8 @@ locals {
 
     instance_type               = "t3.small"
     ami                         = data.aws_ami.amazon_linux.id
-    associate_public_ip_address = true
-    vpc_id                      = local.vpc_id
     subnet_id                   = var.instance_subnet_id
+    associate_public_ip_address = false
     iam_instance_profile        = var.instance_iam_instance_profile
 
     allow_access = {

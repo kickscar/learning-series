@@ -1,8 +1,11 @@
-resource "aws_s3_bucket" "tfstate" {
-  bucket = local.bucket_name
+# resource "aws_s3_bucket" "tfstate" {
+#   bucket = "tf-core-tfstate"
+# }
+resource "aws_s3_bucket" "this" {
+  bucket = local.s3bucket.bucket
 
   tags = {
-    Name = local.bucket_name
+    Name = "${local.namespace}-s3bucket-${local.s3bucket.name}"
   }
 
   lifecycle {
@@ -10,19 +13,30 @@ resource "aws_s3_bucket" "tfstate" {
   }
 }
 
-resource "aws_s3_bucket_versioning" "tfstate" {
-  bucket = aws_s3_bucket.tfstate.id
+# resource "aws_s3_bucket_versioning" "tfstate" {
+#   bucket = aws_s3_bucket.tfstate.id
+#   versioning_configuration { status = "Enabled" }
+# }
+resource "aws_s3_bucket_versioning" "this" {
+  bucket = aws_s3_bucket.this.id
 
   versioning_configuration {
-    status = "Enabled"
+    status = local.s3bucket.versioning_configuration.status
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "tfstate" {
-  bucket = aws_s3_bucket.tfstate.id
+# resource "aws_s3_bucket_public_access_block" "tfstate" {
+#   bucket = aws_s3_bucket.tfstate.id
+#   block_public_acls = true
+#   block_public_policy = true
+#   ignore_public_acls = true
+#   restrict_public_buckets = true
+# }
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket = aws_s3_bucket.this.id
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+  block_public_acls       = local.s3bucket.public_access_block.block_public_acls
+  block_public_policy     = local.s3bucket.public_access_block.block_public_policy
+  ignore_public_acls      = local.s3bucket.public_access_block.ignore_public_acls
+  restrict_public_buckets = local.s3bucket.public_access_block.restrict_public_buckets
 }

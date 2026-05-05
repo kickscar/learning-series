@@ -16,8 +16,7 @@ provider "aws" {
     tags = {
       Organization = local.org
       Project      = local.project
-      Environment  = local.environment
       ManagedBy    = "Terraform"
     }
-  }  
+  }
 }

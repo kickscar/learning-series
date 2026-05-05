@@ -1,7 +1,7 @@
 locals {
   namespace = var.namespace
 
-  role = {
+  iamrole = {
     name       = "instance-web"
     policy_arn = data.aws_iam_policy.aws_ssm_core_policy.arn
   }

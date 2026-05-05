@@ -1,5 +1,5 @@
-resource "aws_security_group" "instance" {
-  name = "${local.namespace}-sg-instance"
+resource "aws_security_group" "this" {
+  name = "${local.namespace}-sg"
 
   egress {
     from_port   = 0
@@ -9,6 +9,6 @@ resource "aws_security_group" "instance" {
   }
 
   tags = {
-    Name = "${local.namespace}-sg-instance"
+    Name = "${local.namespace}-sg"
   }
 }

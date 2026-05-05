@@ -1,9 +1,7 @@
 locals {
-  org         = "tf-core"
-  project     = "gallery"
-  environment = var.env
-
-  namespace = "${local.org}-${local.project}-${local.environment}"
+  org       = "tf-core"
+  project   = "gallery"
+  namespace = "${local.org}-${local.project}"
 
   infra = {
     lb = {
@@ -12,7 +10,7 @@ locals {
 
     instance = {
       service_port   = 8080
-      deploy_version = "1.0.1"
+      deploy_version = "1.0.0"
     }
   }
 }

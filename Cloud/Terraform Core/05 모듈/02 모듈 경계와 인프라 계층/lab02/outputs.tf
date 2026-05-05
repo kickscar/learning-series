@@ -1,4 +1,4 @@
-output "module_output" {
+output "module" {
   value = {
     network = module.network
   }

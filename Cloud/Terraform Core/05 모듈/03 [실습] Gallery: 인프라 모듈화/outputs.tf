@@ -1,4 +1,4 @@
-output "module_output" {
+output "module" {
   value = {
     network = module.network
     platform = module.platform
@@ -7,5 +7,5 @@ output "module_output" {
 }
 
 output "endpoint" {
-  value = "${lower(module.platform.lb.listener.protocol)}://${module.platform.lb.dns_name}:${module.platform.lb.listener.port}"
+  value = "${lower(module.platform.lb["main"].listener.protocol)}://${module.platform.lb["main"].dns_name}:${module.platform.lb["main"].listener.port}"
 }

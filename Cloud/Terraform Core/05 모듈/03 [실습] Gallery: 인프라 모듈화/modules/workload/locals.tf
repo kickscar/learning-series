@@ -1,6 +1,5 @@
 locals {
-  namespace   = var.namespace
-  environment = var.environment
+  namespace = var.namespace
 
   vpc_id = var.vpc_id
 
@@ -32,7 +31,7 @@ locals {
     }
 
     user_data = base64encode(templatefile("${path.module}/templates/user_data.sh.tpl", {
-      profile     = var.environment
+      profile     = "dev"
       server_port = var.lt_service_port
     }))
 
