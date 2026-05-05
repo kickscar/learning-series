@@ -30,6 +30,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
+        id: plan
         run: terraform plan
 
       - name: Fail if Plan Failed
