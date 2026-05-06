@@ -1,0 +1,37 @@
+name: 10.01.lab01 deploy
+
+on:
+  push:
+    branches: [main]
+    paths: ["Cloud/Terraform Core/10 배포 자동화/01 IaC 워크플로우/lab01/*.tf"]
+
+env:
+  TF_VERSION: "1.14.7"
+  WORKING_DIR: "Cloud/Terraform Core/10 배포 자동화/01 IaC 워크플로우/lab01"
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIR }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve
+
+      - name: Fail if Apply Failed
+        if: steps.apply.outcome == 'failure'
+        run: exit 1

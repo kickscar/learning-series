@@ -1,10 +1,10 @@
-name: 09.06.lab01 review
+name: 10.02.lab01 review
 
 on:
   pull_request:
     branches: [main]
     types: [opened, synchronize]
-    paths: ["Cloud/Terraform Core/09 코드 품질 & 배포 자동화/06 인프라 배포 워크플로우/lab01/infra/*.tf"]
+    paths: ["Cloud/Terraform Core/10 배포 자동화/02 인프라 배포 워크플로우/lab01/infra/*.tf"]
 
 permissions:
   contents: read
@@ -14,7 +14,7 @@ permissions:
 env:
   TF_VERSION: "1.14.7"
   AWS_REGION: "ap-northeast-2"
-  WORKING_DIR: "Cloud/Terraform Core/09 코드 품질 & 배포 자동화/06 인프라 배포 워크플로우/lab01/infra"
+  WORKING_DIR: "Cloud/Terraform Core/10 배포 자동화/02 인프라 배포 워크플로우/lab01/infra"
 
 jobs:
   plan:
