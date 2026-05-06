@@ -1,4 +1,4 @@
-# Ch09 코드 품질 & 배포 자동화 / [실습] Gallery: 검증 추가
+# Ch09 코드 품질 & 테스트 / 03 [실습] Gallery: 검증 추가
 
 Ch05 Gallery(ALB + ASG)에 check 블록을 추가해서 Gallery 앱의 HTTP 응답을 상시 점검한다. 모듈 코드 변경 없이 root main.tf에 check 블록만 추가한다.
 
