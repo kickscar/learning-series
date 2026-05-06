@@ -1,4 +1,4 @@
-name: Deploy
+name: 09.05 lab01 Deploy
 
 on:
   push:
@@ -8,11 +8,11 @@ on:
 env:
   TF_VERSION: "1.14.7"
   WORKING_DIR: "Cloud/Terraform Core/09 코드 품질 & 배포 자동화/05 IaC 워크플로우/lab01"
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   apply:
     runs-on: ubuntu-latest
+
     defaults:
       run:
         working-directory: ${{ env.WORKING_DIR }}
