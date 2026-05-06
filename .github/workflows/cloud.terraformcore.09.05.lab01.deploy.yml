@@ -1,9 +1,8 @@
-name: 09.05 lab01 Review
+name: 09.05.lab01 deploy
 
 on:
-  pull_request:
+  push:
     branches: [main]
-    types: [opened, synchronize]
     paths: ["Cloud/Terraform Core/09 코드 품질 & 배포 자동화/05 IaC 워크플로우/lab01/*.tf"]
 
 env:
@@ -11,13 +10,12 @@ env:
   WORKING_DIR: "Cloud/Terraform Core/09 코드 품질 & 배포 자동화/05 IaC 워크플로우/lab01"
 
 jobs:
-  plan:
+  apply:
     runs-on: ubuntu-latest
-
     defaults:
       run:
-        working-directory: ${{ env.WORKING_DIR }}  
-    
+        working-directory: ${{ env.WORKING_DIR }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,10 +28,10 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve
 
-      - name: Fail if Plan Failed
-        if: steps.plan.outcome == 'failure'
+      - name: Fail if Apply Failed
+        if: steps.apply.outcome == 'failure'
         run: exit 1

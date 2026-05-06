@@ -1,0 +1,52 @@
+name: 09.06.lab01 deploy
+
+on:
+  push:
+    branches: [main]
+    paths: ["Cloud/Terraform Core/09 코드 품질 & 배포 자동화/06 인프라 배포 워크플로우/lab01/*.tf"]
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: cloud-terraformcore-09.06.lab01-deploy
+  cancel-in-progress: false
+
+env:
+  TF_VERSION: "1.14.7"
+  AWS_REGION: "ap-northeast-2"
+  WORKING_DIR: "Cloud/Terraform Core/09 코드 품질 & 배포 자동화/06 인프라 배포 워크플로우/lab01"
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIR }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_IAMROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve
+
+      - name: Fail if Apply Failed
+        if: steps.apply.outcome == 'failure'
+        run: exit 1

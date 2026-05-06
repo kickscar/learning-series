@@ -1,13 +1,10 @@
-name: 09.06 lab01 Review
+name: 09.06.lab01 review
 
 on:
   pull_request:
     branches: [main]
     types: [opened, synchronize]
-    paths:
-      [
-        "Cloud/Terraform Core/09 코드 품질 & 배포 자동화/06 인프라 배포 워크플로우/lab01/infra/*.tf",
-      ]
+    paths: ["Cloud/Terraform Core/09 코드 품질 & 배포 자동화/06 인프라 배포 워크플로우/lab01/infra/*.tf"]
 
 permissions:
   contents: read
@@ -22,7 +19,6 @@ env:
 jobs:
   plan:
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: ${{ env.WORKING_DIR }}
