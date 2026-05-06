@@ -1,4 +1,4 @@
-# Ch09 코드 품질 & 배포 자동화 / 04 Terraform Test
+# Ch09 코드 품질 & 테스트 / 04 Terraform Test
 
 `.tftest.hcl` 파일로 Terraform 코드를 테스트한다. plan 수준 검증, mock provider로 credential 없이 단위 테스트, expect_failures로 네거티브 테스팅을 다룬다.
 

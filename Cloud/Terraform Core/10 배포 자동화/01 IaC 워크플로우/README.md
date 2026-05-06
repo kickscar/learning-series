@@ -1,4 +1,4 @@
-# Ch09 코드 품질 & 배포 자동화 / 05 IaC 워크플로우
+# Ch10 배포 자동화 / 01 IaC 워크플로우
 
 IaC 파이프라인의 전체 그림(4 역할: Quality, Review, Deploy, Monitor)을 이해하고, 핵심 워크플로우 2개(`review.yml`, `deploy.yml`)를 직접 만들어본다. AWS 없이 GitHub Actions 메커니즘 자체를 체험한다.
 
