@@ -3,7 +3,7 @@ name: 09.06.lab01 deploy
 on:
   push:
     branches: [main]
-    paths: ["Cloud/Terraform Core/09 코드 품질 & 배포 자동화/06 인프라 배포 워크플로우/lab01/infra*.tf"]
+    paths: ["Cloud/Terraform Core/09 코드 품질 & 배포 자동화/06 인프라 배포 워크플로우/lab01/infra/*.tf"]
 
 permissions:
   contents: read
