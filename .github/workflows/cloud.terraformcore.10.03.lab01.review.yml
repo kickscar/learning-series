@@ -1,10 +1,10 @@
-name: 10.02.lab01 review
+name: 10.03.lab01 review
 
 on:
   pull_request:
     branches: [main]
     types: [opened, synchronize]
-    paths: ["Cloud/Terraform Core/10 배포 자동화/02 인프라 배포 워크플로우/lab01/infra/*.tf"]
+    paths: ["Cloud/Terraform Core/10 배포 자동화/03 품질 게이트 & 브랜치 보호/lab01/infra/*.tf"]
 
 permissions:
   contents: read
@@ -14,9 +14,44 @@ permissions:
 env:
   TF_VERSION: "1.14.7"
   AWS_REGION: "ap-northeast-2"
-  WORKING_DIR: "Cloud/Terraform Core/10 배포 자동화/02 인프라 배포 워크플로우/lab01/infra"
+  WORKING_DIR: "Cloud/Terraform Core/10 배포 자동화/03 품질 게이트 & 브랜치 보호/lab01/infra"
 
 jobs:
+  quality-gate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIR }}
+    steps:
+      - name: Checkout
+        uses: action/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Init (backend=false)
+        run: terraform init -backend=false
+
+      - name: Validate
+        run: terraform validate
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+
+      - name: Run TFLint
+        run: tflint --init && tflint --recursive
+
+      - name: Security Scan
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: ${{ env.WORKING_DIR }}
+          soft_fail: true
+
   plan:
     runs-on: ubuntu-latest
     defaults:
