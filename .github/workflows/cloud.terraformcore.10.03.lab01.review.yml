@@ -24,7 +24,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
     steps:
       - name: Checkout
-        uses: action/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v4
@@ -53,6 +53,7 @@ jobs:
           soft_fail: true
 
   plan:
+    needs: quality-gate
     runs-on: ubuntu-latest
     defaults:
       run:
