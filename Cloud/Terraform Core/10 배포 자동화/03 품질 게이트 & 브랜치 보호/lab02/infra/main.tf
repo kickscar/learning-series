@@ -1,7 +1,6 @@
 resource "aws_vpc" "this" {
-  cidr_block         = local.vpc.cidr_block
-  enable_dns_support = local.vpc.enable_dns_support
-
+  cidr_block           = local.vpc.cidr_block
+  enable_dns_support   = local.vpc.enable_dns_support
   enable_dns_hostnames = local.vpc.enable_dns_hostnames
 
   tags = {
