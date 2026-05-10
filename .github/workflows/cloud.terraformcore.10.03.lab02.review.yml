@@ -32,9 +32,11 @@ jobs:
         uses: terraform-linters/setup-tflint@v4
 
       - name: Setup tfsec
-        uses: tfsec/setup-tfsec@v1
-        with:
-          version: v1.28.1
+        run: |
+          TFSEC_VERSION=v1.28.1
+          curl -L "https://github.com/aquasecurity/tfsec/releases/download/${TFSEC_VERSION}/tfsec-linux-amd64" -o tfsec
+          chmod +x tfsec
+          sudo mv tfsec /usr/local/bin/
 
       - name: Set up Python
         uses: actions/setup-python@v5
