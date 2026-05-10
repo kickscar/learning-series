@@ -32,9 +32,9 @@ jobs:
         uses: terraform-linters/setup-tflint@v4
 
       - name: Setup tfsec
-        uses: aquasecurity/tfsec-action@v1.0.0
+        uses: tfsec/setup-tfsec@v1
         with:
-          skip_packing: true
+          version: v1.28.1
 
       - name: Set up Python
         uses: actions/setup-python@v5
