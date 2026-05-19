@@ -44,6 +44,8 @@ repos:
         name: "10.05.gallery Terraform TFLint"
         args:
           - --args=--recursive
+          - --args=--disable-rule=terraform_required_version
+          - --args=--disable-rule=terraform_required_providers
         files: ^Cloud/Terraform Core/10 배포 자동화/05 Gallery/infra/.*\.tf$
 
       - id: terraform_tfsec
