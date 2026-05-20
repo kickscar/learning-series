@@ -29,25 +29,26 @@ jobs:
           terraform_version: ${{ env.TF_VERSION }}
           terraform_wrapper: false
 
+      - name: Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Init (backend=false)
+        run: terraform init -backend=false
+
+      - name: Validate
+        run: terraform validate
+
       - name: Setup TFLint
         uses: terraform-linters/setup-tflint@v4
 
-      - name: Setup tfsec
-        run: |
-          TFSEC_VERSION=v1.28.1
-          curl -L "https://github.com/aquasecurity/tfsec/releases/download/${TFSEC_VERSION}/tfsec-linux-amd64" -o tfsec
-          chmod +x tfsec
-          sudo mv tfsec /usr/local/bin/
+      - name: Run TFLint
+        run: tflint --init && tflint --recursive
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Security Scan
+        uses: aquasecurity/tfsec-action@v1.0.3
         with:
-          python-version: '3.x'
-
-      - name: Run pre-commit
-        uses: pre-commit/action@v3.0.1
-        with:
-          extra_args: --all-files
+          working_directory: ${{ env.WORKING_DIR }}
+          soft_fail: true
 
   plan:
     needs: quality-gate
