@@ -1,14 +1,3 @@
-variable "env" {
-  type        = string
-  default     = "dev"
-  description = "Deploy Environment"
-
-  validation {
-    condition     = contains(["dev", "stg", "prod"], var.env)
-    error_message = "env는 dev, stg, prod 중 하나여야 한다."
-  }
-}
-
 variable "instance_type" {
   type        = string
   default     = "t3.small"
@@ -39,16 +28,5 @@ variable "cidr_blocks" {
   validation {
     condition     = length(var.cidr_blocks) > 0
     error_message = "cidr_blocks는 최소 1개 이상의 CIDR을 포함해야 한다."
-  }
-}
-
-variable "az_num" {
-  description = "AZ Number"
-  type        = number
-  default     = 1
-
-  validation {
-    condition     = var.az_num >= 1 && var.az_num <= length(data.aws_availability_zones.available.names)
-    error_message = "가용 영역 번호는 1부터 ${length(data.aws_availability_zones.available.names)} 사이여야 한다."
   }
 }

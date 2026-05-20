@@ -1,31 +1,29 @@
-resource "aws_iam_role" "instance_web" {
-  name = "${local.project}-iamrole-instance-web"
-
-  assume_role_policy = data.aws_iam_policy_document.ec2_assume_role_policy.json
+resource "aws_iam_role" "this" {
+  name               = "${local.project}-iamrole-${local.iamrole.name}"
+  assume_role_policy = local.iamrole.assume_role_policy
 
   tags = {
-    Name = "${local.project}-iamrole-instance-web"
+    Name = "${local.project}-iamrole-${local.iamrole.name}"
   }
 }
 
-resource "aws_iam_role_policy_attachment" "instance_web_ssm" {
-  role       = aws_iam_role.instance_web.name
-  policy_arn = data.aws_iam_policy.aws_ssm_core_policy.arn
-}
-
-resource "aws_iam_instance_profile" "instance_web" {
-  name = "${local.namespace}-iamprofile-instance-web"
-
-  role = aws_iam_role.instance_web.name
+resource "aws_iam_instance_profile" "this" {
+  name = "${local.project}-iamprofile-${local.iamrole.name}"
+  role = aws_iam_role.this.name
 
   tags = {
-    Name = "${local.namespace}-iamprofile-instance-web"
+    Name = "${local.project}-iamprofile-${local.iamrole.name}"
   }
 }
 
-resource "aws_security_group" "instance_web" {
-  name   = "${local.namespace}-sg-instance-web"
-  vpc_id = data.aws_vpc.default.id
+resource "aws_iam_role_policy_attachment" "this" {
+  role       = aws_iam_role.this.name
+  policy_arn = local.iamrole.policy_arn
+}
+
+resource "aws_security_group" "this" {
+  name   = "${local.project}-sg-instance-${local.instance.name}"
+  vpc_id = local.vpc_id
 
   ingress {
     from_port   = local.instance.allow_access.port
@@ -33,7 +31,6 @@ resource "aws_security_group" "instance_web" {
     protocol    = "tcp"
     cidr_blocks = local.instance.allow_access.cidr_blocks
   }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -42,23 +39,20 @@ resource "aws_security_group" "instance_web" {
   }
 
   tags = {
-    Name = "${local.namespace}-sg-instance-web"
+    Name = "${local.project}-sg-instance-${local.instance.name}"
   }
 }
 
 resource "aws_instance" "web" {
-  ami                         = "ami-0c003e98ceffee43e"
-  instance_type               = var.instance_type
-  subnet_id                   = data.aws_subnets.default.ids[0]
-  associate_public_ip_address = true
+  ami                         = local.instance.ami
+  instance_type               = local.instance.instance_type
+  subnet_id                   = local.instance.subnet_id
+  associate_public_ip_address = local.instance.associate_public_ip_address
   vpc_security_group_ids      = [aws_security_group.instance_web.id]
   iam_instance_profile        = aws_iam_instance_profile.instance_web.name
 
   user_data_replace_on_change = true
-  user_data = templatefile("${path.module}/templates/user_data.sh.tpl", {
-    profile     = local.environment
-    server_port = local.instance.allow_access.port
-  })
+  user_data = local.instance.user_data
 
   depends_on = [aws_iam_role_policy_attachment.instance_web_ssm]
 

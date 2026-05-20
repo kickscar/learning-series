@@ -8,8 +8,11 @@ locals {
       listener_port = 80
     }
 
-    instance = {
-      service_port   = 8080
+    lt = {
+      service_port = 8080
+    }
+
+    asg = {
       deploy_version = "1.0.0"
     }
   }

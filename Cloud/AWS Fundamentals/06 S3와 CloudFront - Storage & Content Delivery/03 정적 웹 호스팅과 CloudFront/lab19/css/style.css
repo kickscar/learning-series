@@ -1,0 +1,149 @@
+/* lab19: Hello S3 Web — static hosting sample */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --text: #15202b;
+  --muted: #5a6b7a;
+  --accent: #146eb4;
+  --accent-soft: rgba(20, 110, 180, 0.12);
+  --card: #ffffff;
+  --ring: rgba(20, 110, 180, 0.15);
+  --shadow: rgba(15, 35, 55, 0.09);
+  --shadow-lg: rgba(15, 35, 55, 0.12);
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.55;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(100, 180, 255, 0.18), transparent 55%),
+    radial-gradient(ellipse 90% 60% at 100% 100%, rgba(20, 110, 180, 0.08), transparent 50%),
+    linear-gradient(165deg, #f0f6fc 0%, #e8f0f8 45%, #eef3f9 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+}
+
+main {
+  width: 100%;
+  max-width: 40rem;
+  text-align: center;
+}
+
+.hero-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.25rem, 5vw, 2.5rem);
+  margin-bottom: 1.75rem;
+}
+
+.hero-icons figure {
+  margin: 0;
+  padding: 1rem 1.15rem;
+  background: var(--card);
+  border-radius: 1.1rem;
+  box-shadow: 0 0.35rem 1.25rem var(--shadow-lg), 0 0 0 1px var(--ring);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-icons figure:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.6rem 1.75rem var(--shadow-lg), 0 0 0 1px var(--ring);
+}
+
+.hero-icons img {
+  display: block;
+  width: clamp(4.5rem, 14vw, 5.75rem);
+  height: auto;
+}
+
+.hero-icons figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+h1 {
+  margin: 0 0 0.4rem;
+  font-size: clamp(1.65rem, 4.5vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  background: linear-gradient(120deg, #0d3d5c 0%, #146eb4 55%, #1e8bc9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lead {
+  margin: 0 0 1.5rem;
+  font-size: 1.02rem;
+  color: var(--muted);
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 1rem;
+  padding: 1.35rem 1.5rem;
+  box-shadow: 0 0.4rem 1.5rem var(--shadow);
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+}
+
+.card p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.card p + p {
+  margin-top: 0.85rem;
+}
+
+.card code {
+  font-size: 0.86em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 0.12em 0.4em;
+  border-radius: 0.35rem;
+  font-weight: 500;
+}
+
+.card ul {
+  margin: 0.75rem 0 0;
+  padding-left: 1.15rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.card li + li {
+  margin-top: 0.35rem;
+}
+
+footer {
+  margin-top: 2.25rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}

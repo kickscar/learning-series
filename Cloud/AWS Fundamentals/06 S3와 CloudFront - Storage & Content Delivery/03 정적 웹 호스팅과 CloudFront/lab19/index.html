@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello S3 Web</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main>
+    <div class="hero-icons" aria-hidden="true">
+      <figure>
+        <img src="images/s3-logo.svg" width="92" height="92" alt="">
+        <figcaption>Storage</figcaption>
+      </figure>
+      <figure>
+        <img src="images/web.svg" width="92" height="92" alt="">
+        <figcaption>Web</figcaption>
+      </figure>
+    </div>
+    <h1>Hello S3 Web</h1>
+    <p class="lead">Amazon S3 정적 웹 호스팅과 CloudFront로 서비스할 때 쓸 수 있는 예제 페이지입니다.</p>
+    <div class="card">
+      <p>이 폴더 전체(<code>index.html</code>, <code>error.html</code>, <code>css/</code>, <code>images/</code>)를 Bucket에 업로드합니다.</p>
+      <p>S3 Website hosting에서 <strong>Error document</strong>에 <code>error.html</code>을 지정하면, 오류에 해당하는 요청에 대해 <strong>리다이렉트가 아니라</strong> 그 HTML이 <strong>응답 본문으로 대체</strong>되어 보일 수 있습니다. <code>error.html</code>은 외부 CSS·이미지 없이 단독으로 두는 예제입니다.</p>
+      <ul>
+        <li>상대 경로만 사용했으므로 <strong>디렉터리 구조를 유지</strong>한 채 업로드하세요.</li>
+        <li>배포 후 <strong>Website endpoint</strong> 또는 <strong>CloudFront 도메인</strong>으로 접속해 확인합니다.</li>
+      </ul>
+    </div>
+    <footer>AWS Fundamentals · [실습]lab19</footer>
+  </main>
+</body>
+</html>
