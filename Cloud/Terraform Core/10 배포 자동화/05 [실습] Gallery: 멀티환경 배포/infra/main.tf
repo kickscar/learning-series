@@ -7,8 +7,8 @@ module "network" {
 module "platform" {
   source = "./modules/platform"
 
-  namespace            = local.namespace
-  vpc_id               = module.network.vpc["main"].id
+  namespace = local.namespace
+  vpc_id    = module.network.vpc["main"].id
 
   lb_subnets           = [module.network.subnet["public-a"].id, module.network.subnet["public-b"].id]
   lb_listener_port     = local.infra.lb.listener_port
