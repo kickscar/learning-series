@@ -805,8 +805,8 @@ gradle-app.setting
 
 # 3. 변수 설정 파일 (민감한 인증 정보 포함 가능성)
 # 실제 운영 환경의 값은 Git에 올리지 않고 별도 관리합니다.
-*.tfvars
-*.tfvars.json
+# *.tfvars
+# *.tfvars.json
 
 # 4. 크래시 로그 및 사용자 설정
 crash.log
