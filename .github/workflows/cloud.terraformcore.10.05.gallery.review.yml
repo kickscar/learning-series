@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize]
-    paths: ["Cloud/Terraform Core/10 배포 자동화/05 [실습] Gallery: 멀티환경 배포/infra/*.tf"]
+    paths: ["Cloud/Terraform Core/10 배포 자동화/05 \\[실습\\] Gallery: 멀티환경 배포/infra/*.tf"]
 
 permissions:
   contents: read
