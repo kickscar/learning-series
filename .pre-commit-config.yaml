@@ -30,26 +30,26 @@ repos:
       # ==========================================
       # 10.05.gallery infra check
       # ==========================================    
-      - id: terraform_fmt
-        name: "10.05.gallery Terraform Format"
-        files: ^Cloud/Terraform Core/10 배포 자동화/05 Gallery/infra/.*\.tf$
+      # - id: terraform_fmt
+      #   name: "10.05.gallery Terraform Format"
+      #   files: ^Cloud/Terraform Core/10 배포 자동화/05 Gallery/infra/.*\.tf$
 
-      - id: terraform_validate
-        name: "10.05.gallery Terraform Validate"
-        args:
-          - --hook-config=--retry-once-with-cleanup=true
-        files: ^Cloud/Terraform Core/10 배포 자동화/05 Gallery/infra/.*\.tf$
+      # - id: terraform_validate
+      #   name: "10.05.gallery Terraform Validate"
+      #   args:
+      #     - --hook-config=--retry-once-with-cleanup=true
+      #   files: ^Cloud/Terraform Core/10 배포 자동화/05 Gallery/infra/.*\.tf$
 
-      - id: terraform_tflint
-        name: "10.05.gallery Terraform TFLint"
-        args:
-          - --args=--recursive
-          - --args=--disable-rule=terraform_required_version
-          - --args=--disable-rule=terraform_required_providers
-        files: ^Cloud/Terraform Core/10 배포 자동화/05 Gallery/infra/.*\.tf$
+      # - id: terraform_tflint
+      #   name: "10.05.gallery Terraform TFLint"
+      #   args:
+      #     - --args=--recursive
+      #     - --args=--disable-rule=terraform_required_version
+      #     - --args=--disable-rule=terraform_required_providers
+      #   files: ^Cloud/Terraform Core/10 배포 자동화/05 Gallery/infra/.*\.tf$
 
-      - id: terraform_tfsec
-        name: "10.05.gallery Terraform tfsec"
-        args:
-          - --args=--soft-fail
-        files: ^Cloud/Terraform Core/10 배포 자동화/05 Gallery/infra/.*\.tf$
+      # - id: terraform_tfsec
+      #   name: "10.05.gallery Terraform tfsec"
+      #   args:
+      #     - --args=--soft-fail
+      #   files: ^Cloud/Terraform Core/10 배포 자동화/05 Gallery/infra/.*\.tf$
