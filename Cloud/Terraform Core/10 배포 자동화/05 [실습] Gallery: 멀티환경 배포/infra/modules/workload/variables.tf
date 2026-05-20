@@ -19,15 +19,15 @@ variable "asg_deploy_version" {
 }
 
 variable "asg_min_size" {
-  type = number  
+  type = number
 }
 
 variable "asg_max_size" {
-  type = number    
+  type = number
 }
 
 variable "asg_desired_capacity" {
-  type = number    
+  type = number
 }
 
 variable "lt_iam_instance_profile_name" {

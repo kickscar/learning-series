@@ -7,7 +7,7 @@ variable "vpc_id" {
 }
 
 variable "lb_target_group_port" {
-  type = number  
+  type = number
 }
 
 variable "lb_subnets" {
