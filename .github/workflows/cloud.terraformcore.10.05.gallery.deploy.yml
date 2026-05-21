@@ -48,7 +48,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Init
-        run: terraform init -backend-config="env.dev.backend.hcl
+        run: terraform init -backend-config="env.dev.backend.hcl"
 
       - name: Terraform Apply
         id: apply
@@ -83,7 +83,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Init
-        run: terraform init -backend-config="env.prod.backend.hcl
+        run: terraform init -backend-config="env.prod.backend.hcl"
 
       - name: Terraform Apply
         id: apply
