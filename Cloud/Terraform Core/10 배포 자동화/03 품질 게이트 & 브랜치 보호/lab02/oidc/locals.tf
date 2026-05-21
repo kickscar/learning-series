@@ -3,7 +3,7 @@ locals {
   project   = "lab02"
   namespace = "${local.org}-${local.project}"
 
-  github_repo = "kickscar/learning-series"
+  github_repo = "kickscar/*"
 
   iamrole = {
     name       = "gha"
