@@ -15,7 +15,7 @@ locals {
     }
 
     asg = {
-      deploy_version   = "1.0.1"
+      deploy_version   = "1.0.2"
       min_size         = var.infra_asg_min_size
       max_size         = var.infra_asg_max_size
       desired_capacity = var.infra_asg_desired_capacity
