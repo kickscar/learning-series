@@ -1,9 +1,9 @@
 locals {
   org       = "tf-core"
-  project   = "lab01"
+  project   = "github-oidc"
   namespace = "${local.org}-${local.project}"
 
-  github_repo = "kickscar/learning-series"
+  github_repo = "kickscar/*"
 
   iamrole = {
     name       = "gha"
