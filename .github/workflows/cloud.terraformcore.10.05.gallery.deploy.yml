@@ -19,7 +19,7 @@ env:
   WORKING_DIR: "Cloud/Terraform Core/10 배포 자동화/05 [실습] Gallery: 멀티환경 배포/infra"
 
 jobs:
-  apply-dev":
+  apply-dev:
     runs-on: ubuntu-latest
 
     environment: dev
@@ -54,7 +54,7 @@ jobs:
         id: apply
         run: terraform apply -input=false -auto-approve -var-file="env.dev.tfvars"
 
-  apply-prod":
+  apply-prod:
     runs-on: ubuntu-latest
 
     environment: prod
