@@ -1,0 +1,13 @@
+[Unit]
+Description=System Monitor Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/system-monitor.sh
+SyslogIdentifier=system-monitor
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

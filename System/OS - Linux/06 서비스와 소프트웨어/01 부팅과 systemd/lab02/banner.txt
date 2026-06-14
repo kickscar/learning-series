@@ -1,0 +1,8 @@
+╔═══════════════════════════════════════════════╗
+║                                               ║
+║   linux-server.lab                            ║
+║   Rocky Linux 9 — Managed by sysadmin         ║
+║                                               ║
+║   Unauthorized access is prohibited.          ║
+║                                               ║
+╚═══════════════════════════════════════════════╝
