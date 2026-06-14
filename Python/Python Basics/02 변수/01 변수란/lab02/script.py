@@ -1,1 +1,0 @@
-2nd = 2   # SyntaxError
