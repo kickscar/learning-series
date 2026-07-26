@@ -1,14 +1,13 @@
 # 01 Cloud와 Azure 시작하기 / 01 Cloud Computing 개요
 
-Cloud Computing의 핵심 개념을 잡고 Azure가 어떤 서비스 영역을 다루는지 파악한다.
-이후 실습에서 "왜 이 리소스를 만드는가"에 답할 수 있는 출발점이 된다.
+Cloud Computing이 무엇이고 Azure가 그 안에서 어디에 위치하는지를 잡는 이론 섹션. On-premises와의 차이에서 출발해, 서비스 계층·핵심 특성·Azure 서비스 영역까지 개괄한다.
 
 ## What you will learn
 
-- On-premises와 Cloud의 차이 — 인프라 소유에서 서비스 소비로의 전환
-- IaaS / PaaS / SaaS 계층 ��분과 이 시리즈가 다루는 범위
-- Cloud의 핵심 특성 (탄력성, 종량제, 글로벌 배포)
-- Azure 서비스 영역 개괄과 AWS 대응 관계
+- On-premises와 Cloud의 차이: 소유 vs 소비, 운영 책임의 이전
+- IaaS / PaaS / SaaS 계층 구분과 이 시리즈의 위치(IaaS 중심)
+- Cloud의 핵심 특성: 탄력성, 종량제, 글로벌 배포
+- 이 시리즈가 다루는 Azure 서비스 영역과, 그것들이 하나의 배포 가능한 인프라로 연결되는 구조
 
 ## Reference
 

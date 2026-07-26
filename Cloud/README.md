@@ -149,3 +149,7 @@ Cloud/
 
 **설계 당위 ("왜 이렇게 나눠야 하는가")**
 → Architecture & Design 담당. Core/IaC에서는 메커니즘만 보여주고 당위 설명은 최소화.
+
+---
+
+*작업 규약(컨텍스트 스위칭 마커 등)은 [CLAUDE.md](CLAUDE.md) 참조.*
