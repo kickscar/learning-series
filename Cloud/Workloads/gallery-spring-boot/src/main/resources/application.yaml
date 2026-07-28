@@ -60,6 +60,9 @@ app:
         prefix: /assets/images/uploads
     s3:
       bucket: gallery
+    blob:
+      account: ${AZURE_STORAGE_ACCOUNT:}
+      container: gallery
 
 logging:
   pattern:

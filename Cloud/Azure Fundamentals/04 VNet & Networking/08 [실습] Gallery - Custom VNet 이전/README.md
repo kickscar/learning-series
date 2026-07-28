@@ -4,14 +4,14 @@
 
 ## What you will learn
 
-- 골든 이미지로 Gallery 재생성 — `img-web`에서 `vm-web` 스핀업, 앱 이미 구워짐(재배포 0)
+- 골든 이미지로 Gallery 재생성 — `img-gallery-web`에서 `vm-gallery-web` 스핀업, 앱 이미 구워짐(재배포 0)
 - Ch04 격리 적용 — Private Subnet(Public IP 없음) + NAT GW(아웃바운드) + Bastion(접속)
 - generalized 이미지 → 새 관리자 계정·키 지정
 - 외부 접속 불가 → Ch05 Load Balancer 브릿지
 
 ## Examples
 
-- `rg-gallery`에 `vnet`(Public/Private), `ng`, `img-web`에서 `vm-web`(`snet-private`, Public IP 없음). `systemctl status gallery` = active, 외부 접속 불가
+- `rg-gallery`에 `vnet-gallery`(Public/Private), `ng-gallery`, `img-gallery-web`에서 `vm-gallery-web`(`snet-gallery-private`, Public IP 없음). `systemctl status gallery` = active, 외부 접속 불가
 
 ## Reference
 

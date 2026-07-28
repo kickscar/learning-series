@@ -10,7 +10,7 @@ Public IP 없는 VM의 격리를 실습으로 확인하는 섹션. 새 서브넷
 
 ## Examples
 
-- `lab11` → `rg-lab11`의 `snet-private`에 Public IP 없는 `vm`, Bastion 접속, `ping 8.8.8.8` 실패로 격리 확인
+- `lab11` → `rg-lab11`의 `snet-lab11-private`에 Public IP 없는 `vm-lab11`, Bastion 접속, `ping 8.8.8.8` 실패로 격리 확인
 
 ## Reference
 

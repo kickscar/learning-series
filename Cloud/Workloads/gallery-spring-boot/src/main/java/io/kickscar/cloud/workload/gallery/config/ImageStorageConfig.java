@@ -1,8 +1,12 @@
 package io.kickscar.cloud.workload.gallery.config;
 
+import io.kickscar.cloud.workload.gallery.storage.AzureBlobImageStorage;
 import io.kickscar.cloud.workload.gallery.storage.ImageStorage;
 import io.kickscar.cloud.workload.gallery.storage.LocalImageStorage;
 import io.kickscar.cloud.workload.gallery.storage.S3ImageStorage;
+import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -62,11 +66,29 @@ public class ImageStorageConfig implements WebMvcConfigurer {
         return new S3ImageStorage(region, s3Client, imageStorageProperties);
     }
 
+    @Bean
+    @ConditionalOnProperty(name = "app.storage.type", havingValue = "azure-blob")
+    public BlobContainerClient blobContainerClient() {
+        String endpoint = String.format("https://%s.blob.core.windows.net", imageStorageProperties.blob().account());
+        return new BlobServiceClientBuilder()
+                .endpoint(endpoint)
+                .credential(new DefaultAzureCredentialBuilder().build())
+                .buildClient()
+                .getBlobContainerClient(imageStorageProperties.blob().container());
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "app.storage.type", havingValue = "azure-blob")
+    public ImageStorage azureBlobImageStorage(BlobContainerClient blobContainerClient) {
+        return new AzureBlobImageStorage(blobContainerClient, imageStorageProperties);
+    }
+
     @ConfigurationProperties(prefix = "app.storage")
-    public record ImageStorageProperties(String type, Local local, S3 s3) {
+    public record ImageStorageProperties(String type, Local local, S3 s3, Blob blob) {
         public record Local(String path, Url url) {}
         public record Url(String prefix) {}
         public record S3(String bucket) {}
+        public record Blob(String account, String container) {}
 
         public String baseUrl() {
             return local.url().prefix().replaceAll("/+$", "");

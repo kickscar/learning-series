@@ -11,7 +11,7 @@
 
 ## Lab (Gallery)
 
-- `rg-gallery` 누적. `lb-gallery`(Standard Public) 프런트엔드 `pip-gallery` → 백엔드 `vm-web:8080`
+- `rg-gallery` 누적. `lb-gallery`(Standard Public) 프런트엔드 `pip-gallery-lb` → 백엔드 `vm-gallery-web:8080`
 - 04.08의 "외부 접속 불가"가 해소됨
 
 ## Reference
