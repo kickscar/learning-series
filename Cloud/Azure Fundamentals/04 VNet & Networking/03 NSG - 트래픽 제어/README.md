@@ -11,7 +11,7 @@ Azure의 방화벽 NSG(Network Security Group)를 이해하고, 직접 만들어
 
 ## Examples
 
-- `lab10` → `rg-lab10`에 `nsg-web` 생성, SSH·HTTP 허용, `snet-public` 연결, Deny 규칙 토글로 차단 확인
+- `lab10` → `rg-lab10`에 `nsg-lab10-web` 생성, SSH·HTTP 허용, `snet-lab10-public` 연결, Deny 규칙 토글로 차단 확인
 
 ## Reference
 

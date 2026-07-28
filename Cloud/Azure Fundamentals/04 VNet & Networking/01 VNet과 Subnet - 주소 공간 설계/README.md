@@ -7,11 +7,11 @@ Azure 네트워크를 직접 설계하기 시작하는 섹션. VNet의 주소 �
 - VNet — Azure 사설 네트워크 경계(AWS VPC 대응), CIDR 주소 공간
 - Subnet — VNet 쪼개기, 서브넷당 IP 5개 예약(`/24` = 251 사용), 특수 서브넷(GatewaySubnet·AzureBastionSubnet)
 - 라우팅 — System Routes(암묵적, 오브젝트 없음)와 UDR
-- 여기부터 네이밍은 우리 규칙(`vnet`, `snet-public/private`, type-first)
+- 여기부터 네이밍은 우리 규칙(`vnet-lab09`, `snet-lab09-public/private`, type-first)
 
 ## Examples
 
-- `lab09` → `rg-lab09`에 `vnet`(10.10.0.0/16), `snet-public`(10.10.1.0/24)·`snet-private`(10.10.2.0/24) 생성
+- `lab09` → `rg-lab09`에 `vnet-lab09`(10.10.0.0/16), `snet-lab09-public`(10.10.1.0/24)·`snet-lab09-private`(10.10.2.0/24) 생성
 
 ## Reference
 

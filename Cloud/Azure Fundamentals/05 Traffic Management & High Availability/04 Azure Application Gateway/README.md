@@ -12,7 +12,7 @@ L7 Application Gateway를 만들어 HTTP 요청을 웹 VM에 분산하는 실습
 ## Lab
 
 - **lab14: Application Gateway 기본 구성** (`rg-lab14`)
-  - VNet(`snet-web` + AGW 전용 `snet-agw`) → VM 2대(nginx) → `Standard_v2` AGW → 분산 확인
+  - VNet(`snet-lab14-web` + AGW 전용 `snet-lab14-agw`) → VM 2대(nginx) → `Standard_v2` AGW → 분산 확인
 
 ## Reference
 

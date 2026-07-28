@@ -11,7 +11,7 @@
 
 ## Examples
 
-- `lab08` → `vm-web` generalize·capture → Compute Gallery(`gal_gallery` / `img-web` / `1.0.0`), 이미지에서 `vm-test` 스핀업 확인
+- `lab08` → `vm-gallery-web` generalize·capture → Compute Gallery(`gal_gallery` / `img-gallery-web` / `1.0.0`), 이미지에서 `vm-gallery-test` 스핀업 확인
 
 ## Reference
 

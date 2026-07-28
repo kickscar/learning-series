@@ -1,6 +1,6 @@
 # Gallery (Spring Boot)
 
-이미지를 업로드하고 목록에서 보거나 삭제할 수 있는 간단한 웹 갤러리 애플리케이션이다. 업로드 파일은 **로컬 디스크**에 저장하거나 **Amazon S3**에 저장하도록 선택할 수 있다.
+이미지를 업로드하고 목록에서 보거나 삭제할 수 있는 간단한 웹 갤러리 애플리케이션이다. 업로드 파일은 **로컬 디스크**, **Amazon S3**, 또는 **Azure Blob Storage**에 저장하도록 선택할 수 있다.
 
 ---
 
@@ -9,7 +9,7 @@
 - 갤러리 목록 조회
 - 이미지 파일 업로드(선택적으로 코멘트 입력)
 - 항목 삭제(저장소의 파일과 DB 레코드 정리)
-- 로컬 스토리지 또는 S3 기반 스토리지 전환(`app.storage.type`)
+- 로컬 / Amazon S3 / Azure Blob 스토리지 전환(`app.storage.type`)
 
 ---
 
@@ -21,7 +21,7 @@
 | Framework | Spring Boot 3.5.x |
 | View | Thymeleaf |
 | Persistence | MyBatis, H2(기본), MariaDB JDBC 포함 |
-| Cloud SDK | AWS SDK v2 (S3, 선택 시) |
+| Cloud SDK | AWS SDK v2 (S3), Azure SDK (Blob Storage, Identity) — 선택 시 |
 | Build | Maven |
 
 ---
@@ -30,6 +30,7 @@
 
 - JDK 21
 - (S3 사용 시) AWS 자격 증명 및 버킷 — SDK 기본 제공 체인(환경 변수, 프로파일 등)을 사용한다.
+- (Azure Blob 사용 시) Storage Account·컨테이너 및 자격 증명 — `DefaultAzureCredential` 기본 체인(Managed Identity, 환경 변수 등)을 사용한다.
 
 ---
 
@@ -91,10 +92,12 @@ mvnw.cmd spring-boot:run
 |--------------------------------|------|
 | `spring.profiles.active`       | 활성 프로파일. **기본(default)은 `dev`** 이며, 별도로 넘기지 않아도 된다. `prod` 를 쓸 때만 명시한다. |
 | `spring.datasource.*`          | DB 연결. 기본은 인메모리 H2(MySQL 모드). MariaDB 등으로 교체 가능하다. |
-| `app.storage.type`             | `local` 또는 `s3` |
+| `app.storage.type`             | `local`, `s3`, 또는 `azure-blob` |
 | `app.storage.local.path`       | 로컬 저장 디렉터리 (상대 경로는 프로세스 작업 디렉터리 기준). **기본값은 `uploads`** (`application.yaml` 의 default 프로파일과 동일) |
 | `app.storage.local.url.prefix` | 브라우저에서 접근하는 업로드 파일 URL prefix |
 | `app.storage.s3.bucket`        | S3 버킷 이름 (`app.storage.type=s3` 일 때) |
+| `app.storage.blob.account`     | Storage Account 이름 (`app.storage.type=azure-blob` 일 때). 환경변수 `AZURE_STORAGE_ACCOUNT` 로도 주입 |
+| `app.storage.blob.container`   | Blob 컨테이너 이름 (`app.storage.type=azure-blob` 일 때) |
 
 ---
 
@@ -132,8 +135,9 @@ Spring Boot 는 **`--속성=값`** 으로 설정을 덮어쓴다. 비밀번호 �
 |------------------|-------------------------------------------------------------------------------------|
 | 프로파일             | `prod` 를 쓸 때만 `--spring.profiles.active=prod` (기본 `dev` 는 생략 가능) |
 | 포트               | 기본 `8080`. 다른 포트는 `--server.port=9090` 등 (선택) |
-| 스토리지             | `--app.storage.type=s3`                                                             |
+| 스토리지             | `--app.storage.type=s3` 또는 `--app.storage.type=azure-blob`                          |
 | S3 버킷            | `--app.storage.s3.bucket=버킷이름`                                                      |
+| Azure Blob        | `--app.storage.blob.account=계정명` , `--app.storage.blob.container=컨테이너명`             |
 | 외부 DB(MariaDB 등) | `--spring.datasource.url=...` , `--spring.datasource.username=...` , `--spring.datasource.password=...` |
 
 ### 조합 예시
@@ -176,6 +180,18 @@ java -jar target/gallery.jar \
 ```
 
 
+
+**5) 프로파일(prod) + 스토리지(Azure Blob) + 포트(8080)**
+
+```bash
+java -jar target/gallery.jar \
+--spring.profiles.active=prod \
+--app.storage.type=azure-blob \
+--app.storage.blob.account=stgallery \
+--app.storage.blob.container=gallery
+```
+
+(Azure 자격 증명은 Managed Identity·환경 변수 등 `DefaultAzureCredential` 체인으로 제공한다. 반환되는 이미지 URL이 브라우저에서 바로 열리려면 컨테이너에 익명 읽기가 허용돼야 한다.)
 
 ---
 
