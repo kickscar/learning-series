@@ -1,6 +1,6 @@
 # 04 VNet & Networking / 05 NAT Gateway
 
-lab11에서 격리된 VM의 아웃바운드만 여는 섹션. NAT Gateway는 outbound 전용(응답만 통과)이라 격리를 유지하며 나가는 길만 연다. 나가기(NAT GW)와 들어오기(Public IP/LB)가 별개 조각임을 확인한다.
+"Private Subnet 격리"에서 격리된 VM의 아웃바운드만 여는 섹션. NAT Gateway는 outbound 전용(응답만 통과)이라 격리를 유지하며 나가는 길만 연다. 나가기(NAT GW)와 들어오기(Public IP/LB)가 별개 조각임을 확인한다.
 
 ## What you will learn
 
@@ -11,7 +11,7 @@ lab11에서 격리된 VM의 아웃바운드만 여는 섹션. NAT Gateway는 out
 
 ## Examples
 
-- `lab12` → `rg-lab12`에 `ng-lab12`+`pip-lab12-ng` 생성, `snet-lab12-private` 연결, `ping 8.8.8.8` 성공(lab11 대비)·VM은 Public IP 없음 확인
+- `lab12` → `rg-lab12`에 `ng-lab12`+`pip-lab12-ng` 생성, `snet-lab12-priv` 연결, `ping 8.8.8.8` 성공("Private Subnet 격리" 대비)·VM은 Public IP 없음 확인
 
 ## Reference
 

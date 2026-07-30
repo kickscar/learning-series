@@ -4,7 +4,7 @@ Gallery를 컨테이너로 재플랫폼(ACR + Container Apps, Blob·MySQL 환경
 
 ## What you will learn
 
-- 재플랫폼이 쉬운 이유 — 상태(파일·DB)를 밖에 빼둬 앱이 stateless(06.06·07.04)
+- 재플랫폼이 쉬운 이유 — 상태(파일·DB)를 밖에 빼둬 앱이 stateless("Gallery Blob 연동"·"Gallery MySQL 연동")
 - Gallery 이미지 빌드 → ACR, Container Apps Environment(`vnet-gallery` 통합)
 - Blob(Managed Identity)·MySQL(env) 연결, 외부 Ingress
 - VM 스택 vs Container Apps 비교, 다음 여정(../Container)

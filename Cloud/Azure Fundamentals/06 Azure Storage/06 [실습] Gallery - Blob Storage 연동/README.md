@@ -6,7 +6,7 @@ VMSS Gallery의 업로드 저장소를 인스턴스 로컬에서 Azure Blob으�
 
 - VMSS 로컬 업로드의 문제 — 공유 안 됨·일시성·중복
 - 앱 스토리지 추상화 — `app.storage.type=azure-blob` (`AzureBlobImageStorage`)
-- Managed Identity + `Storage Blob Data Contributor` RBAC (키 없이, 06.04 실천)
+- Managed Identity + `Storage Blob Data Contributor` RBAC (키 없이, "Storage 접근 제어" 실천)
 - 공유 Blob 저장 확인, (선택) Front Door 이미지 가속
 
 ## Lab (Gallery)
