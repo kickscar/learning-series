@@ -1,20 +1,19 @@
 package io.kickscar.cloud.workload.gallery.config;
 
-import io.kickscar.cloud.workload.gallery.runtime.EC2InstanceIdentity;
+import io.kickscar.cloud.workload.gallery.runtime.HostIdentity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 @ControllerAdvice
 public class GlobalModelAdvice {
-    private final EC2InstanceIdentity instanceIdentity;
+    private final HostIdentity hostIdentity;
 
-    public GlobalModelAdvice(EC2InstanceIdentity instanceIdentity) {
-        this.instanceIdentity = instanceIdentity;
+    public GlobalModelAdvice(HostIdentity hostIdentity) {
+        this.hostIdentity = hostIdentity;
     }
 
-    @ModelAttribute("ec2InstanceId")
-    public String ec2InstanceId() {
-        return instanceIdentity.getInstanceId();
+    @ModelAttribute("hostId")
+    public String hostId() {
+        return hostIdentity.getHostId();
     }
 }
-

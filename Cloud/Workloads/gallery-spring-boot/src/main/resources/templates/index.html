@@ -47,9 +47,9 @@
         </div>
     </main>
 
-    <footer th:if="${ec2InstanceId != null}" class="site-footer">
+    <footer th:if="${hostId != null}" class="site-footer">
         <div class="site-footer__inner">
-            <small class="site-footer__text">Instance: <span th:text="${ec2InstanceId}">local</span></small>
+            <small class="site-footer__text">Instance: <span th:text="${hostId}">host</span></small>
         </div>
     </footer>
 </body>
