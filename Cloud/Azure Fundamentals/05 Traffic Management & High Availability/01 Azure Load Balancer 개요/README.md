@@ -1,6 +1,6 @@
 # 05 Traffic Management & High Availability / 01 Azure Load Balancer 개요
 
-04.08에서 격리된 Gallery를 외부에 노출하는 실마리, Load Balancer를 잡는 이론 섹션. 앞단에서 받아 여러 VM에 분산하는 구조와 L4(LB)/L7(AGW) 구분, SKU를 이해한다.
+"Gallery Custom VNet 이전"에서 격리된 Gallery를 외부에 노출하는 실마리, Load Balancer를 잡는 이론 섹션. 앞단에서 받아 여러 VM에 분산하는 구조와 L4(LB)/L7(AGW) 구분, SKU를 이해한다.
 
 ## What you will learn
 

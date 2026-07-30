@@ -1,4 +1,4 @@
-# 03 Compute - Azure Virtual Machine / 04 VM 디스크와 스토리지 연결
+# 03 Compute - Azure Virtual Machine / 03 VM 디스크와 스토리지 연결
 
 VM에 붙는 세 종류 디스크(OS·임시·데이터)의 차이를 이해하고, 데이터 디스크를 추가해 파티션·포맷·마운트까지 직접 수행하는 섹션. 포털의 "디스크 연결"이 주는 것은 raw 장치뿐이고, 나머지는 OS 몫이라는 경계를 드러낸다.
 
@@ -15,5 +15,5 @@ VM에 붙는 세 종류 디스크(OS·임시·데이터)의 차이를 이해하�
 
 ## Reference
 
-- Draft: `.claude/draft/03.04.claude.notion.md`
+- Draft: `.claude/draft/03.03.claude.notion.md`
 - Notion: [Notion 문서]()

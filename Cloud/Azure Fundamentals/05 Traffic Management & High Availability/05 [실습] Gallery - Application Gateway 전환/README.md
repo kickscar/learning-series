@@ -4,7 +4,7 @@ Gallery 앞단을 L4 Load Balancer에서 L7 Application Gateway로 무중단 교
 
 ## What you will learn
 
-- L4 → L7 진입 계층 교체 — `lb-gallery` 제거, `agw-gallery`(`snet-gallery-public` 전용 서브넷)
+- L4 → L7 진입 계층 교체 — `lb-gallery` 제거, `agw-gallery`(`snet-gallery-pub` 전용 서브넷)
 - `vm-gallery-web`은 그대로, 앞단만 교체(포트 80 → 8080 매핑 유지)
 - `/actuator/health` 사용자 지정 프로브 연결
 - L7 보안 이점 — 리버스 프록시라 백엔드 NSG의 `Internet` 8080 규칙을 제거 가능

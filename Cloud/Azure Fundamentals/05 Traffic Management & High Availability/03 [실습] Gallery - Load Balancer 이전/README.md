@@ -1,6 +1,6 @@
 # 05 Traffic Management & High Availability / 03 [실습] Gallery: Load Balancer 이전
 
-04.08에서 Private Subnet에 격리된 Gallery를 Public Load Balancer 뒤에 넣어, VM에 Public IP 없이 외부 노출을 여는 Gallery 실습.
+"Gallery Custom VNet 이전"에서 Private Subnet에 격리된 Gallery를 Public Load Balancer 뒤에 넣어, VM에 Public IP 없이 외부 노출을 여는 Gallery 실습.
 
 ## What you will learn
 
@@ -12,7 +12,7 @@
 ## Lab (Gallery)
 
 - `rg-gallery` 누적. `lb-gallery`(Standard Public) 프런트엔드 `pip-gallery-lb` → 백엔드 `vm-gallery-web:8080`
-- 04.08의 "외부 접속 불가"가 해소됨
+- "Gallery Custom VNet 이전"의 "외부 접속 불가"가 해소됨
 
 ## Reference
 
