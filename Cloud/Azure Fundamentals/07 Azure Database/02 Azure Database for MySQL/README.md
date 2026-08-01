@@ -1,6 +1,6 @@
 # 07 Azure Database / 02 Azure Database for MySQL
 
-MySQL Flexible Server를 Public Access로 만들고 방화벽·Cloud Shell 접속을 확인하는 실습(lab21).
+MySQL Flexible Server를 Public Access로 만들고 방화벽·Cloud Shell 접속을 확인하는 실습(lab20).
 
 ## What you will learn
 
@@ -10,8 +10,8 @@ MySQL Flexible Server를 Public Access로 만들고 방화벽·Cloud Shell 접�
 
 ## Lab
 
-- **lab21: MySQL Flexible Server 생성** (`rg-lab21`)
-  - `mysql-lab21`(Burstable `B1ms`, 8.0) → Public + 방화벽(내 IP) → Cloud Shell `mysql` 접속
+- **lab20: MySQL Flexible Server 생성** (`rg-lab20`)
+  - `mysql-lab20`(Burstable `B1ms`, 8.0) → Public + 방화벽(내 IP) → Cloud Shell `mysql` 접속
 
 ## Reference
 

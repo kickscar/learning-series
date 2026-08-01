@@ -11,7 +11,7 @@ VM에 붙는 세 종류 디스크(OS·임시·데이터)의 차이를 이해하�
 
 ## Examples
 
-- `lab07` → vm에 disk-data(16GB Standard SSD) 추가, `parted`/`mkfs.ext4`로 준비, `/data` 마운트 및 fstab UUID 등록
+- `lab06` → vm에 disk-data(16GB Standard SSD) 추가, `parted`/`mkfs.ext4`로 준비, `/data` 마운트 및 fstab UUID 등록
 
 ## Reference
 

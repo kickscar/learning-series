@@ -1,6 +1,6 @@
 # 06 Azure Storage / 05 Azure CDN & Front Door
 
-CDN(엣지 캐싱)의 개념과 Azure 현행 제품 Front Door를 이해하고, Blob을 origin으로 Front Door를 붙여 캐시 hit/miss를 확인하는 실습(lab20).
+CDN(엣지 캐싱)의 개념과 Azure 현행 제품 Front Door를 이해하고, Blob을 origin으로 Front Door를 붙여 캐시 hit/miss를 확인하는 실습(lab19).
 
 ## What you will learn
 
@@ -11,8 +11,8 @@ CDN(엣지 캐싱)의 개념과 Azure 현행 제품 Front Door를 이해하고, 
 
 ## Lab
 
-- **lab20: Front Door로 Blob 콘텐츠 전송** (`rg-lab20`)
-  - `stlab20` 정적 웹사이트 origin → `afd-lab20`(Standard) → hit/miss 확인
+- **lab19: Front Door로 Blob 콘텐츠 전송** (`rg-lab19`)
+  - `stlab19` 정적 웹사이트 origin → `afd-lab19`(Standard) → hit/miss 확인
 
 ## Reference
 

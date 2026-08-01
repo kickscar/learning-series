@@ -1,6 +1,6 @@
 # 05 Traffic Management & High Availability / 02 Azure Load Balancer 구성
 
-Standard Public Load Balancer를 직접 만들어 VM 2대에 트래픽을 분산하고, Health Probe가 죽은 VM을 빼는 것까지 확인하는 실습(lab13).
+Standard Public Load Balancer를 직접 만들어 VM 2대에 트래픽을 분산하고, Health Probe가 죽은 VM을 빼는 것까지 확인하는 실습(lab11).
 
 ## What you will learn
 
@@ -11,7 +11,7 @@ Standard Public Load Balancer를 직접 만들어 VM 2대에 트래픽을 분산
 
 ## Lab
 
-- **lab13: Public Load Balancer 구성** (`rg-lab13`)
+- **lab11: Public Load Balancer 구성** (`rg-lab11`)
   - VNet·NSG → VM 2대(nginx, 호스트명 응답) → Standard Public LB → 분산·프로브 검증
 
 ## Reference

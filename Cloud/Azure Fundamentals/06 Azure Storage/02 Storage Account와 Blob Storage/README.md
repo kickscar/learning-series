@@ -1,6 +1,6 @@
 # 06 Azure Storage / 02 Storage Account와 Blob Storage
 
-Storage Account를 만들고 Private 컨테이너에 파일을 올리며, Blob URL 익명 접근이 왜 막히는지와 정적 웹사이트로는 어떻게 열리는지 확인하는 실습(lab17).
+Storage Account를 만들고 Private 컨테이너에 파일을 올리며, Blob URL 익명 접근이 왜 막히는지와 정적 웹사이트로는 어떻게 열리는지 확인하는 실습(lab16).
 
 ## What you will learn
 
@@ -11,8 +11,8 @@ Storage Account를 만들고 Private 컨테이너에 파일을 올리며, Blob U
 
 ## Lab
 
-- **lab17: Storage Account 생성 및 Blob 업로드** (`rg-lab17`)
-  - `stlab17`(Standard / LRS) → Private 컨테이너 → Blob URL 차단 확인 → 정적 웹사이트 호스팅
+- **lab16: Storage Account 생성 및 Blob 업로드** (`rg-lab16`)
+  - `stlab16`(Standard / LRS) → Private 컨테이너 → Blob URL 차단 확인 → 정적 웹사이트 호스팅
 
 ## Reference
 

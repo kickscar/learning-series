@@ -1,17 +1,17 @@
 # 05 Traffic Management & High Availability / 09 [실습] Gallery - VM Scale Set 적용
 
-Gallery의 단일 VM을 VMSS로 전환하며, 인스턴스를 cloud-init(provision)으로 올려 앞 섹션의 골든 이미지(bake)와 나란히 비교하는 Ch05 대미.
+Gallery의 두 VM을 VMSS로 전환하며 인스턴스를 cloud-init(provision)으로 올리는 Ch05 대미. "프로비저닝 자동화"의 bake로 안정 구간을 굴렸고, 여기서 provision으로 전환하는 이유(곧 바뀔 설정)와 그 대가(빌드 무게)를 함께 겪는다.
 
 ## What you will learn
 
-- 단일 `vm-gallery-web` → `vmss-gallery-web`(Flexible), AGW 백엔드 풀 교체(인스턴스 자동 등록)
-- 같은 Gallery 앱으로 **bake(프로비저닝 섹션) vs provision(이번 섹션)** 몸으로 비교
-- `cloud-init.yaml` — 인스턴스마다 JDK 설치 + Maven 빌드(수 분), NAT Gateway 아웃바운드 필수
-- provision의 대가(느린 스케일 아웃) → 무거운 준비는 bake로. **VMSS 모델 변경 = rolling upgrade**(AWS instance refresh 대응, Flex 이미지 자동교체는 preview)
+- 두 VM(`vm-gallery-web-1/-2`) → `vmss-gallery-web`(Flexible), AGW 백엔드 풀 교체(인스턴스 자동 등록)
+- 왜 여기서 provision인가 — 곧 Ch06(Blob)·Ch07(MySQL)로 설정이 바뀔 참이라 재굽기 없는 유연성 선택(속도↔유연성, "프로비저닝 자동화"의 축)
+- 그 대가 — `cloud-init.yaml`이 인스턴스마다 JDK 설치 + Maven 빌드(수 분), NAT Gateway 아웃바운드 필수
+- VMSS 모델 변경 = rolling upgrade(AWS instance refresh 대응, Flex 이미지 자동교체는 preview)
 
 ## Lab (Gallery)
 
-- `rg-gallery` 누적. `vmss-gallery-web`(Flexible, cloud-init) → `agw-gallery` 백엔드 연동 → 백엔드 상태 `Healthy` 대기 → 검증. `img-gallery-web`(bake 아티팩트)은 비교 근거로 유지
+- `rg-gallery` 누적. `vmss-gallery-web`(Flexible, cloud-init) → `agw-gallery` 백엔드 연동 → 백엔드 상태 `Healthy` 대기 → 검증. 전환 후 두 정적 VM 삭제, `img-gallery-web`(bake 산출물)은 유지
 
 ## Examples
 

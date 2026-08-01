@@ -1,6 +1,6 @@
 # 08 관측과 운영 - Azure Monitor / 01 Azure Monitor 개요와 메트릭·로그
 
-Azure Monitor의 구조(Metrics/Logs)와 플랫폼 vs 게스트 메트릭을 이해하고, Log Analytics·Diagnostic settings·KQL을 구성하는 실습(lab24).
+Azure Monitor의 구조(Metrics/Logs)와 플랫폼 vs 게스트 메트릭을 이해하고, Log Analytics·Diagnostic settings·KQL을 구성하는 실습(lab23).
 
 ## What you will learn
 
@@ -11,8 +11,8 @@ Azure Monitor의 구조(Metrics/Logs)와 플랫폼 vs 게스트 메트릭을 이
 
 ## Lab
 
-- **lab24: Azure Monitor 메트릭·로그 구성** (`rg-lab24`)
-  - `vm-lab24` Metrics Explorer(플랫폼) → `log-lab24` Workspace + Diagnostic settings → KQL
+- **lab23: Azure Monitor 메트릭·로그 구성** (`rg-lab23`)
+  - `vm-lab23` Metrics Explorer(플랫폼) → `log-lab23` Workspace + Diagnostic settings → KQL
 
 ## Reference
 

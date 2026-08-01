@@ -1,6 +1,6 @@
 # 09 Container - ACR & Azure Container Apps / 03 Azure Container Apps 배포
 
-ACR 이미지를 Azure Container Apps로 서버리스 배포하고, 외부 Ingress로 공개 URL 접근을 확인하는 실습(lab26).
+ACR 이미지를 Azure Container Apps로 서버리스 배포하고, 외부 Ingress로 공개 URL 접근을 확인하는 실습(lab25).
 
 ## What you will learn
 
@@ -11,8 +11,8 @@ ACR 이미지를 Azure Container Apps로 서버리스 배포하고, 외부 Ingre
 
 ## Lab
 
-- **lab26: Azure Container Apps 배포** (`rg-lab26`)
-  - `cae-lab26` Environment → `ca-lab26`(ACR 이미지, 외부 Ingress) → URL 접근
+- **lab25: Azure Container Apps 배포** (`rg-lab25`)
+  - `cae-lab25` Environment → `ca-lab25`(ACR 이미지, 외부 Ingress) → URL 접근
 
 ## Reference
 
