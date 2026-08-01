@@ -1,6 +1,6 @@
-# 05 Traffic Management & High Availability / 06 고가용성 구성
+# 05 Traffic Management & High Availability / 07 고가용성 구성
 
-Availability Set과 Availability Zone의 차이를 이해하고, Zone에 VM을 분산 배포해 데이터센터 장애에도 서비스가 유지되는 것을 확인하는 실습(lab15).
+Availability Set과 Availability Zone의 차이를 이해하고, Zone에 VM을 분산 배포해 데이터센터 장애에도 서비스가 유지되는 것을 확인하는 실습(lab14).
 
 ## What you will learn
 
@@ -11,10 +11,10 @@ Availability Set과 Availability Zone의 차이를 이해하고, Zone에 VM을 �
 
 ## Lab
 
-- **lab15: Availability Zone VM 분산 배포** (`rg-lab15`)
+- **lab14: Availability Zone VM 분산 배포** (`rg-lab14`)
   - Zone 1 / Zone 2 VM → zone-redundant LB → Zone 장애 시뮬레이션
 
 ## Reference
 
-- Draft: `.claude/draft/05.06.claude.notion.md`
+- Draft: `.claude/draft/05.07.claude.notion.md`
 - Notion: [Notion 문서]()

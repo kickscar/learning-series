@@ -63,8 +63,8 @@ Resource Group : rg-{project}
 | `project` | `lab{NN}` / `gallery` | **모든 리소스에 항상** |
 | `identity` | Target/Type/Attr/Loc (§5), 하나뿐이면 생략 | 추천(사용자 영역) |
 
-- **평면 원칙**: 부모-자식(vnet↔snet)을 따지지 않는다. subnet도 project를 그대로 갖는다 → `snet-gallery-private`. **계층 상속 규칙 없음.**
-- 예: `vnet-lab13`, `snet-gallery-public`, `vm-gallery-web`, `nsg-lab13-vm`
+- **평면 원칙**: 부모-자식(vnet↔snet)을 따지지 않는다. subnet도 project를 그대로 갖는다 → `snet-gallery-priv`. **계층 상속 규칙 없음.**
+- 예: `vnet-lab13`, `snet-gallery-pub`, `vm-gallery-web`, `nsg-lab13-vm`
 
 ---
 
@@ -102,12 +102,13 @@ Resource Group : rg-{project}
 | 범주 | 예시 |
 |------|------|
 | Target | `nsg-lab13-vm` (보호/연결 대상) |
-| Type | `snet-gallery-public`, `snet-gallery-private` |
+| Type | `snet-gallery-pub`, `snet-gallery-priv` |
 | Attr | `vm-gallery-web`, `vm-gallery-was` |
 | Loc | `snet-gallery-web-a` (AZ) |
 
 - **하나뿐이면 생략**: `vnet-gallery`, `ng-gallery`, `lb-lab13`.
 - 리소스마다 자연스러운 범주를 고른다. 특정 범주로 고정하지 않는다.
+- **축약**: `public`/`private`는 **`pub`/`priv`**로 쓴다(type-first 약어 하우스스타일과 정합). 예: `snet-gallery-pub`, `snet-lab09-priv`.
 
 ---
 
@@ -171,7 +172,7 @@ rg-lab13
 ```
 rg-gallery
   ├── vnet-gallery
-  ├── snet-gallery-public / snet-gallery-private
+  ├── snet-gallery-pub / snet-gallery-priv
   ├── ng-gallery,  pip-gallery-ng
   ├── nsg-gallery-web
   ├── vm-gallery-web,  img-gallery-web
@@ -188,7 +189,7 @@ rg-gallery
 | AWS-fund | Azure-fund |
 |----------|------------|
 | `aws-fund-lab13-vpc` | `vnet-lab13` |
-| `aws-fund-lab13-subnet-public-a` | `snet-lab13-public` |
+| `aws-fund-lab13-subnet-public-a` | `snet-lab13-pub` |
 | `aws-fund-lab13-sg-instance` | `nsg-lab13-vm` |
 | `aws-fund-gallery-natgw` | `ng-gallery` |
 | `aws-fund-gallery-instance-web` | `vm-gallery-web` |
