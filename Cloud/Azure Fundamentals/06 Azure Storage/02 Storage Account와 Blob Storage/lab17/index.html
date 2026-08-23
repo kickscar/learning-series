@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud Gallery</title>
+  <style>
+    :root{
+      --bg:#F6F4ED; --card:#FBFAF6; --line:#E4E0D5;
+      --ink:#5A584F; --muted:#8A887E; --orange:#D9943E;
+    }
+    *{box-sizing:border-box; margin:0; padding:0;}
+    body{
+      font-family:'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+      background:var(--bg); color:var(--ink); -webkit-font-smoothing:antialiased;
+    }
+    .wrap{max-width:1040px; margin:0 auto; padding:56px 24px;}
+    header{text-align:center; margin-bottom:40px;}
+    .logo{
+      display:inline-block; font-family:'DejaVu Sans Mono',monospace;
+      font-size:13px; font-weight:700; letter-spacing:.08em; color:var(--orange);
+      border:1.5px solid var(--orange); border-radius:20px; padding:5px 14px; margin-bottom:18px;
+    }
+    h1{font-size:34px; font-weight:800; letter-spacing:-.02em;}
+    header p{margin-top:10px; color:var(--muted); font-size:15px;}
+    .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+    @media(max-width:860px){.grid{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:560px){.grid{grid-template-columns:1fr;}}
+    figure{
+      background:var(--card); border:1px solid var(--line); border-radius:16px;
+      overflow:hidden; box-shadow:0 1px 2px rgba(90,88,79,.06);
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    figure:hover{transform:translateY(-4px); box-shadow:0 10px 24px rgba(90,88,79,.12);}
+    figure img{display:block; width:100%; height:auto;}
+    figcaption{
+      padding:14px 16px; font-size:13px; color:var(--muted);
+      font-family:'DejaVu Sans Mono',monospace;
+    }
+    footer{margin-top:44px; text-align:center;}
+    footer .badge{
+      display:inline-block; background:var(--card); border:1px solid var(--line);
+      border-radius:14px; padding:6px 14px; font-size:12.5px; color:var(--muted);
+      font-family:'DejaVu Sans Mono',monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <span class="logo">CLOUD GALLERY</span>
+      <h1>Azure Fundamentals</h1>
+      <p>A gallery of Azure building blocks</p>
+    </header>
+
+    <div class="grid">
+      <figure><img src="img/gallery-01.svg" alt="Blob Storage"><figcaption>blob-storage</figcaption></figure>
+      <figure><img src="img/gallery-02.svg" alt="Virtual Network"><figcaption>virtual-network</figcaption></figure>
+      <figure><img src="img/gallery-03.svg" alt="Load Balancer"><figcaption>load-balancer</figcaption></figure>
+      <figure><img src="img/gallery-04.svg" alt="VM Scale Set"><figcaption>vm-scale-set</figcaption></figure>
+      <figure><img src="img/gallery-05.svg" alt="NAT Gateway"><figcaption>nat-gateway</figcaption></figure>
+      <figure><img src="img/gallery-06.svg" alt="Application Gateway"><figcaption>application-gateway</figcaption></figure>
+    </div>
+
+    <footer>
+      <span class="badge">served from Blob Static Website</span>
+    </footer>
+  </div>
+</body>
+</html>

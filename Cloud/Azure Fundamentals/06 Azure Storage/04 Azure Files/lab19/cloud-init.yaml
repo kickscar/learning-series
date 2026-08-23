@@ -1,0 +1,158 @@
+#cloud-config
+# vmss-lab13-web Custom Data. The Portal Custom Data field accepts ASCII only,
+# so comments and page text are in English.
+#
+# Fill in before pasting:
+#   stlab13{uniq}        -> your storage account name ({uniq} = your unique token)
+#   <stlab13{uniq} key1> -> Access keys > key1 of that account
+
+package_update: true
+packages:
+  - nginx
+  - cifs-utils
+
+write_files:
+  # Cloud Gallery served by nginx (same page as the static website; footer only)
+  - path: /var/www/html/index.html
+    content: |
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Cloud Gallery</title>
+        <style>
+          :root{
+            --bg:#F6F4ED; --card:#FBFAF6; --line:#E4E0D5;
+            --ink:#5A584F; --muted:#8A887E; --orange:#D9943E;
+          }
+          *{box-sizing:border-box; margin:0; padding:0;}
+          body{
+            font-family:'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+            background:var(--bg); color:var(--ink); -webkit-font-smoothing:antialiased;
+          }
+          .wrap{max-width:1040px; margin:0 auto; padding:56px 24px;}
+          header{text-align:center; margin-bottom:40px;}
+          .logo{
+            display:inline-block; font-family:'DejaVu Sans Mono',monospace;
+            font-size:13px; font-weight:700; letter-spacing:.08em; color:var(--orange);
+            border:1.5px solid var(--orange); border-radius:20px; padding:5px 14px; margin-bottom:18px;
+          }
+          h1{font-size:34px; font-weight:800; letter-spacing:-.02em;}
+          header p{margin-top:10px; color:var(--muted); font-size:15px;}
+          .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+          @media(max-width:860px){.grid{grid-template-columns:repeat(2,1fr);}}
+          @media(max-width:560px){.grid{grid-template-columns:1fr;}}
+          figure{
+            background:var(--card); border:1px solid var(--line); border-radius:16px;
+            overflow:hidden; box-shadow:0 1px 2px rgba(90,88,79,.06);
+            transition:transform .15s ease, box-shadow .15s ease;
+          }
+          figure:hover{transform:translateY(-4px); box-shadow:0 10px 24px rgba(90,88,79,.12);}
+          figure img{display:block; width:100%; height:auto;}
+          figcaption{
+            padding:14px 16px; font-size:13px; color:var(--muted);
+            font-family:'DejaVu Sans Mono',monospace;
+          }
+          footer{margin-top:44px; text-align:center;}
+          footer .badge{
+            display:inline-block; background:var(--card); border:1px solid var(--line);
+            border-radius:14px; padding:6px 14px; font-size:12.5px; color:var(--muted);
+            font-family:'DejaVu Sans Mono',monospace;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="wrap">
+          <header>
+            <span class="logo">CLOUD GALLERY</span>
+            <h1>Azure Fundamentals</h1>
+            <p>A gallery of Azure building blocks</p>
+          </header>
+
+          <div class="grid">
+            <figure><img src="img/gallery-01.svg" alt="Blob Storage"><figcaption>blob-storage</figcaption></figure>
+            <figure><img src="img/gallery-02.svg" alt="Virtual Network"><figcaption>virtual-network</figcaption></figure>
+            <figure><img src="img/gallery-03.svg" alt="Load Balancer"><figcaption>load-balancer</figcaption></figure>
+            <figure><img src="img/gallery-04.svg" alt="VM Scale Set"><figcaption>vm-scale-set</figcaption></figure>
+            <figure><img src="img/gallery-05.svg" alt="NAT Gateway"><figcaption>nat-gateway</figcaption></figure>
+            <figure><img src="img/gallery-06.svg" alt="Application Gateway"><figcaption>application-gateway</figcaption></figure>
+          </div>
+
+          <footer>
+            <span class="badge">served from Azure Files (shared)</span>
+          </footer>
+        </div>
+      </body>
+      </html>
+
+  # Custom 404 page (same as the static website error page)
+  - path: /var/www/html/errors/404.html
+    content: |
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>404 - Cloud Gallery</title>
+        <style>
+          :root{ --bg:#F6F4ED; --card:#FBFAF6; --line:#E4E0D5; --ink:#5A584F; --muted:#8A887E; --orange:#D9943E; }
+          *{box-sizing:border-box; margin:0; padding:0;}
+          body{
+            font-family:'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+            background:var(--bg); color:var(--ink); -webkit-font-smoothing:antialiased;
+            min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+          }
+          .box{ text-align:center; max-width:440px; }
+          .logo{
+            display:inline-block; font-family:'DejaVu Sans Mono','Courier New',monospace;
+            font-size:13px; font-weight:700; letter-spacing:.08em; color:var(--orange);
+            border:1.5px solid var(--orange); border-radius:20px; padding:5px 14px; margin-bottom:28px;
+          }
+          .code{
+            font-family:'DejaVu Sans Mono','Courier New',monospace; font-size:88px; font-weight:800;
+            line-height:1; letter-spacing:-.03em; color:var(--orange);
+          }
+          h1{ font-size:22px; font-weight:800; margin-top:18px; letter-spacing:-.01em; }
+          p{ margin-top:10px; color:var(--muted); font-size:15px; line-height:1.6; }
+          a.home{
+            display:inline-block; margin-top:28px; font-family:'DejaVu Sans Mono','Courier New',monospace;
+            font-size:13px; font-weight:700; color:var(--ink); text-decoration:none;
+            background:var(--card); border:1px solid var(--line); border-radius:14px; padding:10px 18px;
+            transition:transform .15s ease, box-shadow .15s ease;
+          }
+          a.home:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(90,88,79,.12); }
+          a.home:focus-visible{ outline:2px solid var(--orange); outline-offset:2px; }
+          @media(prefers-reduced-motion:reduce){ a.home{transition:none;} }
+        </style>
+      </head>
+      <body>
+        <div class="box">
+          <span class="logo">CLOUD GALLERY</span>
+          <div class="code">404</div>
+          <h1>Page not found</h1>
+          <p>The page you requested doesn't exist or has moved.<br>Head back to the gallery to find it.</p>
+          <a class="home" href="/">&larr; Back to gallery</a>
+        </div>
+      </body>
+      </html>
+
+  # Return the 404 page for missing paths
+  - path: /etc/nginx/conf.d/gallery.conf
+    content: |
+      error_page 404 /errors/404.html;
+
+  # SMB mount credentials (account name + key)
+  - path: /etc/smbcredentials/stlab13{uniq}.cred
+    permissions: '0600'
+    content: |
+      username=stlab13{uniq}
+      password=<stlab13{uniq} key1>
+
+runcmd:
+  # Mount the images share to the nginx image folder (fstab -> persists on boot)
+  - mkdir -p /var/www/html/img
+  - echo '//stlab13{uniq}.file.core.windows.net/images /var/www/html/img cifs nofail,vers=3.1.1,credentials=/etc/smbcredentials/stlab13{uniq}.cred,dir_mode=0755,file_mode=0644,serverino 0 0' >> /etc/fstab
+  - mount -a
+  # Apply the error_page from conf.d
+  - systemctl reload nginx
