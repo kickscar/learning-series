@@ -3,6 +3,8 @@ package io.kickscar.cloud.workload.gallery.config;
 import io.kickscar.cloud.workload.gallery.storage.AzureBlobImageStorage;
 import io.kickscar.cloud.workload.gallery.storage.ImageStorage;
 import io.kickscar.cloud.workload.gallery.storage.LocalImageStorage;
+import io.kickscar.cloud.workload.gallery.storage.NcpObjectImageStorage;
+import io.kickscar.cloud.workload.gallery.storage.NcpServerRoleCredentialsProvider;
 import io.kickscar.cloud.workload.gallery.storage.S3ImageStorage;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.storage.blob.BlobContainerClient;
@@ -15,10 +17,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.regions.providers.DefaultAwsRegionProviderChain;
 import software.amazon.awssdk.services.s3.S3Client;
 
+import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -83,12 +89,42 @@ public class ImageStorageConfig implements WebMvcConfigurer {
         return new AzureBlobImageStorage(blobContainerClient, imageStorageProperties);
     }
 
+    @Bean
+    @ConditionalOnProperty(name = "app.storage.type", havingValue = "ncp-object")
+    public S3Client ncpS3Client() {
+        ImageStorageProperties.Ncp ncp = imageStorageProperties.ncp();
+
+        // 자격증명: 정적 키가 주어지면 정적, 없으면 Server Role(키리스) 폴백.
+        // AWS(env/config -> IMDS) / Azure(DefaultAzureCredential)와 같은 우선순위.
+        AwsCredentialsProvider credentialsProvider;
+        if (ncp.accessKey() != null && !ncp.accessKey().isBlank()) {
+            credentialsProvider = StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(ncp.accessKey(), ncp.secretKey()));
+        } else {
+            credentialsProvider = new NcpServerRoleCredentialsProvider();
+        }
+
+        return S3Client.builder()
+                .region(Region.of(ncp.region()))
+                .endpointOverride(URI.create(ncp.endpoint()))
+                .credentialsProvider(credentialsProvider)
+                .forcePathStyle(true)
+                .build();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "app.storage.type", havingValue = "ncp-object")
+    public ImageStorage ncpObjectImageStorage(S3Client ncpS3Client) {
+        return new NcpObjectImageStorage(ncpS3Client, imageStorageProperties);
+    }
+
     @ConfigurationProperties(prefix = "app.storage")
-    public record ImageStorageProperties(String type, Local local, S3 s3, Blob blob) {
+    public record ImageStorageProperties(String type, Local local, S3 s3, Blob blob, Ncp ncp) {
         public record Local(String path, Url url) {}
         public record Url(String prefix) {}
         public record S3(String bucket) {}
         public record Blob(String account, String container) {}
+        public record Ncp(String bucket, String endpoint, String region, String accessKey, String secretKey) {}
 
         public String baseUrl() {
             return local.url().prefix().replaceAll("/+$", "");
