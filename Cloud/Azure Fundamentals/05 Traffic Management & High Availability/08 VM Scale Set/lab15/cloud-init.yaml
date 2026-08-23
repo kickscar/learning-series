@@ -1,0 +1,9 @@
+#cloud-config
+package_update: true
+packages:
+  - nginx
+  - stress-ng
+runcmd:
+  - |
+    ZONE=$(curl -s -H "Metadata: true" "http://169.254.169.254/metadata/instance/compute/zone?api-version=2021-02-01&format=text")
+    echo "[$(hostname)]-[VMSS-Model-V1.0] on [Zone ${ZONE}]" > /var/www/html/index.html

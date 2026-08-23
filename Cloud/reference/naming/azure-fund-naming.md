@@ -63,8 +63,8 @@ Resource Group : rg-{project}
 | `project` | `lab{NN}` / `gallery` | **모든 리소스에 항상** |
 | `identity` | Target/Type/Attr/Loc (§5), 하나뿐이면 생략 | 추천(사용자 영역) |
 
-- **평면 원칙**: 부모-자식(vnet↔snet)을 따지지 않는다. subnet도 project를 그대로 갖는다 → `snet-gallery-priv`. **계층 상속 규칙 없음.**
-- 예: `vnet-lab13`, `snet-gallery-pub`, `vm-gallery-web`, `nsg-lab13-vm`
+- **평면 원칙**: 부모-자식(vnet↔snet)을 따지지 않는다. subnet도 project를 그대로 갖는다 → `snet-gallery-web`. **계층 상속 규칙 없음.**
+- 예: `vnet-lab13`, `snet-gallery-web`, `vm-gallery-web`, `nsg-lab13-snet-web`
 
 ---
 
@@ -83,7 +83,7 @@ Resource Group : rg-{project}
 | Private 연결 | `vpce` | `pep` | Private Endpoint |
 | VM | `instance` | `vm` | |
 | VM 이미지 | (ami) | `img` | Compute Gallery 이미지 |
-| L4 로드밸런서 | (nlb) | `lb` | Azure Load Balancer |
+| L4 로드밸런서 | `nlb` | `lbe`/`lbi` | 외부/내부 Load Balancer |
 | L7 로드밸런서 | `alb` | `agw` | Application Gateway |
 | 오토스케일 | `asg` | `vmss` | VM Scale Set |
 | 관계형 DB | `rds` | `mysql` / `sql` | Azure DB for MySQL / Azure SQL |
@@ -101,24 +101,30 @@ Resource Group : rg-{project}
 
 | 범주 | 예시 |
 |------|------|
-| Target | `nsg-lab13-vm` (보호/연결 대상) |
-| Type | `snet-gallery-pub`, `snet-gallery-priv` |
+| Target | `nsg-lab13-snet-web` (보호 대상=서브넷) |
+| Type | `snet-lab08-pub`, `snet-lab09-priv` |
 | Attr | `vm-gallery-web`, `vm-gallery-was` |
 | Loc | `snet-gallery-web-a` (AZ) |
 
-- **하나뿐이면 생략**: `vnet-gallery`, `ng-gallery`, `lb-lab13`.
+- **하나뿐이면 생략**: `vnet-gallery`, `ng-gallery`, `lbe-lab13`.
 - 리소스마다 자연스러운 범주를 고른다. 특정 범주로 고정하지 않는다.
-- **축약**: `public`/`private`는 **`pub`/`priv`**로 쓴다(type-first 약어 하우스스타일과 정합). 예: `snet-gallery-pub`, `snet-lab09-priv`.
+- **서브넷 identity**: 공개여부·역할(web/agw)·담긴 자원 등 상황에 맞게. **다중 서브넷이면 역할이 자연스럽다**(Gallery `snet-gallery-web`/`-agw`/`-db`, 단일 격리 랩은 `-priv`). MS 강제 이름(`AzureBastionSubnet`)은 그대로 수용.
+- **NSG identity = 붙는 서브넷**: `nsg-{proj}-snet`(서브넷 하나) / `nsg-{proj}-snet-{role}`(여럿, 예 `nsg-lab13-snet-web`·`nsg-gallery-snet-web`).
+- **축약**: `public`/`private`는 **`pub`/`priv`**로 쓴다(type-first 약어 하우스스타일과 정합). 예: `snet-lab08-pub`, `snet-lab09-priv`.
 
 ---
 
 ## 6. 하위 구성(sub-config) — 부모에 담김
 
-LB/AGW의 내부 구성(frontend IP config, backend pool, health probe, load-balancing/routing rule, listener, backend settings)은 **RG 평면의 리소스가 아니라 부모 리소스(`lb-gallery`)의 속성**이다. 이미 이름 있는 부모 안에 있으므로 **project를 붙이지 않고 기능명으로** 쓴다.
+LB/AGW의 내부 구성(frontend IP config, backend pool, health probe, load-balancing/routing rule, listener, backend settings)은 **RG 평면의 리소스가 아니라 부모 리소스(`lbe-gallery`)의 속성**이다. 부모 네임스페이스 안의 child라 Azure가 부모별로 스코프한다. 그래서 **기능 풀네임만** 쓴다. 부모가 이미 project를 담으므로 **project를 붙이지 않고**, 그 종류가 부모 안에 하나뿐이면 **identity도 생략**한다.
 
 ```
-feip-lb, bepool-web, probe-http, rule-http, listener-http, beset-http
+frontend-ip, backend-pool, health-probe, rule, listener, backend-settings
 ```
+
+- 같은 종류가 부모 안에 **여럿일 때만** identity를 붙인다(규칙 둘이면 `rule-http`, `rule-https` 식).
+- **다른 rule 타입이 공존**하면(부하 분산 규칙 + 아웃바운드 규칙) `rule` 단독은 모호하므로 기능으로 가른다: `rule-load-balance`, `rule-outbound`. 부하 분산 규칙만 있으면 그냥 `rule`.
+- 부모(LB)가 여럿 공존해도 이름은 부모별 스코프라 충돌하지 않는다(Azure child resource).
 
 ---
 
@@ -126,14 +132,15 @@ feip-lb, bepool-web, probe-http, rule-http, listener-http, beset-http
 
 project를 항상 이름에 넣으므로, 더 이상 "예외로 project 복귀"가 아니다(그냥 규칙). 남는 특수 처리는 둘뿐이다.
 
-- **문자 제약**: `st`·`cr`은 소문자+숫자, **하이픈 불가**. `kv`는 하이픈 가능.
-- **충돌 tiebreaker**: 테넌트에서 딴 **짧은 org 코드(4~6자)**를 붙인다. (테넌트 GUID는 길이·하이픈 때문에 못 들어감.)
+- **문자 제약**: `st`·`cr`은 소문자+숫자, **하이픈 불가**. `kv`·`mysql`은 하이픈 가능.
+- **전역 유일 토큰 `{uniq}`**: project 뒤에 각자 채우는 전역 유일 값을 붙인다(짧은 org 코드 4~6자, 이니셜, 랜덤; 테넌트 GUID는 길이·하이픈 때문에 못 들어감). **교육자료라 문서에 이 토큰을 항상 표기**한다. 문서 이름을 그대로 쓰면 전 세계 학습자가 같은 이름으로 충돌하므로, 학습자는 `{uniq}`를 자기 값으로 바꾼다(예: `stlab16abc`).
 
-| 리소스 | type | 제약 | 기본 | 충돌 시 |
-|--------|------|------|------|---------|
-| Storage Account | `st` | 3–24, 소문자+숫자 | `stgallery`, `stlab17` | `stgallery{code}` |
-| Key Vault | `kv` | 3–24, 영숫자+하이픈 | `kv-gallery` | `kv-gallery-{code}` |
-| Container Registry | `cr` | 5–50, 영숫자 | `crgallery` | `crgallery{code}` |
+| 리소스 | type | 제약 | 문서 표기 | 예(학습자 치환) |
+|--------|------|------|-----------|-----------------|
+| Storage Account | `st` | 3–24, 소문자+숫자 | `stlab16{uniq}`, `stgallery{uniq}` | `stgalleryabc` |
+| Key Vault | `kv` | 3–24, 영숫자+하이픈 | `kv-gallery-{uniq}` | `kv-gallery-abc` |
+| Container Registry | `cr` | 5–50, 영숫자 | `crgallery{uniq}` | `crgalleryabc` |
+| MySQL Flexible Server | `mysql` | 3–63, 소문자+숫자+하이픈 | `mysql-lab20-{uniq}`, `mysql-gallery-{uniq}` | `mysql-gallery-abc` |
 
 ---
 
@@ -163,8 +170,8 @@ rg-lab13
   ├── snet-lab13-web
   ├── nsg-lab13-web
   ├── vm-lab13-web-1 / vm-lab13-web-2
-  ├── lb-lab13            (feip-lb · bepool-web · probe-http · rule-http)
-  ├── pip-lab13-lb
+  ├── lbe-lab13           (frontend-ip, backend-pool, health-probe, rule)
+  ├── pip-lab13-lbe
   └── key-lab13           (로컬 .pem)
 ```
 
@@ -172,13 +179,13 @@ rg-lab13
 ```
 rg-gallery
   ├── vnet-gallery
-  ├── snet-gallery-pub / snet-gallery-priv
+  ├── snet-gallery-web / snet-gallery-agw / snet-gallery-db
   ├── ng-gallery,  pip-gallery-ng
-  ├── nsg-gallery-web
-  ├── vm-gallery-web,  img-gallery-web
-  ├── lb-gallery / agw-gallery,  pip-gallery-lb / pip-gallery-agw
+  ├── nsg-gallery-snet-web
+  ├── vm-gallery-web-01/-02,  img-gallery-web
+  ├── lbe-gallery / agw-gallery,  pip-gallery-lbe / pip-gallery-agw-listener
   ├── vmss-gallery-web
-  ├── stgallery           (전역 고유, 충돌 시 stgallery{code})
+  ├── stgallery{uniq}     (전역 고유, {uniq}=학습자가 채우는 유일 토큰)
   └── key-gallery         (로컬 .pem)
 ```
 

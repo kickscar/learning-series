@@ -15,7 +15,8 @@ write_files:
       Type=simple
       User=azureuser
       WorkingDirectory=/opt/gallery
-      ExecStart=/usr/bin/java -jar /opt/gallery/gallery.jar --spring.profiles.active=dev --gallery.storage.local.path=/opt/gallery/uploads
+      Environment=AZURE_CLIENT_ID={id-gallery의 클라이언트 ID}
+      ExecStart=/usr/bin/java -jar /opt/gallery/gallery.jar --spring.profiles.active=dev --app.storage.type=azure-blob --app.storage.blob.account=stgallery{uniq} --app.storage.blob.container=gallery
       Restart=on-failure
       RestartSec=5
       StandardOutput=journal
