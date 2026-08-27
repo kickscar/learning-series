@@ -39,9 +39,17 @@ public class ImageStorageConfig implements WebMvcConfigurer {
         this.imageStorageProperties = imageStorageProperties;
     }
 
+    /**
+     * 업로드한 파일을 정적 리소스로 노출한다. 로컬 스토리지일 때만 필요하다.
+     *
+     * <p>{@code @ConditionalOnProperty}는 {@code @Bean} 메서드와 설정 클래스에서만 평가되고
+     * 인터페이스 구현 메서드에는 적용되지 않으므로 여기서는 직접 확인한다.
+     */
     @Override
-    @ConditionalOnProperty(name = "app.storage.type", havingValue = "local")
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        if (!"local".equals(imageStorageProperties.type())) {
+            return;
+        }
         registry.addResourceHandler(imageStorageProperties.baseUrl() + "/**")
                 .addResourceLocations(Path.of(imageStorageProperties.resolvedLocalPath()).toUri().toString());
     }

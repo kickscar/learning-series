@@ -63,6 +63,13 @@ app:
     blob:
       account: ${AZURE_STORAGE_ACCOUNT:}
       container: gallery
+    ncp:
+      bucket: gallery
+      endpoint: https://kr.object.ncloudstorage.com
+      region: kr-standard
+      # 키리스(Server Role)가 기본. 정적 키를 주면 그쪽이 우선한다.
+      access-key: ${NCP_ACCESS_KEY:}
+      secret-key: ${NCP_SECRET_KEY:}
 
 logging:
   pattern:
