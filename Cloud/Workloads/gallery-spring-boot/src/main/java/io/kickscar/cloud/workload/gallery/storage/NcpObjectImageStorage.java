@@ -66,7 +66,10 @@ public class NcpObjectImageStorage implements ImageStorage {
     public void delete(String url) {
         // path-style URL에서 key 추출: {endpoint}/{bucket}/{key}
         String prefix = properties.ncp().endpoint() + "/" + properties.ncp().bucket() + "/";
-        String key = url.substring(url.indexOf(prefix) + prefix.length());
+        if (!url.startsWith(prefix)) {
+            throw new IllegalArgumentException("Not an NCP Object Storage URL: " + url);
+        }
+        String key = url.substring(prefix.length());
         s3Client.deleteObject(DeleteObjectRequest.builder()
                 .bucket(properties.ncp().bucket())
                 .key(key)
