@@ -20,6 +20,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.checksums.RequestChecksumCalculation;
+import software.amazon.awssdk.core.checksums.ResponseChecksumValidation;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.regions.providers.DefaultAwsRegionProviderChain;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -117,6 +119,11 @@ public class ImageStorageConfig implements WebMvcConfigurer {
                 .endpointOverride(URI.create(ncp.endpoint()))
                 .credentialsProvider(credentialsProvider)
                 .forcePathStyle(true)
+                // SDK 기본값(WHEN_SUPPORTED)은 PutObject 본문을 aws-chunked로 감싸고
+                // CRC32 트레일러를 붙인다. NCP Object Storage가 그 형식을 받지 않아
+                // AccessDenied로 막히므로 필요한 경우에만 계산하도록 낮춘다.
+                .requestChecksumCalculation(RequestChecksumCalculation.WHEN_REQUIRED)
+                .responseChecksumValidation(ResponseChecksumValidation.WHEN_REQUIRED)
                 .build();
     }
 
@@ -132,7 +139,23 @@ public class ImageStorageConfig implements WebMvcConfigurer {
         public record Url(String prefix) {}
         public record S3(String bucket) {}
         public record Blob(String account, String container) {}
-        public record Ncp(String bucket, String endpoint, String region, String accessKey, String secretKey) {}
+        public record Ncp(String bucket, String endpoint, String publicEndpoint,
+                          String region, String accessKey, String secretKey) {
+
+            /**
+             * 브라우저가 이미지를 받아 가는 주소의 기준.
+             *
+             * <p>NCP Object Storage는 사설 통신용 도메인이 공인 도메인과 다르다
+             * (AWS VPC Endpoint나 Azure Private Endpoint는 같은 FQDN을 쓴다).
+             * 서버가 사설 도메인으로 올리더라도 브라우저에 내보내는 URL은 공인
+             * 도메인이어야 하므로 둘을 나눈다.
+             *
+             * <p>지정하지 않으면 {@code endpoint}를 그대로 쓴다.
+             */
+            public String resolvedPublicEndpoint() {
+                return (publicEndpoint == null || publicEndpoint.isBlank()) ? endpoint : publicEndpoint;
+            }
+        }
 
         public String baseUrl() {
             return local.url().prefix().replaceAll("/+$", "");
