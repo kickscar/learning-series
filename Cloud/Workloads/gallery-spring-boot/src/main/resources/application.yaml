@@ -65,7 +65,11 @@ app:
       container: gallery
     ncp:
       bucket: gallery
-      endpoint: https://kr.object.ncloudstorage.com
+      # 서버가 객체를 올리는 주소. Private Subnet이면 사설 도메인을 쓸 수 있다.
+      endpoint: ${NCP_OBJECT_ENDPOINT:https://kr.object.ncloudstorage.com}
+      # 브라우저가 이미지를 받아 가는 주소. 비우면 endpoint를 그대로 쓴다.
+      # 사설 도메인으로 올릴 때는 반드시 공인 도메인을 지정한다.
+      public-endpoint: ${NCP_OBJECT_PUBLIC_ENDPOINT:}
       region: kr-standard
       # 키리스(Server Role)가 기본. 정적 키를 주면 그쪽이 우선한다.
       access-key: ${NCP_ACCESS_KEY:}
