@@ -38,12 +38,14 @@ COPY --from=prepare-application /${workspace}/${temp}/${application}/snapshot-de
 COPY --from=prepare-application /${workspace}/${temp}/${application}/spring-boot-loader/ ./
 COPY --from=prepare-application /${workspace}/${temp}/${application}/application/ ./
 
-RUN groupadd -r spring && useradd -r -g spring spring \
+# 비root 사용자를 고정 UID/GID로 생성한다.
+# USER를 숫자로 지정해야 Kubernetes의 runAsNonRoot 검증(Pod Security Restricted)을 통과한다.
+RUN groupadd -r -g 10001 spring && useradd -r -u 10001 -g spring spring \
     && mkdir -p uploads \
-    && chown -R spring:spring /${application}
+    && chown -R 10001:10001 /${application}
 
 EXPOSE 8080
-USER spring:spring
+USER 10001:10001
 
 ENV SPRING_PROFILES_ACTIVE=dev
 ENV SPRING_DATASOURCE_URL=jdbc:h2:mem:gallery;DB_CLOSE_DELAY=-1;MODE=MYSQL
