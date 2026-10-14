@@ -4,14 +4,14 @@
 
 ## What you will learn
 
-- 컨테이너 상태 7가지와 명령으로 오가는 4가지 상태(`created` · `running` · `paused` · `exited`)
+- 컨테이너 상태 7가지와 명령으로 오가는 4가지 상태(`created`, `running`, `paused`, `exited`)
 - `docker container ls` 의 `STATUS` 열 표시와 `-a` 옵션
-- `create` · `start` · `pause` · `unpause` · `stop` · `restart` · `rm` 에 따른 상태 전이
+- `create`, `start`, `pause`, `unpause`, `stop`, `restart`, `rm` 에 따른 상태 전이
 - `docker container run` 과 `create` · `start` 의 관계
 
 ## Examples
 
-- `lab01` → 컨테이너 상태 전환 (생성 · 시작 · 일시 정지 · 재개 · 재시작 · 정지 · 삭제, 삭제 거부 확인, 정지 소요 시간 관찰)
+- `lab01` → 컨테이너 상태 전환 (생성부터 삭제까지의 상태 전환, 삭제 거부 확인, 정지 소요 시간 관찰)
 
 ## Source
 
