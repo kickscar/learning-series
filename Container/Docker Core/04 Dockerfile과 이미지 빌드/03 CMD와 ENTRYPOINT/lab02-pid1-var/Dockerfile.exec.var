@@ -1,0 +1,7 @@
+# syntax=docker/dockerfile:1
+
+FROM alpine:3.24
+
+ENV APP_MODE=develop
+
+CMD ["echo", "APP_MODE=${APP_MODE}"]
