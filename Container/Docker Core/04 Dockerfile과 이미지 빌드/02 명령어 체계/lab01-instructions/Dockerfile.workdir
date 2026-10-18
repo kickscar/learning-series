@@ -1,0 +1,9 @@
+# syntax=docker/dockerfile:1
+
+FROM alpine:3.24
+
+WORKDIR /app
+WORKDIR src
+USER nobody
+
+CMD ["pwd"]
