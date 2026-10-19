@@ -30,6 +30,8 @@ FROM eclipse-temurin:21-jre
 ARG workspace=workspace
 ARG temp=temp
 ARG application
+# 화면 푸터에 표시할 버전 (예: --build-arg version=1.0). 비우면 표시하지 않는다
+ARG version=
 
 WORKDIR /${application}
 
@@ -54,6 +56,7 @@ ENV SPRING_DATASOURCE_PASSWORD=
 ENV APP_STORAGE_TYPE=local
 ENV APP_STORAGE_LOCAL_URL_PREFIX=/assets/images/uploads
 ENV APP_STORAGE_S3_BUCKET=gallery
+ENV APP_RUNTIME_VERSION=${version}
 
 # 로컬 저장소는 WORKDIR 기준 상대 경로 `uploads` 로 고정 (명령줄 인자가 env·yaml보다 우선 → 호스트 절대경로 주입 완화)
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher", "--app.storage.local.path=uploads"]
