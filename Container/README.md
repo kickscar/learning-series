@@ -203,12 +203,10 @@ Learning Series/
 
 | 앱 | 런타임 | 용도 |
 |----|--------|------|
-| **gallery-spring-boot** | Spring Boot 3.5.x / Java 21 | 메인 실습 대상. Docker Core와 Kubernetes Core가 챕터마다 확장한다 |
-| identicon | Spring Boot 3.3.x / Java 21 | 보조 서비스 |
-| gallery-asp-dotnet | .NET 8 | gallery-spring-boot의 포팅. 도메인·엔드포인트·화면이 대칭이다 |
+| **gallery-spring-boot** | Spring Boot 3.5.x / Java 21 | 실습 대상. Docker Core가 이미지를 완성해 게시하고, Kubernetes Core와 Cloud Native가 그 이미지를 받아 확장한다 |
 
 ```
-Docker Core        이미지를 만든다        gallery:local
+Docker Core        이미지를 만든다        dkrcore/gallery:1.0 · 2.0
       ↓
 Kubernetes Core    클러스터에 배포한다     Deployment → Service → PVC → Helm
       ↓
@@ -217,7 +215,7 @@ Cloud Native       서비스로 설계한다       아키텍처·릴리스·관�
 
 학습자가 매번 새 예제를 익히지 않고 **실행 방식의 차이에 집중**할 수 있다.
 
-> 앱 소스의 정본은 `Cloud/Workloads/` 다. 세 트랙(`Cloud/`, `Container/`, `System/`)이 같은 소스를 공유한다.
+> 앱 소스의 정본은 `Cloud/Workloads/` 다. Container 트랙은 `gallery-spring-boot` 만 두고, Gallery 실습에 필요한 수정은 `Container/Workloads/` 에서 한 뒤 정본에 반영한다.
 
 ---
 
