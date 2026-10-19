@@ -1,0 +1,12 @@
+# syntax=docker/dockerfile:1
+
+FROM alpine:3.24
+ARG APP_DIR=/app
+
+WORKDIR ${APP_DIR}
+COPY packages.txt ./
+RUN apk add --no-cache $(cat packages.txt)
+
+WORKDIR src
+COPY src ./
+CMD ["sh", "run.sh"]
