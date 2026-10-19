@@ -1,4 +1,4 @@
-# 04 Dockerfile과 이미지 빌드 / 03 CMD와 ENTRYPOINT
+# 04 Dockerfile과 이미지 빌드 / 04 CMD와 ENTRYPOINT
 
 컨테이너가 실행할 명령을 정하는 `CMD` 와 `ENTRYPOINT` 를 다룬다. 두 명령의 작성 형식에 따라 실행 방식이 달라지는 점과 두 명령을 함께 지정했을 때의 결과를 정리하고, 형식 차이로 발생하는 정지 지연과 변수 미치환을 실행으로 확인한다.
 
