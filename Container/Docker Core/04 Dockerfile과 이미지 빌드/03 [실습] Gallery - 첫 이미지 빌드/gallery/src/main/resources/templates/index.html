@@ -49,7 +49,7 @@
 
     <footer th:if="${hostId != null}" class="site-footer">
         <div class="site-footer__inner">
-            <small class="site-footer__text">Instance: <span th:text="${hostId}">host</span></small>
+            <small class="site-footer__text">Instance: <span th:text="${hostId}">host</span><th:block th:if="${appVersion != null}"> · Version: <span th:text="${appVersion}">1.0</span></th:block></small>
         </div>
     </footer>
 </body>
