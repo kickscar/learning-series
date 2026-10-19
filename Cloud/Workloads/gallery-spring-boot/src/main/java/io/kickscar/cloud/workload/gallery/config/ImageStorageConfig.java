@@ -17,9 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.checksums.RequestChecksumCalculation;
 import software.amazon.awssdk.core.checksums.ResponseChecksumValidation;
 import software.amazon.awssdk.regions.Region;
@@ -104,20 +101,11 @@ public class ImageStorageConfig implements WebMvcConfigurer {
     public S3Client ncpS3Client() {
         ImageStorageProperties.Ncp ncp = imageStorageProperties.ncp();
 
-        // 자격증명: 정적 키가 주어지면 정적, 없으면 Server Role(키리스) 폴백.
-        // AWS(env/config -> IMDS) / Azure(DefaultAzureCredential)와 같은 우선순위.
-        AwsCredentialsProvider credentialsProvider;
-        if (ncp.accessKey() != null && !ncp.accessKey().isBlank()) {
-            credentialsProvider = StaticCredentialsProvider.create(
-                    AwsBasicCredentials.create(ncp.accessKey(), ncp.secretKey()));
-        } else {
-            credentialsProvider = new NcpServerRoleCredentialsProvider();
-        }
-
+        // 자격증명은 Server Role(키리스)만 쓴다. 키를 서버에 두지 않는다.
         return S3Client.builder()
                 .region(Region.of(ncp.region()))
                 .endpointOverride(URI.create(ncp.endpoint()))
-                .credentialsProvider(credentialsProvider)
+                .credentialsProvider(new NcpServerRoleCredentialsProvider())
                 .forcePathStyle(true)
                 // SDK 기본값(WHEN_SUPPORTED)은 PutObject 본문을 aws-chunked로 감싸고
                 // CRC32 트레일러를 붙인다. NCP Object Storage가 그 형식을 받지 않아
@@ -140,7 +128,7 @@ public class ImageStorageConfig implements WebMvcConfigurer {
         public record S3(String bucket) {}
         public record Blob(String account, String container) {}
         public record Ncp(String bucket, String endpoint, String publicEndpoint,
-                          String region, String accessKey, String secretKey) {
+                          String region) {
 
             /**
              * 브라우저가 이미지를 받아 가는 주소의 기준.
