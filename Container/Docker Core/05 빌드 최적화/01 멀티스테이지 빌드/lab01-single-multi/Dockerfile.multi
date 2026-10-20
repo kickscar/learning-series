@@ -1,0 +1,22 @@
+# syntax=docker/dockerfile:1
+
+# stage01: build
+FROM golang:1.27-alpine AS build
+
+WORKDIR /src
+
+COPY main.go ./
+RUN go build -o /out/hello main.go
+
+# stage02: runtime
+FROM alpine:3.24 AS runtime
+
+WORKDIR /app
+
+RUN addgroup -S -g 10001 app && adduser -S -D -H -u 10001 -G app app
+RUN mkdir data && chown 10001:10001 data
+COPY --from=build /out/hello ./
+
+USER 10001:10001
+
+CMD ["./hello"]
