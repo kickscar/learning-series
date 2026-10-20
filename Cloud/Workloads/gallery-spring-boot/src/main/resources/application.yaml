@@ -44,8 +44,9 @@ management:
         include: health
   endpoint:
     health:
+      # liveness · readiness 그룹(/actuator/health/liveness · /readiness)을 노출한다
       probes:
-        enabled: false
+        enabled: true
       show-details: never
 
 mybatis:
@@ -70,6 +71,9 @@ app:
       # 브라우저가 이미지를 받아 가는 주소. 비우면 endpoint를 그대로 쓴다.
       public-endpoint: ${NCP_OBJECT_PUBLIC_ENDPOINT:https://kr.object.ncloudstorage.com}
       region: kr-standard
+  runtime:
+    # 화면 푸터에 표시할 버전. 컨테이너 이미지는 빌드 때 APP_RUNTIME_VERSION 으로 지정한다. 비우면 표시하지 않는다
+    version:
 
 logging:
   pattern:
@@ -118,3 +122,4 @@ logging:
   config: classpath:logback-prod.xml
   ops:
     level: WARN
+    # 파일 로그(./gallery-logs/)는 logfile 프로필을 함께 활성화할 때만 쓴다 (SPRING_PROFILES_ACTIVE=prod,logfile)

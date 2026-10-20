@@ -99,12 +99,6 @@
             <version>9.0</version>
         </dependency>
 
-        <!-- logback-prod.xml 의 조건부 설정(<if>) -->
-        <dependency>
-            <groupId>org.codehaus.janino</groupId>
-            <artifactId>janino</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

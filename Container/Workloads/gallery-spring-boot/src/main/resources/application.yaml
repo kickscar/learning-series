@@ -122,5 +122,4 @@ logging:
   config: classpath:logback-prod.xml
   ops:
     level: WARN
-    # 파일 로그는 기본으로 끈다. VM 배포 등에서 필요하면 LOGGING_OPS_FILE_ENABLED=true
-    file-enabled: false
+    # 파일 로그(./gallery-logs/)는 logfile 프로필을 함께 활성화할 때만 쓴다 (SPRING_PROFILES_ACTIVE=prod,logfile)

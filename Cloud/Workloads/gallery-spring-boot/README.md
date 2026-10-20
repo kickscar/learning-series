@@ -118,7 +118,7 @@ mvnw.cmd spring-boot:run
 | 구분 | `dev` (default) | `prod` |
 |------|--------|--------|
 | **HTTP 포트** | `8080` (`application.yaml` 의 `server.port`) | `8080` (동일. 프로파일과 무관하게 **8080 고정**) |
-| **로깅** | 기본 콘솔 패턴 (`application.yaml` 의 `logging`) | `logback-prod.xml` 사용, 구조화·운영 로그에 맞춘 설정 |
+| **로깅** | 기본 콘솔 패턴 (`application.yaml` 의 `logging`) | `logback-prod.xml` 사용. JSON 구조화 로그를 표준 출력으로 내보낸다. 파일 로그(`./gallery-logs/`)는 `logfile` 프로필을 함께 활성화할 때만 쓴다 (`SPRING_PROFILES_ACTIVE=prod,logfile`) |
 | **기타** | Thymeleaf 캐시 끔, DevTools(핫 리로드 등) 사용 | Thymeleaf 캐시 켬, `logging.ops.level` 등 운영용 레벨 |
 
 포트를 바꾸려면 실행 시 **`--server.port=...`** 또는 환경 변수 **`SERVER_PORT`** 로 덮어쓸 수 있다. 기본 구성은 **항상 8080** 이다.
@@ -226,6 +226,10 @@ docker build --build-arg application=gallery -t gallery:local .
 | 스토리지 | `APP_STORAGE_TYPE=s3` |
 | S3 버킷 | `APP_STORAGE_S3_BUCKET=버킷이름` |
 | 외부 DB(MariaDB 등) | `SPRING_DATASOURCE_URL=...`, `SPRING_DATASOURCE_USERNAME=...`, `SPRING_DATASOURCE_PASSWORD=...` |
+| 파일 로그 (`prod`) | `SPRING_PROFILES_ACTIVE=prod,logfile` (기본은 표준 출력만) |
+| 푸터 버전 표시 | 빌드 때 `--build-arg version=1.0` → `APP_RUNTIME_VERSION`. 비우면 표시하지 않는다 |
+
+헬스 엔드포인트: `/actuator/health`, liveness `/actuator/health/liveness`, readiness `/actuator/health/readiness`.
 
 S3 사용 시 AWS 자격 증명은 **사전 요구 사항** 과 같이 SDK 기본 체인(예: `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` / `AWS_REGION` 등)을 따른다.
 
