@@ -4,10 +4,8 @@
     <springProperty name="SPRING_PROFILES_ACTIVE" source="spring.profiles.active" defaultValue="dev"/>
     <springProperty name="LOGGING_OPS_LEVEL" source="logging.ops.level" defaultValue="WARN"/>
 
-    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-
-        <file>./${APPLICATION_NAME}-logs/${APPLICATION_NAME}.current.log</file>
-
+    <!-- 표준 출력. 컨테이너 런타임이 수집한다 -->
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <includeMdc>true</includeMdc>
             <includeContext>true</includeContext>
@@ -22,16 +20,43 @@
                 <logger>logger</logger>
             </fieldNames>
         </encoder>
-
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>./${APPLICATION_NAME}-logs/${APPLICATION_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>10</maxHistory>
-        </rollingPolicy>
-
     </appender>
 
     <root level="${LOGGING_OPS_LEVEL}">
-        <appender-ref ref="fileAppender" />
+        <appender-ref ref="consoleAppender" />
     </root>
+
+    <!-- 파일 로그. logfile 프로필을 함께 활성화할 때만 추가한다 (예: SPRING_PROFILES_ACTIVE=prod,logfile) -->
+    <springProfile name="logfile">
+            <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+                <file>./${APPLICATION_NAME}-logs/${APPLICATION_NAME}.current.log</file>
+
+                <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                    <includeMdc>true</includeMdc>
+                    <includeContext>true</includeContext>
+                    <customFields>
+                        {"application_name": "${APPLICATION_NAME}", "profile_active":"${SPRING_PROFILES_ACTIVE}"}
+                    </customFields>
+                    <fieldNames>
+                        <timestamp>timestamp</timestamp>
+                        <level>severity</level>
+                        <message>message</message>
+                        <thread>thread</thread>
+                        <logger>logger</logger>
+                    </fieldNames>
+                </encoder>
+
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <fileNamePattern>./${APPLICATION_NAME}-logs/${APPLICATION_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+                    <maxHistory>10</maxHistory>
+                </rollingPolicy>
+
+            </appender>
+
+            <root level="${LOGGING_OPS_LEVEL}">
+                <appender-ref ref="fileAppender" />
+            </root>
+    </springProfile>
 
 </configuration>
