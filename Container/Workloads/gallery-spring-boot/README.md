@@ -199,22 +199,22 @@ java -jar target/gallery.jar \
 
 컨테이너 이미지는 **`Dockerfile`** 의 `ENV` 로 **기본적으로 dev·H2·로컬 스토리지** 를 쓴다(포트는 이미지에서 **8080**). 실행 시 **`-e`** 로 JAR 의 `--속성=값` 과 같은 설정을 덮어쓴다. 비밀번호 등은 명령줄·환경 변수 노출을 피하기 위해 운영에서는 Secret·외부 설정을 권장한다.
 
-**로컬 스토리지 경로(컨테이너):** 이미지는 **`WORKDIR`(`/gallery`) 기준 상대 경로 `uploads`** 로 고정한다(`ENTRYPOINT` 에서 `--app.storage.local.path=uploads`). 호스트에서 절대경로로 바꾸는 설정은 컨테이너 샌드박스와 맞지 않아 **의도적으로 우선 적용하기 어렵게** 두었다. 업로드를 호스트에 남기려면 **볼륨으로 `/gallery/uploads` 에 마운트**하면 된다 (예: `-v "$(pwd)/gallery-uploads:/gallery/uploads"`).
+**로컬 스토리지 경로(컨테이너):** 이미지는 **`WORKDIR`(`/gallery`) 기준 상대 경로 `uploads`** 를 쓴다(`app.storage.local.path` 기본값). 이미지는 컨테이너를 비root 사용자(UID · GID `10001`)로 실행하며, `uploads` 디렉터리를 이 사용자 소유로 미리 만들어 둔다. 업로드를 호스트에 남기려면 **볼륨으로 `/gallery/uploads` 에 마운트**하면 된다 (예: `-v "$(pwd)/gallery-uploads:/gallery/uploads"`).
 
-이미지 빌드 시 **`--build-arg application=gallery` 는 필수** 이다(`ARG application` 기본값 없음).
+이미지 빌드에 필요한 빌드 인자는 `Dockerfile` 에 기본값이 있다(`APP_NAME=gallery`, `BUILD_DIR=workspace`). 이미지는 Spring Boot layered jar 를 레이어별로 복사하고 `JarLauncher` 로 실행한다.
 
 ### 빌드
 
 프로젝트 루트(`gallery-spring-boot/`)에서 실행한다.
 
 ```bash
-docker build --build-arg application=gallery -t gallery:local .
+docker build -t gallery:local .
 ```
 
 Windows:
 
 ```bash
-docker build --build-arg application=gallery -t gallery:local .
+docker build -t gallery:local .
 ```
 
 ### 환경 변수 (컨테이너)
