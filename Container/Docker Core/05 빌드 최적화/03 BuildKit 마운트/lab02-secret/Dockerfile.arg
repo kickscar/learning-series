@@ -1,0 +1,9 @@
+# syntax=docker/dockerfile:1
+
+FROM alpine:3.24
+
+ARG API_TOKEN
+
+RUN echo "token length: ${#API_TOKEN}" > /token-info.txt
+
+CMD ["cat", "/token-info.txt"]
