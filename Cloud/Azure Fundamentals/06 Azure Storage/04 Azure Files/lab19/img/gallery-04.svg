@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="VM Scale Set">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E0A354"/><stop offset="1" stop-color="#C67F2A"/></linearGradient></defs>
+  <rect width="400" height="300" fill="url(#g)"/>
+  <g fill="none" stroke="#fff" stroke-width="6" stroke-linejoin="round" opacity="0.95">
+    <rect x="116" y="96" width="52" height="72" rx="10"/>
+    <rect x="174" y="96" width="52" height="72" rx="10"/>
+    <rect x="232" y="96" width="52" height="72" rx="10"/>
+  </g>
+  <text x="200" y="236" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="25" font-weight="700" fill="#fff">VM Scale Set</text>
+  <text x="200" y="264" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#fff" opacity="0.85">스케일 세트</text>
+</svg>
