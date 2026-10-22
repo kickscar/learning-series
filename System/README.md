@@ -70,11 +70,11 @@ Cloud 시리즈 — "이걸 AWS/Azure/GCP로 옮기면 클라우드다"
 | 인덱스 | 시리즈 타이틀 | 핵심 컨셉 | 규모 |
 |--------|------------|----------|------|
 | 01 | Compute: Virtualization | 가상화 개념 + VirtualBox 실습 환경 구축 + 현대 OS의 하이퍼바이저 통합 + 클라우드 연결 | 3 Ch / 10 Sec / 6 Lab |
-| 02 | OS: Linux | OS 이론 다이제스트 + UNIX 계보 → Linux CLI 운영. "CLI는 OS와의 대화" | 9 Ch / 35 Sec / 27 Lab |
-| 03 | Network: Engineering & Troubleshooting | Top-Down(App→Link) + 패킷 캡처로 모든 프로토콜 관찰. 미니 데이터센터 네트워크 완성 | 9 Ch / 27 Sec / 20 Lab |
+| 02 | OS: Linux | OS 이론 다이제스트 + UNIX 계보 → Linux CLI 운영. "CLI는 OS와의 대화" | 9 Ch / 36 Sec / 27 Lab |
+| 03 | Network: Engineering & Troubleshooting | Top-Down(App→Link) + 패킷 캡처로 모든 프로토콜 관찰. 미니 데이터센터 네트워크 완성 | 9 Ch / 31 Sec / 20 Lab |
 | 04 | OS: Windows Server | 전반부 "OS는 같다"(Linux 대응) + 후반부 "고유 가치"(AD/Entra ID, .NET, Hyper-V). PowerShell 주력 | 7 Ch / 25 Sec / 20 Lab |
 | 05 | Data: Database Engineering | DB 이론을 엔지니어링 관점으로. DA/DBA/AppDev 세 역할의 맥락을 이해. employees DB(390만 행)로 실습 | 8 Ch / 26 Sec / 20 Lab |
-| | **합계** | | **36 Ch / 123 Sec / 93 Lab** |
+| | **합계** | | **36 Ch / 128 Sec / 93 Lab** |
 
 ---
 
@@ -121,7 +121,7 @@ Cloud 시리즈 — "이걸 AWS/Azure/GCP로 옮기면 클라우드다"
 
 | Ch | 챕터 | Sec | Lab | 핵심 |
 |----|------|-----|-----|------|
-| 01 | 운영체제의 이해 | 5 | 0 | OS 보편 이론 + **UNIX 계보(System V 포함)** + Linux 산업 주류화 |
+| 01 | 운영체제의 이해 | 6 | 0 | OS 보편 이론(4기능) + **입출력 관리** + **UNIX 계보(System V 포함)** + Linux 산업 주류화 |
 | 02 | 설치와 첫 로그인 | 3 | 2 | **수동 파티셔닝** 설치, 초기 설정 |
 | 03 | 셸과 CLI | 6 | 5 | 파일, 텍스트, 리다이렉션, **vi/vim**, 링크·찾기 |
 | 04 | 사용자와 권한 | 3 | 3 | 사용자/그룹, rwx, sudo/특수 권한 |
@@ -142,10 +142,10 @@ Cloud 시리즈 — "이걸 AWS/Azure/GCP로 옮기면 클라우드다"
 | 01 | 네트워킹 개요와 도구 | 3 | 1 | 계층 모델 + **tcpdump 조기 도입** |
 | 02 | 애플리케이션 계층 | 3 | 3 | HTTP, DNS, DHCP 패킷 캡처 |
 | 03 | 전송 계층 | 3 | 3 | **TCP handshake 캡처**, UDP, 포트/소켓 |
-| 04 | 네트워크 계층 | 4 | 4 | IP(**IPv6 포함**), 서브넷/CIDR, **Router VM 라우팅**, ICMP |
+| 04 | 네트워크 계층 | 6 | 4 | IP(**IPv6 포함**), 서브넷/CIDR, **미니DC 설계·라우팅 실습**, ICMP |
 | 05 | 링크 계층 | 3 | 1 | 이더넷, **ARP 패킷 캡처**, VLAN(인식) |
 | 06 | 네트워크 서비스 구축 | 2 | 2 | DNS 서버(bind), DHCP 서버(dhcpd) 직접 구축 |
-| 07 | 보안과 트래픽 관리 | 4 | 3 | 방화벽, NAT, **TLS/HTTPS 암호화 비교**, LB(인식) |
+| 07 | 보안과 트래픽 관리 | 6 | 3 | 방화벽, NAT, **미니DC 방화벽·NAT 실습**, **TLS/HTTPS 암호화 비교**, LB(인식) |
 | 08 | 진단과 트러블슈팅 | 3 | 2 | **계층별 진단 방법론** + 시나리오 트러블슈팅 |
 | 09 | 종합 구성 | 2 | 1 | **미니 데이터센터 네트워크 완성** (전 챕터 기술 총동원) |
 
