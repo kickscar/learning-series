@@ -1,18 +1,10 @@
 #cloud-config
-# vmss-lab13-web Custom Data. The Portal Custom Data field accepts ASCII only,
-# so comments and page text are in English.
-#
-# Fill in before pasting:
-#   stlab13{uniq}        -> your storage account name ({uniq} = your unique token)
-#   <stlab13{uniq} key1> -> Access keys > key1 of that account
-
 package_update: true
 packages:
   - nginx
   - cifs-utils
 
 write_files:
-  # Cloud Gallery served by nginx (same page as the static website; footer only)
   - path: /var/www/html/index.html
     content: |
       <!DOCTYPE html>
@@ -86,7 +78,6 @@ write_files:
       </body>
       </html>
 
-  # Custom 404 page (same as the static website error page)
   - path: /var/www/html/errors/404.html
     content: |
       <!DOCTYPE html>
@@ -137,22 +128,18 @@ write_files:
       </body>
       </html>
 
-  # Return the 404 page for missing paths
   - path: /etc/nginx/conf.d/gallery.conf
     content: |
       error_page 404 /errors/404.html;
 
-  # SMB mount credentials (account name + key)
   - path: /etc/smbcredentials/stlab13{uniq}.cred
     permissions: '0600'
     content: |
       username=stlab13{uniq}
-      password=<stlab13{uniq} key1>
+      password=<key1>
 
 runcmd:
-  # Mount the images share to the nginx image folder (fstab -> persists on boot)
   - mkdir -p /var/www/html/img
   - echo '//stlab13{uniq}.file.core.windows.net/images /var/www/html/img cifs nofail,vers=3.1.1,credentials=/etc/smbcredentials/stlab13{uniq}.cred,dir_mode=0755,file_mode=0644,serverino 0 0' >> /etc/fstab
   - mount -a
-  # Apply the error_page from conf.d
   - systemctl reload nginx
