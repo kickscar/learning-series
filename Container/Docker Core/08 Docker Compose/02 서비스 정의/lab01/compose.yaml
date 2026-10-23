@@ -1,0 +1,17 @@
+services:
+  app:
+    image: lab01-app:2.0-dev
+    build:
+      context: .
+      target: dev
+    environment:
+      APP_MODE: compose
+      APP_VERSION: "1.10"
+    env_file:
+      - app.env
+    init: true
+    volumes:
+      - vol-data:/data
+
+volumes:
+  vol-data:
