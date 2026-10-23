@@ -1,0 +1,16 @@
+# 빌드 산출물
+target/
+
+# 버전 관리
+.git
+.gitignore
+.gitattributes
+
+# 이미지 빌드에 사용하지 않는 파일
+Dockerfile
+.dockerignore
+mvnw.cmd
+
+# Compose 구성 파일
+compose.yaml
+.env
