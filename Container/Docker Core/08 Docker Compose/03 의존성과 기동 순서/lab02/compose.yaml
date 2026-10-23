@@ -1,0 +1,38 @@
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: 'RoOt!@#$'
+      MARIADB_DATABASE: gallery
+      MARIADB_USER: gallery
+      MARIADB_PASSWORD: 'GaLlErY!@#$'
+    volumes:
+      - vol-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+      start_interval: 2s
+
+  app:
+    image: gallery:5.5
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/gallery
+      SPRING_DATASOURCE_USERNAME: gallery
+      SPRING_DATASOURCE_PASSWORD: 'GaLlErY!@#$'
+    volumes:
+      - vol-uploads:/gallery/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    pre_start:
+      - image: alpine:3.24
+        command: ["chown", "-R", "10001:10001", "/gallery/uploads"]
+
+volumes:
+  vol-db:
+  vol-uploads:
