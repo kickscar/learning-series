@@ -1,0 +1,9 @@
+services:
+  web:
+    image: nginx:1.30
+    # container_name: lab02-web
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 64M
