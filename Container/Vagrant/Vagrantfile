@@ -23,6 +23,8 @@ Vagrant.configure("2") do |config|
   config.vm.box_download_checksum_type = "sha256"
   config.vm.box_download_checksum = BOX_SHA256[ARCH]
   config.vm.synced_folder ".", "/vagrant", disabled: true
+  # box가 지정한 NAT 어댑터 MAC를 쓰지 않는다. linked clone 노드마다 MAC가 달라진다
+  config.vm.base_mac = nil
 
   NODES.each do |node|
     config.vm.define node[:name] do |n|
