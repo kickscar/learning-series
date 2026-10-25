@@ -13,7 +13,7 @@
 
 - `aws/create-cluster.sh` → VPC부터 인스턴스 3대까지 자원 생성, 노드별 사설 · 공인 IP 표 출력
 - `aws/stop-cluster.sh` → worker 노드를 먼저, `cp` 를 마지막에 정지
-- `aws/start-cluster.sh` → `cp` 를 먼저, worker 노드를 나중에 기동하고 새 공인 IP 표 출력
+- `aws/start-cluster.sh` → 보안 그룹의 SSH · NodePort 허용 IP를 지금 호스트의 공인 IP로 갱신, `cp` 를 먼저, worker 노드를 나중에 기동하고 새 공인 IP 표 출력
 - `aws/delete-cluster.sh` → `Organization=k8s-core` · `Project=cluster` 태그 자원을 생성의 역순으로 삭제, 키 페어와 로컬 개인 키 삭제
 
 학습자 호스트의 `~/k8s-core/aws/` 에서 실행한다. AWS CLI v2와 자격 증명, 리전(`ap-northeast-2`) 설정이 필요하다.

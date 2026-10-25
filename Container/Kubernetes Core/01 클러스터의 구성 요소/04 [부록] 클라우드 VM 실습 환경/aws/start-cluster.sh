@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 실습 클러스터 기동: cp → worker 순서. 공인 IP는 기동할 때마다 바뀐다
+# 실습 클러스터 기동: 보안 그룹 허용 IP 갱신 → cp → worker 순서. 공인 IP는 기동할 때마다 바뀐다
 set -euo pipefail
 
 export AWS_REGION="${AWS_REGION:-ap-northeast-2}"
@@ -14,6 +14,21 @@ ids() {
               "Name=instance-state-name,Values=stopped" \
     --query 'Reservations[].Instances[].InstanceId' --output text
 }
+
+# 보안 그룹: SSH · NodePort 허용 IP를 지금 호스트의 공인 IP로 바꾼다. 접속 장소가 바뀌면 공인 IP도 바뀐다
+MY_IP="$(curl -s https://checkip.amazonaws.com)/32"
+SG_ID=$(aws ec2 describe-security-groups \
+  --filters "Name=tag:Organization,Values=$ORG" "Name=tag:Project,Values=$PROJECT" "Name=group-name,Values=$PREFIX-sg-node" \
+  --query 'SecurityGroups[0].GroupId' --output text)
+for RANGE in 22-22 30000-32767; do
+  FROM=${RANGE%-*}
+  for CIDR in $(aws ec2 describe-security-groups --group-ids "$SG_ID" \
+      --query "SecurityGroups[0].IpPermissions[?FromPort==\`$FROM\`].IpRanges[].CidrIp" --output text); do
+    aws ec2 revoke-security-group-ingress --group-id "$SG_ID" --protocol tcp --port "$RANGE" --cidr "$CIDR" > /dev/null
+  done
+  aws ec2 authorize-security-group-ingress --group-id "$SG_ID" --protocol tcp --port "$RANGE" --cidr "$MY_IP" > /dev/null
+done
+echo "Security group: $SG_ID (SSH · NodePort 허용: $MY_IP)"
 
 CP=$(ids cp)
 if [ -n "$CP" ]; then
