@@ -34,27 +34,27 @@ for unit in $(systemctl list-units --type swap --all --plain --no-legend | awk '
   esac
 done
 
-echo "[5/10] 커널 파라미터"
+echo "[5/10] SELinux permissive"
+setenforce 0 || true
+sed -i 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
+
+echo "[6/10] firewalld 비활성화"
+if systemctl list-unit-files firewalld.service > /dev/null 2>&1 && systemctl cat firewalld > /dev/null 2>&1; then
+  systemctl disable --now firewalld
+fi
+
+echo "[7/10] 커널 파라미터"
 cat <<EOF > /etc/sysctl.d/k8s.conf
 net.ipv4.ip_forward = 1
 EOF
 sysctl --system > /dev/null
 
-echo "[6/10] containerd"
+echo "[8/10] containerd"
 dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
 dnf -y install containerd.io
 containerd config default > /etc/containerd/config.toml
 sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
 systemctl enable --now containerd
-
-echo "[7/10] SELinux permissive"
-setenforce 0 || true
-sed -i 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
-
-echo "[8/10] firewalld 비활성화"
-if systemctl list-unit-files firewalld.service > /dev/null 2>&1 && systemctl cat firewalld > /dev/null 2>&1; then
-  systemctl disable --now firewalld
-fi
 
 echo "[9/10] Kubernetes 패키지"
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo

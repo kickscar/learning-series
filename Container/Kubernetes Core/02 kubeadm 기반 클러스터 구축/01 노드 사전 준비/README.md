@@ -4,8 +4,9 @@
 
 ## What you will learn
 
-- 패키지 갱신, 노드 이름 등록, 시간 동기화, 패킷 전달(`net.ipv4.ip_forward`), SELinux permissive, firewalld 비활성화와 구성 요소별 포트
+- 패키지 갱신, 노드 이름 등록, 시간 동기화
 - swap의 완전한 비활성화(`swapoff`, fstab, GPT swap 파티션의 자동 생성 유닛 mask)
+- SELinux permissive, firewalld 비활성화와 구성 요소별 포트, 패킷 전달(`net.ipv4.ip_forward`)
 - containerd 설치와 CRI 플러그인 활성화, `SystemdCgroup = true` 와 kubelet의 cgroup 드라이버 자동 감지
 - `pkgs.k8s.io` 마이너 버전 저장소와 `exclude=` 버전 고정, kubelet · kubeadm · kubectl · crictl 설치
 - 듀얼 NIC 노드의 kubelet 노드 IP(`--node-ip`)와 `kubeadm` 이전 kubelet의 재시작 대기 상태
