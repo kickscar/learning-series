@@ -25,6 +25,8 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true
   # box가 지정한 NAT 어댑터 MAC를 쓰지 않는다. linked clone 노드마다 MAC가 달라진다
   config.vm.base_mac = nil
+  # kube-apiserver는 종료할 때 처리 중인 요청을 정리하는 데 60초 가까이 쓴다. 기본 대기 시간(60초)을 넘기면 강제 종료된다
+  config.vm.graceful_halt_timeout = 180
 
   NODES.each do |node|
     config.vm.define node[:name] do |n|
