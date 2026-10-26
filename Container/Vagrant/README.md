@@ -13,6 +13,7 @@ Kubernetes Core 실습에서 사용하는 노드 VM 3대(control-plane 1 + worke
 - 게스트 OS: Rocky Linux 9 (box는 9.6, 노드 준비에서 `dnf update` 로 최신 9.x로 갱신)
 - 디스크: 동적 할당 64GB (box 기본값)
 - 네트워크: NIC1 NAT (외부 다운로드), NIC2 host-only `192.168.56.0/24` (클러스터 통신). NAT 어댑터의 MAC 주소는 노드마다 새로 생성한다(`config.vm.base_mac = nil`). box가 지정한 MAC를 그대로 쓰면 linked clone 노드 3대의 MAC가 같아진다
+- 정지: `vagrant halt` 의 정상 종료 대기 시간을 180초로 늘린다(`config.vm.graceful_halt_timeout`). control plane 노드는 `kube-apiserver` 가 종료하는 데 1분 가까이 걸려 기본값(60초)으로는 강제 종료된다
 - VirtualBox VM 이름: `kc-cp`, `kc-worker1`, `kc-worker2`. 디스크는 linked clone으로 box 이미지를 공유한다
 
 ## Box
