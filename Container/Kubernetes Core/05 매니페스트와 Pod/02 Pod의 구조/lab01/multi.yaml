@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lab01-multi
+  namespace: lab01
+  labels:
+    app: multi
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.30
+    ports:
+    - containerPort: 80
+  - name: helper
+    image: busybox:1.37
+    command: ["sleep", "3600"]
