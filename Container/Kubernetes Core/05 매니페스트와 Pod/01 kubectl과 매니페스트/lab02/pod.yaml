@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lab02-nginx
+  namespace: lab02
+  labels:
+    app: nginx
+    tier: web
+    env: dev
+  annotations:
+    description: "lab02 매니페스트 실습용 nginx"
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.30
+    ports:
+    - containerPort: 80
