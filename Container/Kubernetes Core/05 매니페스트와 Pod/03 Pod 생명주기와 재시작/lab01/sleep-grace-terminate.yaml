@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lab01-sleep-grace-terminate
+  namespace: lab01
+spec:
+  terminationGracePeriodSeconds: 5
+  containers:
+  - name: busybox
+    image: busybox:1.37
+    command: ["sleep", "3600"]

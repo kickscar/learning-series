@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lab01-prestop
+  namespace: lab01
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.30
+    lifecycle:
+      preStop:
+        exec:
+          command: ["sh", "-c", "echo preStop start > /proc/1/fd/1; sleep 5; echo preStop end > /proc/1/fd/1"]
