@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab02-nginx
+  namespace: lab02
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: lab02-nginx
+  template:
+    metadata:
+      labels:
+        app: lab02-nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.30
+        ports:
+        - containerPort: 80
