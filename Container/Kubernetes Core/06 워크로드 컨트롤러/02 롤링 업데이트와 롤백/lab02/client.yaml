@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lab02-client
+  namespace: lab02
+spec:
+  containers:
+  - name: busybox
+    image: busybox:1.37
+    command: ["sh", "-c", "while true; do if wget -q -T 1 -O /dev/null http://lab02-web-svc 2>/dev/null; then echo \"$(date +%T) ok\"; else echo \"$(date +%T) fail\"; fi; sleep 0.5; done"]
