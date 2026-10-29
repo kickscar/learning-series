@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: lab01-agent
+  namespace: lab01
+spec:
+  selector:
+    matchLabels:
+      app: lab01-agent
+  template:
+    metadata:
+      labels:
+        app: lab01-agent
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: busybox
+        image: busybox:1.37
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        command: ["sh", "-c"]
+        args:
+        - trap 'exit 0' TERM; while true; do echo "$(date +%T) agent on $NODE_NAME"; sleep 10 & wait; done
