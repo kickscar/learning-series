@@ -1,6 +1,6 @@
 # 05 매니페스트와 Pod / 05 Init Container와 Sidecar
 
-한 Pod에 컨테이너를 여러 개 두는 기준을 정리하고, 실무에서 쓰는 두 형태인 Init Container와 Native Sidecar의 시작 · 종료 순서를 확인한다. 이 장의 마지막 섹션으로, 끝에서 스냅샷 `ch05-done` 을 생성한다.
+한 Pod에 컨테이너를 여러 개 두는 기준을 정리하고, 실무에서 쓰는 두 형태인 Init Container와 Native Sidecar의 시작 · 종료 순서를 확인한다.
 
 ## What you will learn
 
@@ -22,7 +22,7 @@
 | `service.yaml` | 의존 대상 역할의 Service `lab01-db-svc`. `init.yaml` 을 적용해 대기 상태를 확인한 뒤 적용한다 |
 | `sidecar.yaml` | 로그 수집 Native Sidecar(`log-tailer`)와 nginx |
 
-`cp` 노드의 `~/k8s-core/05/05/lab01` 에서 실행한다. lab은 자원 정리까지 하고, 스냅샷 `ch05-done` 생성은 본문의 절차를 따라 학습자 호스트에서 실행한다.
+`cp` 노드의 `~/k8s-core/05/05/lab01` 에서 실행한다. 장 끝 스냅샷 `ch05-done` 은 이 장의 Gallery 실습 끝에서 생성한다.
 
 ## Reference
 
