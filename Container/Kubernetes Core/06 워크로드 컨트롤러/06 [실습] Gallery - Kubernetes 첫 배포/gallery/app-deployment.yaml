@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gallery-app
+  namespace: gallery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gallery-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: gallery-app
+    spec:
+      initContainers:
+      - name: wait-db
+        image: busybox:1.37
+        command: ["sh", "-c"]
+        args:
+        - until nc -z -w 2 gallery-db-svc 3306; do echo "$(date +%T) waiting for gallery-db-svc:3306"; sleep 3; done; echo "$(date +%T) gallery-db-svc:3306 is ready"
+      containers:
+      - name: gallery
+        image: dkrcore/gallery:2.0
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:mariadb://gallery-db-svc:3306/gallery"
+        - name: SPRING_DATASOURCE_USERNAME
+          value: "gallery"
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "GaLlErY!@#$"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 10
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+          periodSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
