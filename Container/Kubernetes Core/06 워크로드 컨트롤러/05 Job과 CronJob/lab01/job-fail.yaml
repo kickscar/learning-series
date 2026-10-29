@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: lab01-fail
+  namespace: lab01
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: busybox
+        image: busybox:1.37
+        command: ["sh", "-c"]
+        args:
+        - echo "$(date +%T) fail $HOSTNAME"; exit 1

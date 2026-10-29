@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: lab01-cron
+  namespace: lab01
+spec:
+  schedule: "* * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: busybox
+            image: busybox:1.37
+            command: ["sh", "-c"]
+            args:
+            - echo "$(date +%T) start"; sleep 90; echo "$(date +%T) done"
