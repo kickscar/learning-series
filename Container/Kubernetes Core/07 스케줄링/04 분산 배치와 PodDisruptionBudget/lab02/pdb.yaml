@@ -1,0 +1,10 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: lab02-web-pdb
+  namespace: lab02
+spec:
+  minAvailable: 3
+  selector:
+    matchLabels:
+      app: lab02-web
