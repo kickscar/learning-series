@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lab01-hostpath
+  namespace: lab01
+  labels:
+    app: lab01-hostpath
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: worker1
+  containers:
+  - name: busybox
+    image: busybox:1.37
+    command: ["sleep", "3600"]
+    volumeMounts:
+    - name: host-data
+      mountPath: /data-write
+  volumes:
+  - name: host-data
+    hostPath:
+      path: /tmp/k8s-core/09/01/lab01
+      type: DirectoryOrCreate
