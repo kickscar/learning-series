@@ -1,0 +1,40 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: lab01-route
+  namespace: lab01
+spec:
+  parentRefs:
+  - name: lab01-gw
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /a
+    backendRefs:
+    - name: lab01-a-svc
+      port: 80
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /b
+    backendRefs:
+    - name: lab01-b-svc
+      port: 80
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+      headers:
+      - name: x-version
+        value: b
+    backendRefs:
+    - name: lab01-b-svc
+      port: 80
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: lab01-a-svc
+      port: 80
